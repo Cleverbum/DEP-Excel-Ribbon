@@ -23,12 +23,13 @@ Public Class Ribbon1
 
         mailPath = Environ("TEMP") & "\DistiEmail.msg"
 
+        i = 2
 
-        For i = 2 To myCount + 1
+        While oXlWs.Cells(i, 1).value <> ""
             snglLine = readExcelLine(oXlWs, i)
             lines.Add(snglLine)
-
-        Next
+            i += 1
+        End While
 
         myCount = discardNoDEP(lines) ' number of lines removed
 
@@ -89,6 +90,22 @@ Public Class Ribbon1
 
         tmpLine.Serials = pSerials
 
+        'if no dep = discard
+        'if includes reg then reg
+        'if blank but with account manager email then ticket
+        'if blank and no email then discard
+
+        If tmpLine.DEP Is Nothing OrElse (tmpLine.DEP = "" And
+                    (tmpLine.Account_Manager_Email IsNot Nothing AndAlso
+                    tmpLine.Account_Manager_Email <> "")
+                ) Then
+            tmpLine.Action = "Ticket"
+        ElseIf tmpLine.DEP.ToLower.Contains("reg") Then
+            tmpLine.Action = "Reg"
+        Else
+            tmpLine.Action = "Discard"
+
+        End If
 
 
         Return tmpLine
@@ -97,7 +114,7 @@ Public Class Ribbon1
         Dim count As Integer, i As Integer
         count = 0
         For i = rawLines.Count - 1 To 0 Step -1
-            If rawLines(i).DEP IsNot Nothing AndAlso rawLines(i).DEP.StartsWith("No ", vbTextCompare) Then
+            If rawLines(i).Action = "Discard" Then
                 rawLines.RemoveAt(i)
                 count = count + 1
             End If
