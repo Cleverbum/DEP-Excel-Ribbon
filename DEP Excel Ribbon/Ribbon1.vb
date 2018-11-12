@@ -38,18 +38,25 @@ Public Class Ribbon1
 
             line.NDT_Number = ndt.createTicket(2, line.toTicket())
             ndt.ticketNumber = line.NDT_Number
-            ndt.AddToNotify(Globals.ThisAddIn.findAlias(line.Account_Manager_Email))
+            Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
+            If tmpAlias <> "NN" Then
+                ndt.AddToNotify(tmpAlias)
+            Else
+                MsgBox("Could not find the nextdesk username for " & line.Account_Manager_Email & ". Please click OK to continue without adding them to the ticket")
+            End If
+
             If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And doDistiMail Then
                 Dim distiMail As New clsDistiEmail, thisMail As Outlook.MailItem
                 thisMail = distiMail.generateMail(line)
 
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
                     thisMail.Display()
-                End If
-                thisMail.SaveAs(mailPath)
+                    thisMail.SaveAs(mailPath)
 
-                ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
-                My.Computer.FileSystem.DeleteFile(mailPath)
+                    ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
+                    My.Computer.FileSystem.DeleteFile(mailPath)
+                End If
+
             End If
         Next
 
@@ -99,9 +106,17 @@ Public Class Ribbon1
                     (tmpLine.Account_Manager_Email IsNot Nothing AndAlso
                     tmpLine.Account_Manager_Email <> "")
                 ) Then
-            tmpLine.Action = "Ticket"
+            If tmpLine.Account_Manager_Email Is Nothing Then
+                tmpLine.Action = "Discard"
+            Else
+                tmpLine.Action = "Ticket"
+            End If
         ElseIf tmpLine.DEP.ToLower.Contains("reg") Then
-            tmpLine.Action = "Reg"
+            If tmpLine.Account_Manager_Email Is Nothing Then
+                tmpLine.Action = "Discard"
+            Else
+                tmpLine.Action = "Reg"
+            End If
         Else
             tmpLine.Action = "Discard"
 

@@ -62,14 +62,23 @@
         toTicket = New Dictionary(Of String, String)
         Dim tmpDEP As String
 
-        toTicket.Add("Short Description", "Register DEP")
+        If Order_Type_Desc.ToLower.Contains("return") Then
+            toTicket.Add("Short Description", "Return that may need DEP processing")
+        Else
+            toTicket.Add("Short Description", "Register DEP")
+        End If
+
         toTicket.Add("Client Number", Account_Number)
         toTicket.Add("Client PO Number", Customer_PO)
         toTicket.Add("Client Name", Company)
 
         On Error Resume Next
-        tmpDEP = Split(DEP, " ")(0)
-        If tmpDEP = "" Then tmpDEP = DEP
+        If DEP Is Nothing Then
+            tmpDEP = "TBD"
+        Else
+            tmpDEP = Split(DEP, " ")(0)
+            If tmpDEP = "" Then tmpDEP = DEP
+        End If
         On Error GoTo 0
 
         toTicket.Add("DEP ID", tmpDEP)

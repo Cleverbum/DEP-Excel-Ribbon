@@ -25,6 +25,12 @@ Public Class clsDistiEmail
             'probably Techdata - at this stage do nothing
         End If
 
+        If distiEmail.Subject <> "" AndAlso
+            DepInfo.Order_Type_Desc.ToLower.Contains("return") Then
+
+            distiEmail.Subject = "Return Order: " & distiEmail.Subject.Replace("register", "de-register")
+
+        End If
 
 
         Return distiEmail

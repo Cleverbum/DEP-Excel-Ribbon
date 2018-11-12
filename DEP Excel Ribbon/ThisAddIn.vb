@@ -21,7 +21,7 @@ Public Class ThisAddIn
         MsgBox("This part of the code isn't quite ready yet")
     End Sub
 
-    Function FindAlias(emailAddress As String) As String
+    Function FindAlias(ByVal emailAddress As String) As String
         Dim AppOutlook As New outlook.Application
         Dim outlookNameSpace As outlook.NameSpace = AppOutlook.GetNamespace("MAPI")
         Dim myAddressList As outlook.AddressList = outlookNameSpace.GetGlobalAddressList
@@ -29,12 +29,16 @@ Public Class ThisAddIn
 
         Dim objAEntry As outlook.AddressEntry
 
+        emailAddress = emailAddress.Replace("@uk.insight.com", "@insight.com")
+
         objAEntry = AppOutlook.Session.CreateRecipient(emailAddress).AddressEntry
 
 
-
-        FindAlias = objAEntry.GetExchangeUser.Alias
-
+        Try
+            FindAlias = objAEntry.GetExchangeUser.Alias
+        Catch
+            FindAlias = "NN"
+        End Try
 
     End Function
 

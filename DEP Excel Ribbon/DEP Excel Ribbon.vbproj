@@ -33,10 +33,10 @@
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>S:\Sales\public sector\Martin Klefas\DEP Excel Toolbar\</PublishUrl>
+    <PublishUrl>\\insight.com\root\Shared\Sales\public sector\Martin Klefas\DEP Excel Toolbar\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.4</ApplicationVersion>
+    <ApplicationVersion>1.0.0.5</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
