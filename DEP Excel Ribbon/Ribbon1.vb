@@ -38,14 +38,23 @@ Public Class Ribbon1
 
             line.NDT_Number = ndt.createTicket(2, line.toTicket())
             ndt.ticketNumber = line.NDT_Number
+
+            If line.Units > 10 Then
+                ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive")
+            End If
+
             Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
+
+
             If tmpAlias <> "NN" Then
                 ndt.AddToNotify(tmpAlias)
             Else
+                ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email)
                 MsgBox("Could not find the nextdesk username for " & line.Account_Manager_Email & ". Please click OK to continue without adding them to the ticket")
             End If
 
-            If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And doDistiMail Then
+            If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And
+                        doDistiMail And line.Units < 11 Then
                 Dim distiMail As New clsDistiEmail, thisMail As Outlook.MailItem
                 thisMail = distiMail.generateMail(line)
 
@@ -55,8 +64,13 @@ Public Class Ribbon1
 
                     ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
                     My.Computer.FileSystem.DeleteFile(mailPath)
+                Else
+                    ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". Please complete their process manually.")
                 End If
-
+            ElseIf line.action.Equals("Only", Globals.ThisAddIn.ignoreCase) Then
+                ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
+            ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
+                ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
             End If
         Next
 
@@ -122,6 +136,12 @@ Public Class Ribbon1
 
         End If
 
+        If tmpLine.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) Then
+            If tmpLine.DEP.ToLower.Contains("only") Then
+                tmpLine.Action = "Only"
+            End If
+        End If
+
 
         Return tmpLine
     End Function
@@ -140,6 +160,7 @@ Public Class Ribbon1
     End Function
 
     Private Sub Button2_Click(sender As Object, e As RibbonControlEventArgs) Handles Button2.Click
-        Debug.WriteLine(Globals.ThisAddIn.findAlias("Sam Brennan"))
+        Dim frm As New Form3
+        frm.Show()
     End Sub
 End Class
