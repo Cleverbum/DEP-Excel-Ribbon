@@ -73,8 +73,11 @@
         '
         'Button2
         '
-        Me.Button2.Label = "Button2"
+        Me.Button2.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.Button2.Image = CType(resources.GetObject("Button2.Image"), System.Drawing.Image)
+        Me.Button2.Label = "Close Stale Ticket"
         Me.Button2.Name = "Button2"
+        Me.Button2.ShowImage = True
         '
         'Ribbon1
         '

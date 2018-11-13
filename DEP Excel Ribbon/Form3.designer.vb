@@ -31,7 +31,7 @@ Partial Class Form3
         '
         Me.Button1.Location = New System.Drawing.Point(16, 40)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(120, 28)
+        Me.Button1.Size = New System.Drawing.Size(212, 28)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
