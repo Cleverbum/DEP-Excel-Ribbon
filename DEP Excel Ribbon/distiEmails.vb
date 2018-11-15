@@ -2,25 +2,25 @@
 
 Imports Microsoft.Office.Interop
 
-Public Class clsDistiEmail
+Public Class ClsDistiEmail
 
-    Public Function generateMail(DepInfo As clsDepLine) As Outlook.MailItem
+    Public Function GenerateMail(DepInfo As ClsDepLine) As Outlook.MailItem
         Dim AppOutlook As New Outlook.Application
         Dim distiEmail As Outlook.MailItem
         distiEmail = AppOutlook.CreateItem(Outlook.OlItemType.olMailItem)
 
         If DepInfo.Suppliername.StartsWith("Ingram", Globals.ThisAddIn.ignoreCase) Then
             Dim templateFile As String
-            templateFile = createIngramSpreadsheet(DepInfo)
+            templateFile = CreateIngramSpreadsheet(DepInfo)
             distiEmail.Attachments.Add(templateFile)
             distiEmail.Body = "Please could you register the attached devices?"
             distiEmail.To = "MobilityAppleDEPEMEA@ingrammicro.com"
-            distiEmail.Subject = "Please can you register the attached devices"
-            My.Computer.FileSystem.DeleteFile(templateFile)
+            distiEmail.Subject = "Please can you register the attached devices (NDT: " & DepInfo.NDT_Number & ")"
+            ' My.Computer.FileSystem.DeleteFile(templateFile)
         ElseIf DepInfo.Suppliername.StartsWith("Westcoast", Globals.ThisAddIn.ignoreCase) Then
-            distiEmail.HTMLBody = westCoastBody(DepInfo)
+            distiEmail.HTMLBody = WestCoastBody(DepInfo)
             distiEmail.To = "dep@westcoast.co.uk"
-            distiEmail.Subject = "Please can you register the below devices"
+            distiEmail.Subject = "Please can you register the below devices (NDT: " & DepInfo.NDT_Number & ")"
         Else
             'probably Techdata - at this stage do nothing
         End If
@@ -36,7 +36,7 @@ Public Class clsDistiEmail
         Return distiEmail
     End Function
 
-    Function createIngramSpreadsheet(DEPInfo As clsDepLine) As String
+    Function CreateIngramSpreadsheet(DEPInfo As ClsDepLine) As String
         Dim templateFile As String = Environ("TEMP") & "\Ingram DEP Enrol.xlsx"
 
         My.Computer.FileSystem.WriteAllBytes(templateFile, My.Resources.Ingram_DEP_Enrol, False)
@@ -44,8 +44,9 @@ Public Class clsDistiEmail
         Dim oXlApp As Excel.Application = Nothing
         Dim oWb As Excel.Workbook, oXlSheet As Excel.Worksheet
 
-        oXlApp = New Excel.Application
-        oXlApp.Visible = True
+        oXlApp = New Excel.Application With {
+            .Visible = True
+        }
         oWb = oXlApp.Workbooks.Open(templateFile)
         oXlSheet = oWb.Worksheets("Please fill out")
         With oXlSheet
@@ -66,7 +67,7 @@ Public Class clsDistiEmail
 
         Return templateFile
     End Function
-    Function westCoastBody(depLine As clsDepLine) As String
+    Function WestCoastBody(depLine As ClsDepLine) As String
         Dim tmp As String
 
         tmp = "Hi all, <br> Could you please log the below devices for us:<br>" & vbCrLf
@@ -91,7 +92,7 @@ Public Class clsDistiEmail
 
     End Function
 
-    Function tableLineHTML(cellOne As String, CellTwo As String) As String
+    Function TableLineHTML(cellOne As String, CellTwo As String) As String
         Return "<tr>" & vbTab & "<td>" & vbCrLf & vbTab & vbTab & cellOne & vbCrLf & vbTab &
             "</td>" & vbCrLf & vbTab & "<td>" & vbCrLf & vbTab & vbTab & CellTwo &
             vbCrLf & vbTab & "</td>" & vbCrLf & "</tr>"

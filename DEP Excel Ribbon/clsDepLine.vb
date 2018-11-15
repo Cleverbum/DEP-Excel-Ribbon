@@ -1,4 +1,4 @@
-﻿Public Class clsDepLine
+﻿Public Class ClsDepLine
     Public Property ID As Integer
     Public Property Entity As String
     Public Property Account_Number As Long
@@ -40,7 +40,7 @@
         End Get
     End Property
 
-    Public Function toDEPBody() As String
+    Public Function ToDEPBody() As String
         Dim tmp As String, tmpDEP As String
 
         On Error Resume Next
@@ -55,22 +55,23 @@
             ", Client PO: " & Customer_PO & ", " & Suppliername & ", "
 
         tmp = tmp & Join(pSerials, ",") & ", End"
-        toDEPBody = tmp
+        ToDEPBody = tmp
 
     End Function
-    Public Function toTicket() As Dictionary(Of String, String)
-        toTicket = New Dictionary(Of String, String)
+    Public Function ToTicket() As Dictionary(Of String, String)
+        ToTicket = New Dictionary(Of String, String)
         Dim tmpDEP As String
 
         If Order_Type_Desc.ToLower.Contains("return") Then
-            toTicket.Add("Short Description", "Return that may need DEP processing")
+            ToTicket.Add("Short Description", "Return that may need DEP processing")
         Else
-            toTicket.Add("Short Description", "Register DEP")
+            ToTicket.Add("Short Description", "Register DEP")
         End If
 
-        toTicket.Add("Client Number", Account_Number)
-        toTicket.Add("Client PO Number", Customer_PO)
-        toTicket.Add("Client Name", Company)
+        ToTicket.Add("Client Number", Account_Number)
+        ToTicket.Add("Client PO Number", Customer_PO)
+        ToTicket.Add("Client Name", Company)
+        ToTicket.Add("Units", Units)
 
         On Error Resume Next
         If DEP Is Nothing Then
@@ -81,9 +82,9 @@
         End If
         On Error GoTo 0
 
-        toTicket.Add("DEP ID", tmpDEP)
-        toTicket.Add("SO", Sales_ID)
-        toTicket.Add("Long Description", "Account Manager: " & Account_Manager_Email &
+        ToTicket.Add("DEP ID", tmpDEP)
+        ToTicket.Add("SO", Sales_ID)
+        ToTicket.Add("Long Description", "Account Manager: " & Account_Manager_Email &
             ", Client PO " & Customer_PO & ", " & Suppliername & ", " & Join(pSerials, ",") & ", End")
 
 

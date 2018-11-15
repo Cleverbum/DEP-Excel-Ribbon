@@ -3,6 +3,8 @@ Imports System.IO
 Imports OpenQA.Selenium
 
 Public Class Form3
+    Public Const CloseMessage As String =
+        "This ticket appears to be stale, please let me know if it is still required"
     Public interrupt As Boolean = False
     Private Sub Form3_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Downloading list of tickets"
@@ -16,10 +18,10 @@ Public Class Form3
 
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-        Call get_tickets()
+        Call gettickets()
     End Sub
 
-    Sub get_tickets()
+    Sub GetTickets()
         Dim wd As Chrome.ChromeDriver
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
         wd = ndt.GiveMeChrome(True)
@@ -140,7 +142,7 @@ Public Class Form3
     End Function
 
 
-    Function processfile(file As String) As Tuple(Of Integer, Integer)
+    Function ProcessFile(file As String) As Tuple(Of Integer, Integer)
         Dim MyReader As New FileIO.TextFieldParser(file)
         Dim currentLine As String()
 
@@ -154,7 +156,7 @@ Public Class Form3
         Call SetText("Processing Tickets...")
         While Not MyReader.EndOfData
             If interrupt Then
-                processfile = New Tuple(Of Integer, Integer)(i - 1, deleted)
+                ProcessFile = New Tuple(Of Integer, Integer)(i - 1, deleted)
                 Exit Function
             End If
             Try
@@ -195,33 +197,33 @@ Public Class Form3
 
 
 
-    Function toClose(sheet As Excel.Worksheet, line As Integer) As Boolean
+    Function ToClose(sheet As Excel.Worksheet, line As Integer) As Boolean
         If CStr(sheet.Cells(1, 10).value).StartsWith("Time", vbTextCompare) And
                 CStr(sheet.Cells(1, 5).value).StartsWith("Type", vbTextCompare) Then
             If CStr(sheet.Cells(line, 5).value).StartsWith("Apple", vbTextCompare) Then
                 Dim time As Double, tmpTime As String
                 tmpTime = sheet.Cells(line, 10).value
                 time = CDbl(tmpTime.Split(" ")(0))
-                toClose = time > 10
+                ToClose = time > 10
             Else
-                toClose = False
+                ToClose = False
             End If
         Else
-            toClose = False
+            ToClose = False
         End If
 
     End Function
-    Function toClose(timeString As String) As Boolean
+    Function ToClose(timeString As String) As Boolean
         Dim time As Double
         time = CDbl(timeString.Split(" ")(0))
-        toClose = time > 10
+        ToClose = time > 10
     End Function
 
-    Sub closeTicket(ticketnumber As Integer)
+    Sub CloseTicket(ticketnumber As Integer)
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket With {
             .ticketNumber = ticketnumber
         }
-        ndt.CloseTicket("This ticket appears to be stale, please let me know if it is still required")
+        ndt.CloseTicket(CloseMessage)
     End Sub
 
     Private Sub Closeme()

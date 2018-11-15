@@ -18,6 +18,8 @@ Public Class Ribbon1
 
         Dim lines As New List(Of clsDepLine), snglLine As clsDepLine
 
+        'MsgBox("Acting on " & oXlWb.Name)
+
         doDistiMail = (MsgBox("Would you like to generate the emails to distribution at the same time", vbYesNo) = vbYes)
         Dim mailPath As String
 
@@ -31,12 +33,27 @@ Public Class Ribbon1
             i += 1
         End While
 
+        'MsgBox("Found " & lines.Count & " total lines.")
+
         myCount = discardNoDEP(lines) ' number of lines removed
 
+        'MsgBox("Discarded " & myCount)
+        i = 1
         For Each line As clsDepLine In lines
-            Dim ndt As New clsNextDeskTicket.clsNextDeskTicket
+            Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+            Globals.ThisAddIn.Application.StatusBar = "Creating ticket " & i & " of " & lines.Count
 
-            line.NDT_Number = ndt.createTicket(2, line.toTicket())
+            Try
+                line.NDT_Number = ndt.CreateTicket(2, line.toTicket())
+            Catch ex As Exception
+                line.NDT_Number = 0
+            End Try
+
+            If line.NDT_Number = 0 Then
+                MsgBox("Error creating ticket for Order: " & line.Sales_ID & " Exiting")
+                Exit Sub
+            End If
+
             ndt.ticketNumber = line.NDT_Number
 
             If line.Units > 10 Then
@@ -56,6 +73,7 @@ Public Class Ribbon1
             If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
                 Dim distiMail As New clsDistiEmail, thisMail As Outlook.MailItem
+                Globals.ThisAddIn.Application.StatusBar = "Generating an email if Required"
                 thisMail = distiMail.generateMail(line)
 
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
@@ -72,36 +90,37 @@ Public Class Ribbon1
             ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
                 ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
             End If
+            i += 1
         Next
-
+        Globals.ThisAddIn.Application.StatusBar = "All Done!"
     End Sub
-    Function readExcelLine(ByRef worksheet As Object, ByVal i As Integer) As clsDepLine
-        Dim tmpLine As New clsDepLine
-
-        tmpLine.Entity = worksheet.Cells(i, 1).value
-        tmpLine.Account_Number = worksheet.Cells(i, 2).value
-        tmpLine.Company = worksheet.Cells(i, 3).value
-        tmpLine.DEP = worksheet.Cells(i, 4).value
-        tmpLine.Post_Code = worksheet.Cells(i, 5).value
-        tmpLine.Customer_PO = worksheet.Cells(i, 6).value
-        tmpLine.Sales_ID = worksheet.Cells(i, 7).value
-        tmpLine.Order_Date = worksheet.Cells(i, 8).value
-        tmpLine.Invoice_Date = worksheet.Cells(i, 9).value
-        tmpLine.Order_Type_Desc = worksheet.Cells(i, 10).value
-        tmpLine.Invoice_ID = worksheet.Cells(i, 11).value
-        tmpLine.Item_ID = worksheet.Cells(i, 12).value
-        tmpLine.Manufacturer_Part_Number = worksheet.Cells(i, 13).value
-        tmpLine.Item_Name = worksheet.Cells(i, 14).value
-        tmpLine.Sub_Cat = worksheet.Cells(i, 15).value
-        tmpLine.Sub_Cat_Description = worksheet.Cells(i, 16).value
-        tmpLine.Manufacturer_Name = worksheet.Cells(i, 17).value
-        tmpLine.Units = worksheet.Cells(i, 18).value
-        tmpLine.POto_Supplier = worksheet.Cells(i, 19).value
-        tmpLine.Suppliername = worksheet.Cells(i, 20).value
-        tmpLine.Account_Manager = worksheet.Cells(i, 21).value
-        tmpLine.Account_Manager_Email = worksheet.Cells(i, 22).value
-        tmpLine.POType = worksheet.Cells(i, 23).value
-        tmpLine.POCreated_Date = worksheet.Cells(i, 24).value
+    Function ReadExcelLine(ByRef worksheet As Object, ByVal i As Integer) As ClsDepLine
+        Dim tmpLine As New ClsDepLine With {
+            .Entity = worksheet.Cells(i, 1).value,
+            .Account_Number = worksheet.Cells(i, 2).value,
+            .Company = worksheet.Cells(i, 3).value,
+            .DEP = worksheet.Cells(i, 4).value,
+            .Post_Code = worksheet.Cells(i, 5).value,
+            .Customer_PO = worksheet.Cells(i, 6).value,
+            .Sales_ID = worksheet.Cells(i, 7).value,
+            .Order_Date = worksheet.Cells(i, 8).value,
+            .Invoice_Date = worksheet.Cells(i, 9).value,
+            .Order_Type_Desc = worksheet.Cells(i, 10).value,
+            .Invoice_ID = worksheet.Cells(i, 11).value,
+            .Item_ID = worksheet.Cells(i, 12).value,
+            .Manufacturer_Part_Number = worksheet.Cells(i, 13).value,
+            .Item_Name = worksheet.Cells(i, 14).value,
+            .Sub_Cat = worksheet.Cells(i, 15).value,
+            .Sub_Cat_Description = worksheet.Cells(i, 16).value,
+            .Manufacturer_Name = worksheet.Cells(i, 17).value,
+            .Units = worksheet.Cells(i, 18).value,
+            .POto_Supplier = worksheet.Cells(i, 19).value,
+            .Suppliername = worksheet.Cells(i, 20).value,
+            .Account_Manager = worksheet.Cells(i, 21).value,
+            .Account_Manager_Email = worksheet.Cells(i, 22).value,
+            .POType = worksheet.Cells(i, 23).value,
+            .POCreated_Date = worksheet.Cells(i, 24).value
+        }
 
         Dim j As Integer, pSerials() As String
         ReDim pSerials(0 To 10)
@@ -145,7 +164,7 @@ Public Class Ribbon1
 
         Return tmpLine
     End Function
-    Function discardNoDEP(ByRef rawLines As List(Of clsDepLine)) As Integer
+    Function DiscardNoDEP(ByRef rawLines As List(Of clsDepLine)) As Integer
         Dim count As Integer, i As Integer
         count = 0
         For i = rawLines.Count - 1 To 0 Step -1
@@ -163,4 +182,40 @@ Public Class Ribbon1
         Dim frm As New Form3
         frm.Show()
     End Sub
+
+
+
+    Private Sub Button3_Click(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
+        Dim frm As New Form4
+        frm.Show()
+    End Sub
+
+
+    Private Sub Button4_Click(sender As Object, e As RibbonControlEventArgs) Handles Button4.Click
+        Dim wd As Chrome.ChromeDriver
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        wd = ndt.GiveMeChrome(True)
+        wd.Navigate.GoToUrl("http://nextdesk/ticket.php?id=6122686")
+        Dim elements = wd.FindElementsByClassName("ticketCell")
+        For Each element In elements
+            If element.Text.ToLower.Contains("client name") Then
+                Debug.WriteLine("element:")
+                Debug.Print(trimClient(element.Text))
+            End If
+
+        Next
+        wd.Quit()
+    End Sub
+
+    Function TrimClient(txt As String) As String
+
+        Dim list As String() = txt.ToLower.Split(vbCrLf)
+
+        For i = 0 To list.Count - 1
+            If list(i).ToLower.Contains("client name") Then
+                Return Trim(list(i + 1).Replace(vbCrLf, " "))
+            End If
+        Next
+        Return ""
+    End Function
 End Class

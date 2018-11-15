@@ -46,6 +46,8 @@
         Me.Group1 = Me.Factory.CreateRibbonGroup
         Me.Button1 = Me.Factory.CreateRibbonButton
         Me.Button2 = Me.Factory.CreateRibbonButton
+        Me.Button3 = Me.Factory.CreateRibbonButton
+        Me.Button4 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -60,6 +62,8 @@
         '
         Me.Group1.Items.Add(Me.Button1)
         Me.Group1.Items.Add(Me.Button2)
+        Me.Group1.Items.Add(Me.Button3)
+        Me.Group1.Items.Add(Me.Button4)
         Me.Group1.Label = "Group1"
         Me.Group1.Name = "Group1"
         '
@@ -79,6 +83,19 @@
         Me.Button2.Name = "Button2"
         Me.Button2.ShowImage = True
         '
+        'Button3
+        '
+        Me.Button3.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.Button3.Image = CType(resources.GetObject("Button3.Image"), System.Drawing.Image)
+        Me.Button3.Label = "Find Ignored Tickets"
+        Me.Button3.Name = "Button3"
+        Me.Button3.ShowImage = True
+        '
+        'Button4
+        '
+        Me.Button4.Label = "Button4"
+        Me.Button4.Name = "Button4"
+        '
         'Ribbon1
         '
         Me.Name = "Ribbon1"
@@ -96,6 +113,8 @@
     Friend WithEvents Group1 As Microsoft.Office.Tools.Ribbon.RibbonGroup
     Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Button2 As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents Button3 As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents Button4 As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection
