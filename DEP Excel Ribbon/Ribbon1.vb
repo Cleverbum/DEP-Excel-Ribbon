@@ -16,9 +16,9 @@ Public Class Ribbon1
         Dim myCount As Integer, i As Integer, doDistiMail As Boolean
 
 
-        Dim lines As New List(Of clsDepLine), snglLine As clsDepLine
+        Dim lines As New List(Of clsDepLine), snglLine As ClsDepLine
 
-        'MsgBox("Acting on " & oXlWb.Name)
+        MsgBox("Acting on " & oXlWb.Name)
 
         doDistiMail = (MsgBox("Would you like to generate the emails to distribution at the same time", vbYesNo) = vbYes)
         Dim mailPath As String
@@ -33,11 +33,11 @@ Public Class Ribbon1
             i += 1
         End While
 
-        'MsgBox("Found " & lines.Count & " total lines.")
+        MsgBox("Found " & lines.Count & " total lines.")
 
         myCount = discardNoDEP(lines) ' number of lines removed
 
-        'MsgBox("Discarded " & myCount)
+        MsgBox("Discarded " & myCount)
         i = 1
         For Each line As clsDepLine In lines
             Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
