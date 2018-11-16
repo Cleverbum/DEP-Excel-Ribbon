@@ -65,11 +65,32 @@ Public Class Form4
         Call SetText("File Downloaded.")
 
         Dim ignoredTickets As List(Of String) = Readfile(file)
+        Dim ticketDetails As New List(Of Dictionary(Of String, String))
+        Call SetText("Found " & ignoredTickets.Count & " ignored tickets")
+        Dim j As Integer = 0
 
+        wd = ndt.GiveMeChrome(False)
+
+        Dim timeSoFar As Stopwatch
+        timeSoFar = Stopwatch.StartNew()
+        Dim timeTaken As Long, estimatedTotalTime As Integer
         For Each ticket In ignoredTickets
+            If interrupt Then
+                wd.Quit()
+                Closeme()
+                Exit Sub
+            End If
             ndt.ticketNumber = ticket
 
+            ticketDetails.Add(ndt.DEPScrape(wd))
+            j += 1
+            timeTaken = timeSoFar.Elapsed.TotalSeconds
+            estimatedTotalTime = CInt(timeTaken / (j / ignoredTickets.Count))
+            Call SetText("Read " & j & " of " & ignoredTickets.Count & " ignored tickets.")
+            Call SetTextTwo("About " & estimatedTotalTime & "s remaining")
         Next
+
+        wd.Quit()
 
         Closeme()
 
@@ -88,6 +109,24 @@ Public Class Form4
         End If
     End Sub
     Delegate Sub SetTextCallback(ByVal [text] As String)
+
+
+    Private Sub SetTextTwo(ByVal [text] As String)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetTextCallback(AddressOf SetText)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+            Me.Label2.Visible = True
+            Me.Label2.Text = [text]
+        End If
+    End Sub
+
+
+
     Function Readfile(file As String) As List(Of String)
         Dim MyReader As New FileIO.TextFieldParser(file)
         Dim currentLine As String()
@@ -97,7 +136,6 @@ Public Class Form4
         MyReader.SetDelimiters(",")
         Dim ignoredTickets As New List(Of String)
 
-        Dim sheet As Excel.Worksheet = Globals.ThisAddIn.Application.ActiveWorkbook.Sheets.Add
 
         While Not MyReader.EndOfData
             If interrupt Then
@@ -124,7 +162,7 @@ Public Class Form4
     Function WasIgnored(ticketData As String()) As Boolean
         If ticketData.Last.ToLower.Contains("no dep tickets will be raised") Then
             Return True
-        ElseIf ticketData.Last.ToList.Contains(Form3.CloseMessage.ToLower) Then
+        ElseIf ticketData.Last.ToLower.Contains(Form3.CloseMessage.ToLower) Then
             Return True
         Else
             Return False

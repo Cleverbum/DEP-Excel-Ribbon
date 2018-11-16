@@ -83,12 +83,15 @@ Public Class Ribbon1
                     ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
                     My.Computer.FileSystem.DeleteFile(mailPath)
                 Else
-                    ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". Please complete their process manually.")
+                    ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.")
                 End If
             ElseIf line.action.Equals("Only", Globals.ThisAddIn.ignoreCase) Then
                 ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
+            ElseIf line.Action.Equals("Fake Serial", Globals.ThisAddIn.ignoreCase) Then
+                ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
             ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
                 ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
+                Call Send_AM_Email(line)
             End If
             i += 1
         Next
@@ -161,6 +164,15 @@ Public Class Ribbon1
             End If
         End If
 
+        If tmpLine.Action <> "Discard" Then
+            If fakeSerials(tmpLine.Serials) Then
+                tmpLine.Action = "Fake Serials"
+            End If
+        End If
+
+        If tmpLine.Suppliername.ToLower.Contains("gbm") Then
+            tmpLine.Action = "Discard"
+        End If
 
         Return tmpLine
     End Function
@@ -191,31 +203,20 @@ Public Class Ribbon1
     End Sub
 
 
-    Private Sub Button4_Click(sender As Object, e As RibbonControlEventArgs) Handles Button4.Click
-        Dim wd As Chrome.ChromeDriver
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-        wd = ndt.GiveMeChrome(True)
-        wd.Navigate.GoToUrl("http://nextdesk/ticket.php?id=6122686")
-        Dim elements = wd.FindElementsByClassName("ticketCell")
-        For Each element In elements
-            If element.Text.ToLower.Contains("client name") Then
-                Debug.WriteLine("element:")
-                Debug.Print(trimClient(element.Text))
-            End If
 
+    Function FakeSerials(serials As String()) As Boolean
+        For Each serial In serials
+            Try
+                If serial.ToLower.StartsWith("po") Then
+                    Return True
+                End If
+            Catch ex As Exception
+                'error handler?
+                Debug.Print(ex.Message)
+            End Try
         Next
-        wd.Quit()
-    End Sub
-
-    Function TrimClient(txt As String) As String
-
-        Dim list As String() = txt.ToLower.Split(vbCrLf)
-
-        For i = 0 To list.Count - 1
-            If list(i).ToLower.Contains("client name") Then
-                Return Trim(list(i + 1).Replace(vbCrLf, " "))
-            End If
-        Next
-        Return ""
+        Return False
     End Function
+
+
 End Class
