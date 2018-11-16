@@ -6,7 +6,8 @@ Public Class Form4
     Public interrupt As Boolean = False
     Private Sub Form4_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Downloading list of tickets"
-        BackgroundWorker1.RunWorkerAsync()
+        Call GetTickets()
+        'BackgroundWorker1.RunWorkerAsync()
     End Sub
 
 
@@ -87,15 +88,34 @@ Public Class Form4
             timeTaken = timeSoFar.Elapsed.TotalSeconds
             estimatedTotalTime = CInt(timeTaken / (j / ignoredTickets.Count))
             Call SetText("Read " & j & " of " & ignoredTickets.Count & " ignored tickets.")
-            Call SetTextTwo("About " & estimatedTotalTime & "s remaining")
+            Call SetTextTwo("About " & estimatedTotalTime - timeTaken & "s remaining")
         Next
 
         wd.Quit()
+
+        Call SetTextTwo("Writing output to excel")
+        Call WriteToExcel(ticketDetails)
 
         Closeme()
 
 
     End Sub
+
+    Private Sub WriteToExcel(ticketDetails As List(Of Dictionary(Of String, String)))
+        Dim i As Integer
+        Dim tSheet As Worksheet = Globals.ThisAddIn.Application.ActiveWorkbook.Sheets.Add()
+        Globals.ThisAddIn.Application.ScreenUpdating = False
+        tSheet.Cells(1, 1).value = "TicketNumber"
+        tSheet.Cells(1, 2).value = "Account Manager"
+        tSheet.Cells(1, 2).value = "Client"
+        For i = 0 To ticketDetails.Count
+            tSheet.Cells(i + 2, 1).value = ticketDetails(i)("TicketNumber")
+            tSheet.Cells(i + 2, 2).value = ticketDetails(i)("AM")
+            tSheet.Cells(i + 2, 2).value = ticketDetails(i)("Client")
+        Next
+        Globals.ThisAddIn.Application.ScreenUpdating = True
+    End Sub
+
     Private Sub SetText(ByVal [text] As String)
 
         ' InvokeRequired required compares the thread ID of the'
@@ -117,7 +137,7 @@ Public Class Form4
         ' calling thread to the thread ID of the creating thread.'
         ' If these threads are different, it returns true.'
         If Me.Label1.InvokeRequired Then
-            Dim d As New SetTextCallback(AddressOf SetText)
+            Dim d As New SetTextCallback(AddressOf SetTextTwo)
             Me.Invoke(d, New Object() {[text]})
         Else
             Me.Label2.Visible = True
