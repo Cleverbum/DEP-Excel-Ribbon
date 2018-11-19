@@ -90,8 +90,11 @@ Public Class Ribbon1
             ElseIf line.Action.Equals("Fake Serial", Globals.ThisAddIn.ignoreCase) Then
                 ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
             ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
-                ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
-                Call Send_AM_Email(line)
+                If Not line.Order_Type_Desc.ToLower.Contains("return") Then
+                    ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
+                    Call Send_AM_Email(line)
+                End If
+
             End If
             i += 1
         Next
@@ -218,5 +221,62 @@ Public Class Ribbon1
         Return False
     End Function
 
+    Private Sub Button4_Click(sender As Object, e As RibbonControlEventArgs)
+        Dim wd As Chrome.ChromeDriver
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        wd = ndt.GiveMeChrome(True)
+        Dim url As String = "http://nextdesk/ticket.php?id=5953026"
 
+        wd.Navigate.GoToUrl(url)
+        Dim depscrape As New Dictionary(Of String, String)
+
+        Dim elements = wd.FindElementsByClassName("ticketCell")
+        For Each element In elements
+            If element.Text.ToLower.Contains("client name") Then
+                depscrape.Add("Client", TrimClient(element.Text))
+                depscrape.Add("AM", TrimAM(element.Text))
+                depscrape.Add("Closed", TrimClosed(element.Text))
+            End If
+
+        Next
+
+    End Sub
+    Function TrimClosed(txt As String) As String
+
+        Dim list As String() = txt.ToLower.Split(vbCrLf)
+
+        For i = 0 To list.Count - 1
+            If list(i).ToLower.Contains("closed") Then
+                Return Trim(list(i + 1).Split(" ")(0).Replace(vbLf, " "))
+            End If
+        Next
+        Return ""
+    End Function
+    Function TrimClient(txt As String) As String
+
+        Dim list As String() = txt.ToLower.Split(vbCrLf)
+
+        For i = 0 To list.Count - 1
+            If list(i).ToLower.Contains("client name") Then
+                Return Trim(list(i + 1).Replace(vbLf, " "))
+            End If
+        Next
+        Return ""
+    End Function
+    Function TrimAM(txt As String) As String
+
+        Dim list As String() = txt.ToLower.Split(vbCrLf)
+
+        For i = 0 To list.Count - 1
+            If list(i).ToLower.Contains("description") Then
+                Dim words = list(i + 1).Split(" ")
+                For Each word In words
+                    If word.Contains("@") Then
+                        Return word
+                    End If
+                Next
+            End If
+        Next
+        Return ""
+    End Function
 End Class

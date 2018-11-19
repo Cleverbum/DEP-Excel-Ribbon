@@ -6,8 +6,8 @@ Public Class Form4
     Public interrupt As Boolean = False
     Private Sub Form4_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Downloading list of tickets"
-        Call GetTickets()
-        'BackgroundWorker1.RunWorkerAsync()
+        ' Call GetTickets()
+        BackgroundWorker1.RunWorkerAsync()
     End Sub
 
 
@@ -89,6 +89,7 @@ Public Class Form4
             estimatedTotalTime = CInt(timeTaken / (j / ignoredTickets.Count))
             Call SetText("Read " & j & " of " & ignoredTickets.Count & " ignored tickets.")
             Call SetTextTwo("About " & estimatedTotalTime - timeTaken & "s remaining")
+            'If j = 5 Then Exit For
         Next
 
         wd.Quit()
@@ -103,15 +104,23 @@ Public Class Form4
 
     Private Sub WriteToExcel(ticketDetails As List(Of Dictionary(Of String, String)))
         Dim i As Integer
-        Dim tSheet As Worksheet = Globals.ThisAddIn.Application.ActiveWorkbook.Sheets.Add()
+        Dim tSheet = Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets.Add()
         Globals.ThisAddIn.Application.ScreenUpdating = False
         tSheet.Cells(1, 1).value = "TicketNumber"
-        tSheet.Cells(1, 2).value = "Account Manager"
-        tSheet.Cells(1, 2).value = "Client"
-        For i = 0 To ticketDetails.Count
-            tSheet.Cells(i + 2, 1).value = ticketDetails(i)("TicketNumber")
-            tSheet.Cells(i + 2, 2).value = ticketDetails(i)("AM")
-            tSheet.Cells(i + 2, 2).value = ticketDetails(i)("Client")
+        tSheet.cells(1, 2).value = "First Ignored"
+        tSheet.Cells(1, 3).value = "Account Manager"
+        tSheet.Cells(1, 4).value = "Client"
+        For i = 0 To ticketDetails.Count - 1
+            Try
+                tSheet.Cells(i + 2, 1).value = ticketDetails(i)("TicketNumber")
+                tSheet.Cells(i + 2, 2).value = ticketDetails(i)("Closed")
+                tSheet.Cells(i + 2, 3).value = ticketDetails(i)("AM")
+                tSheet.Cells(i + 2, 4).value = ticketDetails(i)("Client")
+            Catch ex As Exception
+                Debug.WriteLine("Error writing " & i)
+                Debug.WriteLine(ex.Message)
+            End Try
+
         Next
         Globals.ThisAddIn.Application.ScreenUpdating = True
     End Sub
