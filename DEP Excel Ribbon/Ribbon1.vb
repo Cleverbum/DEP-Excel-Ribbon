@@ -51,7 +51,8 @@ Public Class Ribbon1
 
             If line.NDT_Number = 0 Then
                 MsgBox("Error creating ticket for Order: " & line.Sales_ID & " Exiting")
-                Exit Sub
+                ' go to next "line"
+                Continue For
             End If
 
             ndt.ticketNumber = line.NDT_Number
@@ -64,10 +65,21 @@ Public Class Ribbon1
 
 
             If tmpAlias <> "NN" Then
-                ndt.AddToNotify(tmpAlias)
+                Try
+                    ndt.AddToNotify(tmpAlias)
+                Catch ex As Exception
+                    Debug.WriteLine("Failed during notify")
+                    Debug.WriteLine(ex.Message)
+                End Try
+
             Else
-                ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email)
-                MsgBox("Could not find the nextdesk username for " & line.Account_Manager_Email & ". Please click OK to continue without adding them to the ticket")
+                Try
+                    ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email)
+                    MsgBox("Could not find the nextdesk username for " & line.Account_Manager_Email & ". Please click OK to continue without adding them to the ticket")
+                Catch ex As Exception
+                    Debug.WriteLine("Failed during update")
+                    Debug.WriteLine(ex.Message)
+                End Try
             End If
 
             If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And
@@ -79,20 +91,55 @@ Public Class Ribbon1
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
                     thisMail.Display()
                     thisMail.SaveAs(mailPath)
+                    Try
+                        ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
+                    Catch ex As Exception
+                        Debug.WriteLine("Failed during attach")
+                        Debug.WriteLine(ex.Message)
+                    End Try
+                    Try
+                        My.Computer.FileSystem.DeleteFile(mailPath)
+                    Catch ex As Exception
+                        Debug.WriteLine("Failed during file delete")
+                        Debug.WriteLine(ex.Message)
+                    End Try
 
-                    ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
-                    My.Computer.FileSystem.DeleteFile(mailPath)
                 Else
-                    ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.")
+                    Try
+                        ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.")
+                    Catch ex As Exception
+                        Debug.WriteLine("Failed during  update")
+                        Debug.WriteLine(ex.Message)
+                    End Try
                 End If
             ElseIf line.action.Equals("Only", Globals.ThisAddIn.ignoreCase) Then
-                ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
+                Try
+                    ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
+                Catch ex As Exception
+                    Debug.WriteLine("Failed during update")
+                    Debug.WriteLine(ex.Message)
+                End Try
             ElseIf line.Action.Equals("Fake Serial", Globals.ThisAddIn.ignoreCase) Then
-                ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
+                Try
+                    ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
+                Catch ex As Exception
+                    Debug.WriteLine("Failed during update")
+                    Debug.WriteLine(ex.Message)
+                End Try
             ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
                 If Not line.Order_Type_Desc.ToLower.Contains("return") Then
-                    ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
-                    Call Send_AM_Email(line)
+                    Try
+                        ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
+                    Catch ex As Exception
+                        Debug.WriteLine("Failed during update")
+                        Debug.WriteLine(ex.Message)
+                    End Try
+                    Try
+                        Call Send_AM_Email(line)
+                    Catch ex As Exception
+                        Debug.WriteLine("Failed during mail generation")
+                        Debug.WriteLine(ex.Message)
+                    End Try
                 End If
 
             End If
@@ -161,17 +208,23 @@ Public Class Ribbon1
 
         End If
 
+        'if there is a clause to "only" register x then don't try automated submission
+
         If tmpLine.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) Then
             If tmpLine.DEP.ToLower.Contains("only") Then
                 tmpLine.Action = "Only"
             End If
         End If
 
+        'if it includes a fake serial then modify later behaviour
+
         If tmpLine.Action <> "Discard" Then
             If fakeSerials(tmpLine.Serials) Then
                 tmpLine.Action = "Fake Serials"
             End If
         End If
+
+        'if the supplier is GBM discard - we can't do anything
 
         If tmpLine.Suppliername.ToLower.Contains("gbm") Then
             tmpLine.Action = "Discard"
@@ -279,4 +332,21 @@ Public Class Ribbon1
         Next
         Return ""
     End Function
+
+    Private Sub Button4_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button4.Click
+        Dim options As New Chrome.ChromeOptions
+        Dim service As ChromeDriverService = ChromeDriverService.CreateDefaultService
+
+
+
+
+
+        Try
+            Dim wd As New Chrome.ChromeDriver(service, options)
+            wd.Navigate.GoToUrl("http://www.google.com")
+        Catch
+            MsgBox("oh dear, that didn't work at all!")
+        End Try
+
+    End Sub
 End Class

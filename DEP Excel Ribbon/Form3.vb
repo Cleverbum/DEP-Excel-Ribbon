@@ -1,6 +1,7 @@
 ﻿Imports System.Diagnostics
 Imports System.IO
 Imports OpenQA.Selenium
+Imports OpenQA.Selenium.Chrome
 
 Public Class Form3
     Public Const CloseMessage As String =
@@ -18,7 +19,7 @@ Public Class Form3
 
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-        Call gettickets()
+        Call GetTickets()
     End Sub
 
     Sub GetTickets()
@@ -64,7 +65,7 @@ Public Class Form3
 
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
         Dim newlines As Tuple(Of Integer, Integer)
-        newlines = processfile(file)
+        newlines = ProcessFile(file)
 
         Closeme()
 
@@ -124,7 +125,7 @@ Public Class Form3
                         sheet.Hyperlinks.Add(sheet.Cells(i, 1), "http://nextdesk/ticket.php?setmode=Log&id=" & sheet.Cells(i, 2).value)
                     End If
 
-                    If toClose(sheet, i) Then
+                    If ToClose(sheet, i) Then
                         sheet.Cells(i, currentLine.Count).value = "Close"
                     End If
 
@@ -175,9 +176,9 @@ Public Class Form3
                     currentLine(typeloc).StartsWith("Apple", vbTextCompare) Then
 
 
-                    If toClose(currentLine.Last) Then
+                    If ToClose(currentLine.Last) Then
                         Call SetText("Closing ticket " & currentLine(0))
-                        closeTicket(currentLine(0))
+                        CloseTicket(currentLine(0))
                         deleted += 1
                         Call SetText("Processing Tickets...")
                     End If

@@ -193,7 +193,10 @@ Public Class Form4
             Return True
         ElseIf ticketData.Last.ToLower.Contains(Form3.CloseMessage.ToLower) Then
             Return True
+        ElseIf ticketData.Last.ToLower.Contains("dep please advise and i will reopen this ticket") Then
+            Return True
         Else
+
             Return False
         End If
     End Function

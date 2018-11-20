@@ -31,8 +31,15 @@ Public Class ThisAddIn
 
         emailAddress = emailAddress.Replace("@uk.insight.com", "@insight.com")
 
+        'below are corrections between iCare email addresses and Nextdesk Email addresses
+        emailAddress = emailAddress.Replace("Scott.Waggstaff@insight.com", "Scott.Wagstaff@insight.com")
+
+
+
+        'do final lookup of email to "recipient"
         objAEntry = AppOutlook.Session.CreateRecipient(emailAddress).AddressEntry
 
+        'get alias of "recipient"
 
         Try
             FindAlias = objAEntry.GetExchangeUser.Alias
