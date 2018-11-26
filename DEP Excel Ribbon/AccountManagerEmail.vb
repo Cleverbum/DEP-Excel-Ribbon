@@ -15,6 +15,7 @@ Module AccountManagerEmail
         With amEmail
             .Subject = .Subject.Replace("%ordernum%", depLine.Sales_ID)
             .To = depLine.Account_Manager_Email
+            .CC = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
 
             .HTMLBody = .HTMLBody.Replace("%AM%", depLine.Account_Manager)
             .HTMLBody = .HTMLBody.Replace("ordernum", depLine.Sales_ID)
@@ -24,8 +25,8 @@ Module AccountManagerEmail
             ' .Body = .Body.Replace("ordernum", depLine.Sales_ID)
             ' .Body = .Body.Replace("ticketnum", depLine.NDT_Number)
 
-
-            .Display()
+            '.display()
+            .Send()
         End With
     End Sub
 End Module

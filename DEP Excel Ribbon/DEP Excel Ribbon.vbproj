@@ -36,7 +36,7 @@
     <PublishUrl>\\insight.com\root\Shared\Sales\public sector\Martin Klefas\DEP Excel Toolbar\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.10</ApplicationVersion>
+    <ApplicationVersion>1.0.0.12</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
@@ -230,6 +230,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AccountManagerEmail.vb" />
+    <Compile Include="Module1.vb" />
     <Compile Include="Ribbon1.Designer.vb">
       <DependentUpon>Ribbon1.vb</DependentUpon>
     </Compile>

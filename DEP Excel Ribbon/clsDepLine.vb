@@ -26,6 +26,7 @@
     Public Property POCreated_Date As Date
     Public Property NDT_Number As Long
     Public Property Action As String
+    Public Property Customer_DEP_ID As Long
     Private pSerials() As String
 
 

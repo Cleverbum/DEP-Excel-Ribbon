@@ -14,11 +14,13 @@ Public Class Ribbon1
         Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
         Dim myCount As Integer, i As Integer, doDistiMail As Boolean
-
+        Dim errorCount As Integer = 0
 
         Dim lines As New List(Of clsDepLine), snglLine As ClsDepLine
 
-        MsgBox("Acting on " & oXlWb.Name)
+        Dim TDLines As New List(Of ClsDepLine)
+
+        ' MsgBox("Acting on " & oXlWb.Name)
 
         doDistiMail = (MsgBox("Would you like to generate the emails to distribution at the same time", vbYesNo) = vbYes)
         Dim mailPath As String
@@ -33,11 +35,10 @@ Public Class Ribbon1
             i += 1
         End While
 
-        MsgBox("Found " & lines.Count & " total lines.")
 
         myCount = discardNoDEP(lines) ' number of lines removed
 
-        MsgBox("Discarded " & myCount)
+        ' MsgBox("Found " & lines.Count & " total lines. Discarded " & myCount)
         i = 1
         For Each line As clsDepLine In lines
             Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
@@ -50,7 +51,8 @@ Public Class Ribbon1
             End Try
 
             If line.NDT_Number = 0 Then
-                MsgBox("Error creating ticket for Order: " & line.Sales_ID & " Exiting")
+                highlightError(line.Sales_ID)
+                errorCount += 1
                 ' go to next "line"
                 Continue For
             End If
@@ -75,7 +77,7 @@ Public Class Ribbon1
             Else
                 Try
                     ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email)
-                    MsgBox("Could not find the nextdesk username for " & line.Account_Manager_Email & ". Please click OK to continue without adding them to the ticket")
+
                 Catch ex As Exception
                     Debug.WriteLine("Failed during update")
                     Debug.WriteLine(ex.Message)
@@ -91,23 +93,33 @@ Public Class Ribbon1
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
                     thisMail.Display()
                     thisMail.SaveAs(mailPath)
+                    thisMail.CC = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
+                    thisMail.Send()
+
                     Try
                         ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
                     Catch ex As Exception
+                        highlightError(line.Sales_ID)
+                        errorCount += 1
                         Debug.WriteLine("Failed during attach")
                         Debug.WriteLine(ex.Message)
                     End Try
                     Try
                         My.Computer.FileSystem.DeleteFile(mailPath)
                     Catch ex As Exception
+                        highlightError(line.Sales_ID)
+                        errorCount += 1
                         Debug.WriteLine("Failed during file delete")
                         Debug.WriteLine(ex.Message)
                     End Try
 
                 Else
                     Try
+                        TDLines.Add(line)
                         ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.")
                     Catch ex As Exception
+                        HighlightError(line.Sales_ID)
+                        errorCount += 1
                         Debug.WriteLine("Failed during  update")
                         Debug.WriteLine(ex.Message)
                     End Try
@@ -116,6 +128,8 @@ Public Class Ribbon1
                 Try
                     ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
                 Catch ex As Exception
+                    highlightError(line.Sales_ID)
+                    errorCount += 1
                     Debug.WriteLine("Failed during update")
                     Debug.WriteLine(ex.Message)
                 End Try
@@ -123,6 +137,8 @@ Public Class Ribbon1
                 Try
                     ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
                 Catch ex As Exception
+                    highlightError(line.Sales_ID)
+                    errorCount += 1
                     Debug.WriteLine("Failed during update")
                     Debug.WriteLine(ex.Message)
                 End Try
@@ -131,12 +147,16 @@ Public Class Ribbon1
                     Try
                         ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
                     Catch ex As Exception
+                        highlightError(line.Sales_ID)
+                        errorCount += 1
                         Debug.WriteLine("Failed during update")
                         Debug.WriteLine(ex.Message)
                     End Try
                     Try
                         Call Send_AM_Email(line)
                     Catch ex As Exception
+                        highlightError(line.Sales_ID)
+                        errorCount += 1
                         Debug.WriteLine("Failed during mail generation")
                         Debug.WriteLine(ex.Message)
                     End Try
@@ -145,8 +165,38 @@ Public Class Ribbon1
             End If
             i += 1
         Next
+
+        'If TDLines.Count > 0 AndAlso
+        '   MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
+        '    For Each line In TDLines
+        '        If Not RegisterTechdata(line) Then
+        '            HighlightError(line.Sales_ID)
+        '            errorCount += 1
+        '            Debug.WriteLine("Failed during TD Registration")
+
+        '        End If
+        '    Next
+
+        'End If
+
+        If errorCount > 0 Then
+            MsgBox("There were " & errorCount & " errors during creation of tickets, these have been highlighted red.")
+        Else
+            MsgBox("Completed tasks with no errors")
+        End If
         Globals.ThisAddIn.Application.StatusBar = "All Done!"
     End Sub
+
+    Private Sub HighlightError(sales_ID As Long)
+        Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
+        Dim tCell As Excel.Range = tsheet.Cells.Find(sales_ID)
+
+        With tCell.EntireRow.Font
+            .Color = RGB(255, 0, 0)
+            .Bold = True
+        End With
+    End Sub
+
     Function ReadExcelLine(ByRef worksheet As Object, ByVal i As Integer) As ClsDepLine
         Dim tmpLine As New ClsDepLine With {
             .Entity = worksheet.Cells(i, 1).value,
@@ -196,6 +246,11 @@ Public Class Ribbon1
                 tmpLine.Action = "Discard"
             Else
                 tmpLine.Action = "Ticket"
+                Try
+                    tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(0)
+                Catch
+                    tmpLine.Customer_DEP_ID = 0
+                End Try
             End If
         ElseIf tmpLine.DEP.ToLower.Contains("reg") Then
             If tmpLine.Account_Manager_Email Is Nothing Then
@@ -219,7 +274,7 @@ Public Class Ribbon1
         'if it includes a fake serial then modify later behaviour
 
         If tmpLine.Action <> "Discard" Then
-            If fakeSerials(tmpLine.Serials) Then
+            If FakeSerials(tmpLine.Serials) Then
                 tmpLine.Action = "Fake Serials"
             End If
         End If
@@ -338,7 +393,7 @@ Public Class Ribbon1
         Dim service As ChromeDriverService = ChromeDriverService.CreateDefaultService
 
 
-
+        MsgBox("trying to open a chrome window")
 
 
         Try
@@ -348,5 +403,21 @@ Public Class Ribbon1
             MsgBox("oh dear, that didn't work at all!")
         End Try
 
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs)
+        Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
+        Dim tCell As Excel.Range = tsheet.Cells.Find("5418763")
+
+        With tCell.EntireRow.Font
+            .Color = RGB(255, 0, 0)
+            .Bold = True
+        End With
+
+    End Sub
+
+    Private Sub Button5_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button5.Click
+        Dim test As Boolean
+        test = registerTechdata(New ClsDepLine)
     End Sub
 End Class
