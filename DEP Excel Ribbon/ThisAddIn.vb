@@ -3,9 +3,7 @@ Imports outlook = Microsoft.Office.Interop.Outlook
 
 Public Class ThisAddIn
 
-    Public distiEmailMessage = "As attached, an email was sent to distribution to ask them
-                to register these devices to the appropriate DEP ID. They will confirm by email when this is done,
-                at which point this ticket will be updated again."
+    Public distiEmailMessage = "As attached, an email was sent to distribution to ask them to register these devices to the appropriate DEP ID. They will confirm by email when this is done, at which point this ticket will be updated again."
 
     Public ignoreCase As StringComparison = StringComparison.CurrentCultureIgnoreCase
 
