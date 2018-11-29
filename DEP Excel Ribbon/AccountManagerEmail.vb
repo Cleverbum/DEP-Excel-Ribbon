@@ -17,7 +17,7 @@ Module AccountManagerEmail
             .To = depLine.Account_Manager_Email
             .CC = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
 
-            .HTMLBody = .HTMLBody.Replace("%AM%", depLine.Account_Manager)
+            .HTMLBody = .HTMLBody.Replace("%AM%", depLine.Account_Manager.Split(" ")(0))
             .HTMLBody = .HTMLBody.Replace("ordernum", depLine.Sales_ID)
             .HTMLBody = .HTMLBody.Replace("ticketnum", depLine.NDT_Number)
 

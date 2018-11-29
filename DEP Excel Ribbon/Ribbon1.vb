@@ -30,8 +30,15 @@ Public Class Ribbon1
         i = 2
 
         While oXlWs.Cells(i, 1).value <> ""
-            snglLine = readExcelLine(oXlWs, i)
-            lines.Add(snglLine)
+            Try
+                snglLine = ReadExcelLine(oXlWs, i)
+                lines.Add(snglLine)
+            Catch
+                HighlightError(oXlWs.Cells(i, 1))
+                errorCount += 1
+
+            End Try
+
             i += 1
         End While
 
@@ -42,10 +49,12 @@ Public Class Ribbon1
         i = 1
         For Each line As clsDepLine In lines
             Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+            Dim browser As New Chrome.ChromeDriver
+            browser = ndt.GiveMeChrome(False)
             Globals.ThisAddIn.Application.StatusBar = "Creating ticket " & i & " of " & lines.Count
 
             Try
-                line.NDT_Number = ndt.CreateTicket(2, line.toTicket())
+                line.NDT_Number = ndt.CreateTicket(2, line.ToTicket(), browser)
             Catch ex As Exception
                 line.NDT_Number = 0
             End Try
@@ -60,7 +69,7 @@ Public Class Ribbon1
             ndt.ticketNumber = line.NDT_Number
 
             If line.Units > 10 Then
-                ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive")
+                ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive", browser)
             End If
 
             Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
@@ -68,7 +77,7 @@ Public Class Ribbon1
 
             If tmpAlias <> "NN" Then
                 Try
-                    ndt.AddToNotify(tmpAlias)
+                    ndt.AddToNotify(tmpAlias, browser)
                 Catch ex As Exception
                     Debug.WriteLine("Failed during notify")
                     Debug.WriteLine(ex.Message)
@@ -76,7 +85,7 @@ Public Class Ribbon1
 
             Else
                 Try
-                    ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email)
+                    ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email, browser)
 
                 Catch ex As Exception
                     Debug.WriteLine("Failed during update")
@@ -87,7 +96,7 @@ Public Class Ribbon1
             If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
                 Dim distiMail As New clsDistiEmail, thisMail As Outlook.MailItem
-                Globals.ThisAddIn.Application.StatusBar = "Generating an email if Required"
+                Globals.ThisAddIn.Application.StatusBar = "For ticket " & i & " of " & lines.Count & ": Generating an email if Required"
                 thisMail = distiMail.generateMail(line)
 
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
@@ -116,7 +125,7 @@ Public Class Ribbon1
                 Else
                     Try
                         TDLines.Add(line)
-                        ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.")
+                        ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.", browser)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
@@ -126,7 +135,7 @@ Public Class Ribbon1
                 End If
             ElseIf line.action.Equals("Only", Globals.ThisAddIn.ignoreCase) Then
                 Try
-                    ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.")
+                    ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.", browser)
                 Catch ex As Exception
                     highlightError(line.Sales_ID)
                     errorCount += 1
@@ -135,7 +144,7 @@ Public Class Ribbon1
                 End Try
             ElseIf line.Action.Equals("Fake Serial", Globals.ThisAddIn.ignoreCase) Then
                 Try
-                    ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.")
+                    ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.", browser)
                 Catch ex As Exception
                     highlightError(line.Sales_ID)
                     errorCount += 1
@@ -145,7 +154,7 @@ Public Class Ribbon1
             ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
                 If Not line.Order_Type_Desc.ToLower.Contains("return") Then
                     Try
-                        ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks")
+                        ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks", browser)
                     Catch ex As Exception
                         highlightError(line.Sales_ID)
                         errorCount += 1
@@ -191,6 +200,13 @@ Public Class Ribbon1
         Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
         Dim tCell As Excel.Range = tsheet.Cells.Find(sales_ID)
 
+        With tCell.EntireRow.Font
+            .Color = RGB(255, 0, 0)
+            .Bold = True
+        End With
+    End Sub
+
+    Private Sub HighlightError(tCell As Excel.Range)
         With tCell.EntireRow.Font
             .Color = RGB(255, 0, 0)
             .Bold = True
