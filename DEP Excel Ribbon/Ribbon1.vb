@@ -47,10 +47,12 @@ Public Class Ribbon1
 
         ' MsgBox("Found " & lines.Count & " total lines. Discarded " & myCount)
         i = 1
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
+        Dim browser As New Chrome.ChromeDriver
+        browser = ndt.GiveMeChrome(False)
+
         For Each line As clsDepLine In lines
-            Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-            Dim browser As New Chrome.ChromeDriver
-            browser = ndt.GiveMeChrome(False)
+
             Globals.ThisAddIn.Application.StatusBar = "Creating ticket " & i & " of " & lines.Count
 
             Try
@@ -174,6 +176,8 @@ Public Class Ribbon1
             End If
             i += 1
         Next
+
+        browser.Quit()
 
         'If TDLines.Count > 0 AndAlso
         '   MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
