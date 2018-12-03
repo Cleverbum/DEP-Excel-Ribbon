@@ -127,4 +127,8 @@ Public Class Ribbon1
         Dim test As Boolean
         test = registerTechdata(New ClsDepLine)
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As RibbonControlEventArgs) Handles Button6.Click
+
+    End Sub
 End Class
