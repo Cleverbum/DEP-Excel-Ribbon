@@ -32,7 +32,7 @@ Public Class Form1
 
         Dim TDLines As New List(Of ClsDepLine)
 
-        ' MsgBox("Acting on " & oXlWb.Name)
+        UpdateStatus("Acting on " & oXlWb.Name)
 
         doDistiMail = (MsgBox("Would you like to generate the emails to distribution at the same time", vbYesNo) = vbYes)
         Dim mailPath As String
@@ -53,11 +53,12 @@ Public Class Form1
 
             i += 1
         End While
-
+        Dim total As Long = lines.LongCount
 
         myCount = DiscardNoDEP(lines) ' number of lines removed
 
-        ' MsgBox("Found " & lines.Count & " total lines. Discarded " & myCount)
+        UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
+
         i = 1
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
         Dim browser As Chrome.ChromeDriver
