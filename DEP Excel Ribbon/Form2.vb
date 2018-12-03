@@ -3,6 +3,8 @@
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         For i As Integer = 1 To 100
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.5))
+            SetText(i)
+            SetProgress(i)
         Next
     End Sub
 
@@ -19,6 +21,8 @@
             .Visible = True
 
         End With
+        BackgroundWorker1.RunWorkerAsync()
+
     End Sub
 
     Private Sub SetText(ByVal [text] As String)
@@ -35,7 +39,7 @@
     End Sub
     Delegate Sub SetTextCallback(ByVal [text] As String)
 
-    Private Sub SetProgress(ByVal [progress] As String)
+    Private Sub SetProgress(ByVal [progress] As Double)
 
         ' InvokeRequired required compares the thread ID of the'
         ' calling thread to the thread ID of the creating thread.'

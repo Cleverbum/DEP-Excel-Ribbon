@@ -129,6 +129,7 @@ Public Class Ribbon1
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As RibbonControlEventArgs) Handles Button6.Click
-
+        Dim frm As New Form2
+        frm.Show()
     End Sub
 End Class
