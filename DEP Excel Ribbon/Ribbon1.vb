@@ -48,7 +48,7 @@ Public Class Ribbon1
         ' MsgBox("Found " & lines.Count & " total lines. Discarded " & myCount)
         i = 1
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
-        Dim browser As New Chrome.ChromeDriver
+        Dim browser As Chrome.ChromeDriver
         browser = ndt.GiveMeChrome(False)
 
         For Each line As clsDepLine In lines
@@ -64,6 +64,7 @@ Public Class Ribbon1
             If line.NDT_Number = 0 Then
                 highlightError(line.Sales_ID)
                 errorCount += 1
+                i += 1
                 ' go to next "line"
                 Continue For
             End If
@@ -192,12 +193,14 @@ Public Class Ribbon1
 
         'End If
 
+        Globals.ThisAddIn.Application.StatusBar = "All Done!"
+
         If errorCount > 0 Then
             MsgBox("There were " & errorCount & " errors during creation of tickets, these have been highlighted red.")
         Else
             MsgBox("Completed tasks with no errors")
         End If
-        Globals.ThisAddIn.Application.StatusBar = "All Done!"
+
     End Sub
 
     Private Sub HighlightError(sales_ID As Long)
