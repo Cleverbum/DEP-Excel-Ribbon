@@ -3,9 +3,10 @@ Imports outlook = Microsoft.Office.Interop.Outlook
 
 Public Class ThisAddIn
 
-    Public distiEmailMessage = "As attached, an email was sent to distribution to ask them to register these devices to the appropriate DEP ID. They will confirm by email when this is done, at which point this ticket will be updated again."
+    Public Const ccList As String = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
 
-    Public ignoreCase As StringComparison = StringComparison.CurrentCultureIgnoreCase
+
+    Public Const ignoreCase As StringComparison = StringComparison.CurrentCultureIgnoreCase
 
     Private Sub ThisAddIn_Startup() Handles Me.Startup
 

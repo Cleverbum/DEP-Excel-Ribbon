@@ -109,7 +109,7 @@ Public Class Form1
                 End Try
             End If
 
-            If line.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) And
+            If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
                 Dim distiMail As New ClsDistiEmail, thisMail As Outlook.MailItem
                 UpdateStatus("For ticket " & i & " of " & lines.Count & ": Generating an email if Required")
@@ -118,11 +118,11 @@ Public Class Form1
                 If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
                     thisMail.Display()
                     thisMail.SaveAs(mailPath)
-                    thisMail.CC = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
+                    thisMail.CC = ThisAddIn.ccList
                     thisMail.Send()
 
                     Try
-                        ndt.UpdateNextDeskAttach(mailPath, Globals.ThisAddIn.distiEmailMessage)
+                        ndt.UpdateNextDeskAttach(mailPath, distiEmailMessage)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
@@ -141,7 +141,7 @@ Public Class Form1
                 Else
                     Try
                         TDLines.Add(line)
-                        ndt.UpdateNextDesk("No mail was sent for this as the distributor is " & line.Suppliername & ". DEP Team: Please complete their process manually.", browser)
+                        ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
@@ -149,28 +149,28 @@ Public Class Form1
                         Debug.WriteLine(ex.Message)
                     End Try
                 End If
-            ElseIf line.Action.Equals("Only", Globals.ThisAddIn.ignoreCase) Then
+            ElseIf line.Action.Equals("Only", ThisAddIn.ignoreCase) Then
                 Try
-                    ndt.UpdateNextDesk("There is an 'Only' condition in this customer's registration preferences, and so this registration will need to be completed manually. Thanks.", browser)
+                    ndt.UpdateNextDesk(OnlyMessage, browser)
                 Catch ex As Exception
                     HighlightError(line.Sales_ID)
                     errorCount += 1
                     Debug.WriteLine("Failed during update")
                     Debug.WriteLine(ex.Message)
                 End Try
-            ElseIf line.Action.Equals("Fake Serial", Globals.ThisAddIn.ignoreCase) Then
+            ElseIf line.Action.Equals("Fake Serial", ThisAddIn.ignoreCase) Then
                 Try
-                    ndt.UpdateNextDesk("It seems that some of the serial numbers recorded in iCare do not match normal Apple patterns - please can you investigate this prior to submitting these for DEP.", browser)
+                    ndt.UpdateNextDesk(FakeMessage, browser)
                 Catch ex As Exception
                     HighlightError(line.Sales_ID)
                     errorCount += 1
                     Debug.WriteLine("Failed during update")
                     Debug.WriteLine(ex.Message)
                 End Try
-            ElseIf line.Action.Equals("Ticket", Globals.ThisAddIn.ignoreCase) Then
+            ElseIf line.Action.Equals("Ticket", ThisAddIn.ignoreCase) Then
                 If Not line.Order_Type_Desc.ToLower.Contains("return") Then
                     Try
-                        ndt.UpdateNextDesk("Hi, this shipped yesterday, would the client like this to be added to DEP? If so, please provide DEP ID.  Would the customer also like all Apple devices adding to DEP when shipped Thanks", browser)
+                        ndt.UpdateNextDesk(DepQuestion, browser)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
@@ -313,7 +313,7 @@ Public Class Form1
 
         'if there is a clause to "only" register x then don't try automated submission
 
-        If tmpLine.Action.Equals("Reg", Globals.ThisAddIn.ignoreCase) Then
+        If tmpLine.Action.Equals("Reg", ThisAddIn.ignoreCase) Then
             If tmpLine.DEP.ToLower.Contains("only") Then
                 tmpLine.Action = "Only"
             End If

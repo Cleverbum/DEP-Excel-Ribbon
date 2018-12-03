@@ -236,7 +236,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AccountManagerEmail.vb" />
+    <Compile Include="Message-texts.vb" />
     <Compile Include="Module1.vb" />
+    <Compile Include="My Project\Module1.vb" />
     <Compile Include="Ribbon1.Designer.vb">
       <DependentUpon>Ribbon1.vb</DependentUpon>
     </Compile>
