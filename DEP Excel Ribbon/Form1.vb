@@ -7,9 +7,11 @@ Imports OpenQA.Selenium.Chrome
 
 Public Class Form1
 
-    Public interrupt As Boolean = False
+    Public Interrupt As Boolean = False
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Reading in the Excel file"
+        Label2.Text = "Calculating Duration Estimate"
         BackgroundWorker1.RunWorkerAsync()
     End Sub
 
@@ -61,13 +63,17 @@ Public Class Form1
 
         UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
 
+        Call SetProgressMax(myCount + 1)
+
+
+
         i = 1
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
         Dim browser As Chrome.ChromeDriver
         browser = ndt.GiveMeChrome(False)
 
         For Each line As ClsDepLine In lines
-
+            Call SetProgress(i)
             If interrupt Then Exit For
 
             Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
@@ -96,6 +102,8 @@ Public Class Form1
 
             If interrupt Then Exit For
 
+            Call SetProgress(i + 1.0 / 3.0)
+
             If tmpAlias <> "NN" Then
                 Try
                     ndt.AddToNotify(tmpAlias, browser)
@@ -116,8 +124,13 @@ Public Class Form1
 
             If interrupt Then Exit For
 
+            Call SetProgress(i + 2.0 / 3.0)
+
             If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
+
+
+
                 Dim distiMail As New ClsDistiEmail, thisMail As Outlook.MailItem
                 UpdateStatus("For ticket " & i & " of " & lines.Count & ": Generating an email if Required")
                 thisMail = distiMail.GenerateMail(line)
@@ -391,4 +404,35 @@ Public Class Form1
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         interrupt = True
     End Sub
+
+    Private Sub SetProgress(ByVal [progress] As Double)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetProgressCallback(AddressOf SetProgress)
+            Me.Invoke(d, New Object() {[progress]})
+        Else
+            Me.ProgressBar1.Value = [progress]
+        End If
+    End Sub
+    Delegate Sub SetProgressCallback(ByVal [progress] As Double)
+
+    Private Sub SetProgressMax(ByVal [progressMax] As Long)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetProgressMaxCallback(AddressOf SetProgressMax)
+            Me.Invoke(d, New Object() {[progressMax]})
+        Else
+            Me.ProgressBar1.Maximum = [progressMax]
+        End If
+    End Sub
+    Delegate Sub SetProgressMaxCallback(ByVal [progressMax] As Long)
+
+
+
 End Class
