@@ -1,5 +1,6 @@
 ﻿Imports System.Diagnostics
 Imports System.IO
+Imports System.Windows.Forms
 Imports Microsoft.Office.Interop
 Imports OpenQA.Selenium
 Imports OpenQA.Selenium.Chrome
@@ -18,8 +19,9 @@ Public Class Form1
     End Sub
 
 
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Call MakeTickets()
+        Call Closeme()
     End Sub
 
     Sub MakeTickets()
@@ -66,6 +68,8 @@ Public Class Form1
 
         For Each line As ClsDepLine In lines
 
+            If interrupt Then Exit For
+
             Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
 
             Try
@@ -90,6 +94,7 @@ Public Class Form1
 
             Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
 
+            If interrupt Then Exit For
 
             If tmpAlias <> "NN" Then
                 Try
@@ -108,6 +113,8 @@ Public Class Form1
                     Debug.WriteLine(ex.Message)
                 End Try
             End If
+
+            If interrupt Then Exit For
 
             If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
@@ -381,5 +388,7 @@ Public Class Form1
         Call SetText(message)
     End Sub
 
-
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        interrupt = True
+    End Sub
 End Class
