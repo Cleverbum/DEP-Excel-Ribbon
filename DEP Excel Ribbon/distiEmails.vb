@@ -9,7 +9,7 @@ Public Class ClsDistiEmail
         Dim distiEmail As Outlook.MailItem
         distiEmail = AppOutlook.CreateItem(Outlook.OlItemType.olMailItem)
 
-        If DepInfo.Suppliername.StartsWith("Ingram", Globals.ThisAddIn.ignoreCase) Then
+        If DepInfo.Suppliername.StartsWith("Ingram", ThisAddIn.ignoreCase) Then
             Dim templateFile As String
             templateFile = CreateIngramSpreadsheet(DepInfo)
             distiEmail.Attachments.Add(templateFile)
@@ -17,7 +17,7 @@ Public Class ClsDistiEmail
             distiEmail.To = "MobilityAppleDEPEMEA@ingrammicro.com"
             distiEmail.Subject = "Please can you register the attached devices (NDT: " & DepInfo.NDT_Number & ")"
             ' My.Computer.FileSystem.DeleteFile(templateFile)
-        ElseIf DepInfo.Suppliername.StartsWith("Westcoast", Globals.ThisAddIn.ignoreCase) Then
+        ElseIf DepInfo.Suppliername.StartsWith("Westcoast", ThisAddIn.ignoreCase) Then
             distiEmail.HTMLBody = WestCoastBody(DepInfo)
             distiEmail.To = "dep@westcoast.co.uk"
             distiEmail.Subject = "Please can you register the below devices (NDT: " & DepInfo.NDT_Number & ")"
