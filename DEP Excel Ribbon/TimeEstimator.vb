@@ -9,14 +9,17 @@ Public Class TimeEstimator
 
 
     Sub New(tasks As Long, Guess As TimeSpan)
-        TotalTasks = tasks
-        GuessedDuration = Guess
-        Timer = Stopwatch.StartNew()
+        Call Setup(tasks, Guess)
     End Sub
 
     Sub New(tasks As Long, GuessedSeconds As Double)
+        Call Setup(tasks, TimeSpan.FromSeconds(GuessedSeconds))
+    End Sub
+
+    Sub Setup(tasks As Long, Guess As TimeSpan)
         TotalTasks = tasks
-        GuessedDuration = TimeSpan.FromSeconds(GuessedSeconds)
+        GuessedDuration = Guess
+        Timer = Stopwatch.StartNew()
     End Sub
 
     Function TimeRemaining(TasksDone As Long) As TimeSpan
