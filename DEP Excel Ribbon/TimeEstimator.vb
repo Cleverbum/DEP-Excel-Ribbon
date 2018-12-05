@@ -5,7 +5,7 @@ Public Class TimeEstimator
     Public TotalTasks As Long
 
     Private GuessedDuration As TimeSpan
-    Private ReadOnly Timer As Stopwatch
+    Private Timer As Stopwatch
 
 
     Sub New(tasks As Long, Guess As TimeSpan)

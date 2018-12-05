@@ -8,7 +8,7 @@ Imports OpenQA.Selenium.Chrome
 Public Class Form1
 
     Public Interrupt As Boolean = False
-    Public timeEstimate As TimeEstimator
+    'Public timeEstimate As TimeEstimator
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Reading in the Excel file"
@@ -416,8 +416,8 @@ Public Class Form1
             Me.Invoke(d, New Object() {[progress]})
         Else
             If [progress] = CInt([progress]) Then
-                Dim timeLeft As TimeSpan = timeEstimate.TimeRemaining([progress])
-                Me.Label2.Text = "About " & PrettyString(timeLeft) & " remaining."
+                'Dim timeLeft As TimeSpan = timeEstimate.TimeRemaining([progress])
+                'Me.Label2.Text = "About " & PrettyString(timeLeft) & " remaining."
             End If
 
             Me.ProgressBar1.Value = [progress]
@@ -428,7 +428,7 @@ Public Class Form1
 
     Private Sub SetProgressMax(ByVal [progressMax] As Long)
 
-        timeEstimate = New TimeEstimator(progressMax, 30.0)
+        'timeEstimate = New TimeEstimator(progressMax, 30.0)
 
         ' InvokeRequired required compares the thread ID of the'
         ' calling thread to the thread ID of the creating thread.'
