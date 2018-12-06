@@ -64,7 +64,7 @@ Public Class Form1
 
         UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
 
-        Call SetProgressMax(myCount + 1)
+        Call SetProgressMax(lines.Count)
 
 
 
@@ -74,7 +74,7 @@ Public Class Form1
         browser = ndt.GiveMeChrome(False)
 
         For Each line As ClsDepLine In lines
-            Call SetProgress(i)
+            Call SetProgress(i - 1)
             If interrupt Then Exit For
 
             Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
@@ -103,7 +103,7 @@ Public Class Form1
 
             If interrupt Then Exit For
 
-            Call SetProgress(i + 1.0 / 3.0)
+            Call SetProgress(i - 1 + 1.0 / 3.0)
 
             If tmpAlias <> "NN" Then
                 Try
@@ -125,7 +125,7 @@ Public Class Form1
 
             If interrupt Then Exit For
 
-            Call SetProgress(i + 2.0 / 3.0)
+            Call SetProgress(i - 1 + 2.0 / 3.0)
 
             If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
                         doDistiMail And line.Units < 11 Then
@@ -226,6 +226,7 @@ Public Class Form1
         '    Next
 
         'End If
+        SetProgress(lines.Count)
 
         UpdateStatus("All Done!")
 
