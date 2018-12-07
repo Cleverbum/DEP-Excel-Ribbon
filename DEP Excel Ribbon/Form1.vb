@@ -13,7 +13,11 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Reading in the Excel file"
         Label2.Text = "Calculating Duration Estimate"
+        'parallel
         BackgroundWorker1.RunWorkerAsync()
+
+        'testing version (no threading for debugging)
+        'Call MakeTickets()
     End Sub
 
 

@@ -23,7 +23,9 @@ Public Class TimeEstimator
     End Sub
 
     Function TimeRemaining(TasksDone As Long) As TimeSpan
-        Call Updateguess(TasksDone)
+        'if we've done something, measure how long it took
+        If TasksDone > 0 Then Call Updateguess(TasksDone)
+
         TimeRemaining = TimeSpan.FromTicks((TotalTasks - TasksDone) * GuessedDuration.Ticks)
     End Function
 
