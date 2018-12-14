@@ -215,35 +215,35 @@
   -->
   <ItemGroup>
     <AppDesigner Include="My Project\" />
-    <Compile Include="clsDepLine.vb" />
-    <Compile Include="distiEmails.vb" />
-    <Compile Include="Form1.designer.vb">
+    <Compile Include="Classes\clsDepLine.vb" />
+    <Compile Include="Classes\distiEmails.vb" />
+    <Compile Include="Forms\Form1.designer.vb">
       <DependentUpon>Form1.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="Forms\Form1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.vb">
+    <Compile Include="Forms\Form2.Designer.vb">
       <DependentUpon>Form2.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form2.vb">
+    <Compile Include="Forms\Form2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form3.designer.vb">
+    <Compile Include="Forms\Form3.designer.vb">
       <DependentUpon>Form3.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form3.vb">
+    <Compile Include="Forms\Form3.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form4.designer.vb">
+    <Compile Include="Forms\Form4.designer.vb">
       <DependentUpon>Form4.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form4.vb">
+    <Compile Include="Forms\Form4.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AccountManagerEmail.vb" />
-    <Compile Include="Message-texts.vb" />
-    <Compile Include="Module1.vb" />
+    <Compile Include="modules\AccountManagerEmail.vb" />
+    <Compile Include="modules\Message-texts.vb" />
+    <Compile Include="modules\Module1.vb" />
     <Compile Include="My Project\Module1.vb" />
     <Compile Include="Ribbon1.Designer.vb">
       <DependentUpon>Ribbon1.vb</DependentUpon>
@@ -254,18 +254,18 @@
     <Compile Include="ThisAddIn.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TimeEstimator.vb" />
-    <Compile Include="TimeSpanPrettyString.vb" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Classes\TimeEstimator.vb" />
+    <Compile Include="modules\TimeSpanPrettyString.vb" />
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
+    <EmbeddedResource Include="Forms\Form2.resx">
       <DependentUpon>Form2.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form3.resx">
+    <EmbeddedResource Include="Forms\Form3.resx">
       <DependentUpon>Form3.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form4.resx">
+    <EmbeddedResource Include="Forms\Form4.resx">
       <DependentUpon>Form4.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbon1.resx">

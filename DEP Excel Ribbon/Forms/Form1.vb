@@ -43,7 +43,9 @@ Public Class Form1
 
         UpdateStatus("Acting on " & oXlWb.Name)
 
-        doDistiMail = (MsgBox("Would you like to generate the emails to distribution at the same time", vbYesNo) = vbYes)
+        'no longer need to ask to do this - just assume yes
+        doDistiMail = True
+
         Dim mailPath As String
 
         mailPath = Environ("TEMP") & "\DistiEmail.msg"
@@ -218,18 +220,20 @@ Public Class Form1
 
         browser.Quit()
 
-        'If TDLines.Count > 0 AndAlso
-        '   MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
-        '    For Each line In TDLines
-        '        If Not RegisterTechdata(line) Then
-        '            HighlightError(line.Sales_ID)
-        '            errorCount += 1
-        '            Debug.WriteLine("Failed during TD Registration")
+        If TDLines.Count > 0 AndAlso
+           MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
+            For Each line In TDLines
+                If Not RegisterTechdata(line) Then
+                    HighlightError(line.Sales_ID)
+                    errorCount += 1
+                    Debug.WriteLine("Failed during TD Registration")
+                Else
+                    ndt.ticketNumber = line.NDT_Number
+                    ndt.UpdateNextDesk("Techdata registration completed manually for this order.")
+                End If
+            Next
 
-        '        End If
-        '    Next
-
-        'End If
+        End If
         SetProgress(lines.Count)
 
         UpdateStatus("All Done!")

@@ -112,24 +112,6 @@ Public Class Ribbon1
 
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs)
-        Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
-        Dim tCell As Excel.Range = tsheet.Cells.Find("5418763")
 
-        With tCell.EntireRow.Font
-            .Color = RGB(255, 0, 0)
-            .Bold = True
-        End With
 
-    End Sub
-
-    Private Sub Button5_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button5.Click
-        Dim test As Boolean
-        test = registerTechdata(New ClsDepLine)
-    End Sub
-
-    Private Sub Button6_Click(sender As Object, e As RibbonControlEventArgs) Handles Button6.Click
-        Dim frm As New Form2
-        frm.Show()
-    End Sub
 End Class
