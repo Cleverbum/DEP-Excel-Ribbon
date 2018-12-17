@@ -112,7 +112,7 @@ Public Class Ribbon1
 
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs)
         Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
