@@ -23,9 +23,9 @@ Module TechDataRegistration
 
         wd.FindElementById("txtEndCustRetNr").SendKeys(line.Customer_PO)
 
-        wd.FindElementById("txtEndCustRetNr").SendKeys(line.Customer_PO)
 
-        wd.FindElementById("txtEndCustName").SendKeys(line.Customer_PO)
+
+        wd.FindElementById("txtEndCustName").SendKeys(line.Company)
 
         wd.FindElementById("txtMyReference").SendKeys(line.Sales_ID)
 
@@ -36,13 +36,13 @@ Module TechDataRegistration
 
         For Each serial In line.Serials
             If serial <> "" Then
-                serials = serial & vbCrLf
+                serials &= serial & vbCrLf
             End If
         Next
 
         My.Computer.Clipboard.SetText(serials)
 
-        RegisterTechdata = (MsgBox("serials are now ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
+        RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
 
         wd.Quit()
 

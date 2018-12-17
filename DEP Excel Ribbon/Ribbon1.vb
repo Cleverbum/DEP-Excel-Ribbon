@@ -112,6 +112,16 @@ Public Class Ribbon1
 
     End Sub
 
+    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs) Handles Button5.Click
+        Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
+        Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
+        Dim snglLine As ClsDepLine
+        Dim i As Integer
+        Dim frm As New Form1
+        i = 2
+        snglLine = frm.ReadExcelLine(oXlWs, i)
 
+        Dim success As Boolean = RegisterTechdata(snglLine)
+    End Sub
 End Class

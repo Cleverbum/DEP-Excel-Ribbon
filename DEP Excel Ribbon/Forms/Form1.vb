@@ -324,11 +324,7 @@ Public Class Form1
                 tmpLine.Action = "Discard"
             Else
                 tmpLine.Action = "Ticket"
-                Try
-                    tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(0)
-                Catch
-                    tmpLine.Customer_DEP_ID = 0
-                End Try
+
             End If
         ElseIf tmpLine.DEP.ToLower.Contains("reg") Then
             If tmpLine.Account_Manager_Email Is Nothing Then
@@ -336,10 +332,19 @@ Public Class Form1
             Else
                 tmpLine.Action = "Reg"
             End If
+
+        ElseIf tmpLine.DEP.ToLower.Contains("ask") Then
+            tmpLine.Action = "Ticket"
         Else
             tmpLine.Action = "Discard"
 
         End If
+
+        Try
+            tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(0)
+        Catch
+            tmpLine.Customer_DEP_ID = 0
+        End Try
 
         'if there is a clause to "only" register x then don't try automated submission
 
