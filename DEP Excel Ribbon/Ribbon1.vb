@@ -122,6 +122,6 @@ Public Class Ribbon1
         i = 2
         snglLine = frm.ReadExcelLine(oXlWs, i)
 
-        Dim success As Boolean = RegisterTechdata(snglLine)
+        Dim success As Boolean = frm.RegisterTechdata(snglLine)
     End Sub
 End Class

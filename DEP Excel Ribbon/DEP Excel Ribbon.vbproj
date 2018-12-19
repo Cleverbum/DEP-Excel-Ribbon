@@ -243,7 +243,6 @@
     </Compile>
     <Compile Include="modules\AccountManagerEmail.vb" />
     <Compile Include="modules\Message-texts.vb" />
-    <Compile Include="modules\Module1.vb" />
     <Compile Include="My Project\Module1.vb" />
     <Compile Include="Ribbon1.Designer.vb">
       <DependentUpon>Ribbon1.vb</DependentUpon>

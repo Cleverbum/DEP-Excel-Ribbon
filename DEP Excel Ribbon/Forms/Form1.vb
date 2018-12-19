@@ -457,6 +457,70 @@ Public Class Form1
     End Sub
     Delegate Sub SetProgressMaxCallback(ByVal [progressMax] As Long)
 
+    Function RegisterTechdata(line As ClsDepLine) As Boolean
+        Dim wd As Chrome.ChromeDriver
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        wd = ndt.GiveMeChrome(True)
+        wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
 
+
+        wd.FindElementByName("customerId").SendKeys("316133")
+        wd.FindElementByName("loginUserName").SendKeys("duncanjc")
+        wd.FindElementById("password").SendKeys("Fraser123")
+
+        wd.FindElementByClassName("logINbtn").Click()
+
+
+        wd.FindElementByLinkText("Apple DEP").Click()
+
+        wd.SwitchTo.Frame("ctl00_CPH_iframeCat")
+        wd.FindElementById("txtEndCustId").SendKeys(line.Customer_DEP_ID)
+
+        wd.FindElementById("txtEndCustRetNr").SendKeys(line.Customer_PO)
+
+
+
+        wd.FindElementById("txtEndCustName").SendKeys(line.Company)
+
+        wd.FindElementById("txtMyReference").SendKeys(line.Sales_ID)
+
+        ' generate a list inside the clipboard
+        ' as the user to paste it.
+
+        Dim serials As String = ""
+
+        For Each serial In line.Serials
+            If serial <> "" Then
+                serials &= serial & vbCrLf
+            End If
+        Next
+
+        Try
+            SetClipText(serials)
+        Catch
+            MsgBox("well that didn't work")
+        End Try
+
+        RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
+
+        wd.Quit()
+
+
+    End Function
+
+    Private Sub SetClipText(ByVal [text] As String)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetClipTextCallback(AddressOf SetClipText)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+
+            My.Computer.Clipboard.SetText([text])
+        End If
+    End Sub
+    Delegate Sub SetClipTextCallback(ByVal [text] As String)
 
 End Class
