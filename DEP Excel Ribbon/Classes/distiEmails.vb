@@ -71,14 +71,17 @@ Public Class ClsDistiEmail
         Dim tmp As String
 
         tmp = "Hi all, <br> Could you please log the below devices for us:<br>" & vbCrLf
+
+        ' tmp &= "Customer DEPID:" & depLine.Customer_DEP_ID & " <br><br>"
+
         tmp &= "<table><tr><td colspan=""2"">Reseller Information</td></tr>" & vbCrLf
 
-        tmp &= tableLineHTML("Our DEP ID", "3960F70")
+        tmp &= TableLineHTML("Our DEPID:", "3960F70")
         tmp &= tableLineHTML("Our Sales Order number", depLine.Sales_ID.ToString)
 
         tmp &= "</table>" & vbCrLf & "<br>" & vbCrLf & "<table><tr><td colspan=""2"">End-User Information</td></tr>" & vbCrLf
         tmp &= tableLineHTML("End-User Organization Name", depLine.Company)
-        tmp &= tableLineHTML("End-User DEP ID", depLine.DEP)
+        tmp &= TableLineHTML("End-User DEPID:", depLine.DEP)
         tmp &= tableLineHTML("End-User PO#", depLine.Customer_PO)
 
         tmp &= "</table>" & vbCrLf & "<br>" & vbCrLf & "<table><tr><td colspan=""2"">Device Serial Numbers</td></tr>" & vbCrLf
