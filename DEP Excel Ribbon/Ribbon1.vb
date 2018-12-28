@@ -125,4 +125,9 @@ Public Class Ribbon1
 
         Dim success As Boolean = frm.RegisterTechdata(snglLine, wd)
     End Sub
+
+    Private Sub WriteMails_Click(sender As Object, e As RibbonControlEventArgs) Handles WriteMails.Click
+        Dim frm As New PivotMail
+        frm.Show()
+    End Sub
 End Class

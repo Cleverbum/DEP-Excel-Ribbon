@@ -40,7 +40,7 @@ Public Class FindIgnored
 
         wd.FindElementByName("report").Click()
 
-        For i = 1 To 6
+        For i = 1 To 10
             Call SetText(Label1.Text & ".")
             Threading.Thread.Sleep(300)
             If interrupt Then Exit Sub
@@ -48,7 +48,7 @@ Public Class FindIgnored
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
 
         If oldfile = file Then
-            For i = 1 To 5
+            For i = 1 To 10
                 Call SetText(Label1.Text & ".")
                 Threading.Thread.Sleep(1000)
                 If interrupt Then Exit Sub
@@ -79,7 +79,7 @@ Public Class FindIgnored
             If interrupt Then
                 wd.Quit()
                 Closeme()
-                Exit Sub
+                Exit For
             End If
             ndt.ticketNumber = ticket
 

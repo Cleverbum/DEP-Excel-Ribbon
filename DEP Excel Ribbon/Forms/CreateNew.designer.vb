@@ -32,7 +32,7 @@ Partial Class CreateNew
         'Button1
         '
         Me.Button1.Location = New System.Drawing.Point(16, 166)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(415, 42)
         Me.Button1.TabIndex = 0
@@ -64,7 +64,7 @@ Partial Class CreateNew
         'ProgressBar1
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(16, 86)
-        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4)
         Me.ProgressBar1.Name = "ProgressBar1"
         Me.ProgressBar1.Size = New System.Drawing.Size(415, 64)
         Me.ProgressBar1.TabIndex = 4
@@ -78,7 +78,7 @@ Partial Class CreateNew
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "CreateNew"
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -48,6 +48,7 @@
         Me.CloseStale = Me.Factory.CreateRibbonButton
         Me.FindIgnored = Me.Factory.CreateRibbonButton
         Me.Button4 = Me.Factory.CreateRibbonButton
+        Me.WriteMails = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -63,6 +64,7 @@
         Me.Group1.Items.Add(Me.CreateNew)
         Me.Group1.Items.Add(Me.CloseStale)
         Me.Group1.Items.Add(Me.FindIgnored)
+        Me.Group1.Items.Add(Me.WriteMails)
         Me.Group1.Items.Add(Me.Button4)
         Me.Group1.Name = "Group1"
         '
@@ -95,6 +97,14 @@
         Me.Button4.Label = "Test Chrome Control"
         Me.Button4.Name = "Button4"
         '
+        'WriteMails
+        '
+        Me.WriteMails.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.WriteMails.Image = CType(resources.GetObject("WriteMails.Image"), System.Drawing.Image)
+        Me.WriteMails.Label = "Write Pivot Emails"
+        Me.WriteMails.Name = "WriteMails"
+        Me.WriteMails.ShowImage = True
+        '
         'Ribbon1
         '
         Me.Name = "Ribbon1"
@@ -114,6 +124,7 @@
     Friend WithEvents CloseStale As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents FindIgnored As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Button4 As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents WriteMails As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection
