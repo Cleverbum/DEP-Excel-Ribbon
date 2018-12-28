@@ -9,11 +9,14 @@ Public Class PivotMail
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Dim totalWork As Integer = CountMails()
-
+        If totalWork = 0 Then
+            Call Closeme()
+            Exit Sub
+        End If
         Call SetText(totalWork & " Emails to write.")
 
         If Not WriteMails() = totalWork Then
-            MsgBox("The process did Not complete", vbCritical)
+            MsgBox("The process did not complete", vbCritical)
 
         End If
 
@@ -33,6 +36,9 @@ Public Class PivotMail
         Dim AM_email As String, htmlTable As String
 
         While oXlWs.Cells(i, 3).value <> ""
+
+            If interrupt Then Return MailCount
+
             AM_email = oXlWs.Cells(i, 3).value
             j = i
             While oXlWs.Cells(j, 3).value = AM_email
@@ -84,6 +90,7 @@ Public Class PivotMail
         Dim i As Integer = 2
         Dim LineCount As Integer = 0
         While oXlWs.Cells(i, 3).value <> ""
+            If interrupt Then Return 0
             If oXlWs.Cells(i, 3).value <> oXlWs.Cells(i - 1, 3).value Then
                 LineCount += 1
             End If
