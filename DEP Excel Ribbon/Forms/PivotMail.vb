@@ -55,8 +55,16 @@ Public Class PivotMail
         Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
+        MakeTable = "<style type=""text/css"">
+                        .tg  {border-collapse:collapse;border-spacing:0;}
+                        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:bold;padding:10px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        tr:nth-child(odd) {background: #CCC}
+                        tr:nth-child(even) {background: #FFF}
+                        </style>
+                        <table Class=""tg"">"
 
-        MakeTable = "<table><tr><td>Customer Name</td><td>Net Units Bought (in 2018)</td><td># of ""Apple"" Orders (in 2018)</td></tr>" & vbCrLf
+        MakeTable &= "<tr><th>Customer Name</th><th>Net Units Bought (in 2018)</th><th># of ""Apple"" Orders (in 2018)</th></tr>" & vbCrLf
 
 
         For line As Integer = i To j
