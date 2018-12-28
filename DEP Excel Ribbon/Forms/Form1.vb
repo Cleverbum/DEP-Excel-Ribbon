@@ -226,10 +226,11 @@ Public Class Form1
                 If Not RegisterTechdata(line) Then
                     HighlightError(line.Sales_ID)
                     errorCount += 1
+                    ndt.UpdateNextDesk("Techdata registration failed via the assisted tool: DEP Team, please complete this manually for this order.")
                     Debug.WriteLine("Failed during TD Registration")
                 Else
                     ndt.ticketNumber = line.NDT_Number
-                    ndt.UpdateNextDesk("Techdata registration completed manually for this order.")
+                    ndt.UpdateNextDesk("Techdata registration completed using the assisted tool for this order.")
                 End If
             Next
 

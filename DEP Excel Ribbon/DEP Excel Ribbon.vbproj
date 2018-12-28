@@ -241,6 +241,7 @@
     <Compile Include="Forms\Form4.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="todo.vb" />
     <Compile Include="modules\AccountManagerEmail.vb" />
     <Compile Include="modules\Message-texts.vb" />
     <Compile Include="My Project\Module1.vb" />
