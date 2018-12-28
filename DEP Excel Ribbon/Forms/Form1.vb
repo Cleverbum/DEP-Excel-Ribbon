@@ -222,8 +222,9 @@ Public Class Form1
 
         If TDLines.Count > 0 AndAlso
            MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
+            Dim wd As Chrome.ChromeDriver = DoTDLogin()
             For Each line In TDLines
-                If Not RegisterTechdata(line) Then
+                If Not RegisterTechdata(line, wd) Then
                     HighlightError(line.Sales_ID)
                     errorCount += 1
                     ndt.UpdateNextDesk(tdFail)
@@ -233,6 +234,8 @@ Public Class Form1
                     ndt.UpdateNextDesk(tdSuccess)
                 End If
             Next
+
+            wd.Quit()
 
         End If
         SetProgress(lines.Count)
@@ -363,9 +366,9 @@ Public Class Form1
             End If
         End If
 
-        'if the supplier is GBM discard - we can't do anything
+        'if the supplier is GBM or Insight GmbH Germany        discard -we can't do anything
 
-        If tmpLine.Suppliername.ToLower.Contains("gbm") Then
+        If tmpLine.Suppliername.ToLower.Contains("gbm") Or tmpLine.Suppliername.ToLower.Contains("insight gmbh germany") Then
             tmpLine.Action = "Discard"
         End If
 
@@ -458,56 +461,7 @@ Public Class Form1
     End Sub
     Delegate Sub SetProgressMaxCallback(ByVal [progressMax] As Long)
 
-    Function RegisterTechdata(line As ClsDepLine) As Boolean
-        Dim wd As Chrome.ChromeDriver
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-        wd = ndt.GiveMeChrome(True)
-        wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
 
-
-        wd.FindElementByName("customerId").SendKeys("316133")
-        wd.FindElementByName("loginUserName").SendKeys("duncanjc")
-        wd.FindElementById("password").SendKeys("Fraser123")
-
-        wd.FindElementByClassName("logINbtn").Click()
-
-
-        wd.FindElementByLinkText("Apple DEP").Click()
-
-        wd.SwitchTo.Frame("ctl00_CPH_iframeCat")
-        wd.FindElementById("txtEndCustId").SendKeys(line.Customer_DEP_ID)
-
-        wd.FindElementById("txtEndCustRetNr").SendKeys(line.Customer_PO)
-
-
-
-        wd.FindElementById("txtEndCustName").SendKeys(line.Company)
-
-        wd.FindElementById("txtMyReference").SendKeys(line.Sales_ID)
-
-        ' generate a list inside the clipboard
-        ' as the user to paste it.
-
-        Dim serials As String = ""
-
-        For Each serial In line.Serials
-            If serial <> "" Then
-                serials &= serial & vbCrLf
-            End If
-        Next
-
-        Try
-            SetClipText(serials)
-        Catch
-            MsgBox("well that didn't work")
-        End Try
-
-        RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
-
-        wd.Quit()
-
-
-    End Function
 
     Private Sub SetClipText(ByVal [text] As String)
 

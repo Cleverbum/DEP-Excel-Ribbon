@@ -121,7 +121,8 @@ Public Class Ribbon1
         Dim frm As New Form1
         i = 2
         snglLine = frm.ReadExcelLine(oXlWs, i)
+        Dim wd As Chrome.ChromeDriver = frm.DoTDLogin()
 
-        Dim success As Boolean = frm.RegisterTechdata(snglLine)
+        Dim success As Boolean = frm.RegisterTechdata(snglLine, wd)
     End Sub
 End Class
