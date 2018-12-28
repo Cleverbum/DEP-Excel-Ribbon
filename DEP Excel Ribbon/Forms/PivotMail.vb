@@ -64,7 +64,7 @@ Public Class PivotMail
                         </style>
                         <table Class=""tg"">"
 
-        MakeTable &= "<tr><th>Customer Name</th><th>Net Units Bought (in 2018)</th><th># of ""Apple"" Orders (in 2018)</th></tr>" & vbCrLf
+        MakeTable &= "<tr><th>Customer Name</th><th>Net Units Bought (in 2018)</th><th># of ""Apple"" Orders (in 2018)</th><</tr>" & vbCrLf
 
 
         For line As Integer = i To j
