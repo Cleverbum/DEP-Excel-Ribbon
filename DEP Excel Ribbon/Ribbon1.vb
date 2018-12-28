@@ -10,23 +10,23 @@ Public Class Ribbon1
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
-        Dim frm As New Form1
+    Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
+        Dim frm As New CreateNew
         frm.Show()
 
     End Sub
 
 
 
-    Private Sub Button2_Click(sender As Object, e As RibbonControlEventArgs) Handles Button2.Click
-        Dim frm As New Form3
+    Private Sub Button2_Click(sender As Object, e As RibbonControlEventArgs) Handles CloseStale.Click
+        Dim frm As New CloseStale
         frm.Show()
     End Sub
 
 
 
-    Private Sub Button3_Click(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
-        Dim frm As New Form4
+    Private Sub Button3_Click(sender As Object, e As RibbonControlEventArgs) Handles FindIgnored.Click
+        Dim frm As New FindIgnored
         frm.Show()
     End Sub
 
@@ -118,7 +118,7 @@ Public Class Ribbon1
 
         Dim snglLine As ClsDepLine
         Dim i As Integer
-        Dim frm As New Form1
+        Dim frm As New CreateNew
         i = 2
         snglLine = frm.ReadExcelLine(oXlWs, i)
         Dim wd As Chrome.ChromeDriver = frm.DoTDLogin()

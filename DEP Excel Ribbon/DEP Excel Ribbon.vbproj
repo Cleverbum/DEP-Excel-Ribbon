@@ -217,10 +217,10 @@
     <AppDesigner Include="My Project\" />
     <Compile Include="Classes\clsDepLine.vb" />
     <Compile Include="Classes\distiEmails.vb" />
-    <Compile Include="Forms\Form1.designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="Forms\CreateNew.designer.vb">
+      <DependentUpon>CreateNew.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form1.vb">
+    <Compile Include="Forms\CreateNew.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Form2.Designer.vb">
@@ -229,16 +229,16 @@
     <Compile Include="Forms\Form2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form3.designer.vb">
-      <DependentUpon>Form3.vb</DependentUpon>
+    <Compile Include="Forms\CloseStale.designer.vb">
+      <DependentUpon>CloseStale.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form3.vb">
+    <Compile Include="Forms\CloseStale.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form4.designer.vb">
-      <DependentUpon>Form4.vb</DependentUpon>
+    <Compile Include="Forms\FindIgnored.designer.vb">
+      <DependentUpon>FindIgnored.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form4.vb">
+    <Compile Include="Forms\FindIgnored.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="modules\TechData.vb">
@@ -259,17 +259,17 @@
     </Compile>
     <Compile Include="Classes\TimeEstimator.vb" />
     <Compile Include="modules\TimeSpanPrettyString.vb" />
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\CreateNew.resx">
+      <DependentUpon>CreateNew.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form2.resx">
       <DependentUpon>Form2.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form3.resx">
-      <DependentUpon>Form3.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\CloseStale.resx">
+      <DependentUpon>CloseStale.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form4.resx">
-      <DependentUpon>Form4.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\FindIgnored.resx">
+      <DependentUpon>FindIgnored.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbon1.resx">
       <DependentUpon>Ribbon1.vb</DependentUpon>

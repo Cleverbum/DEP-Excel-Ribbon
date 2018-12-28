@@ -2,7 +2,7 @@
 Imports System.IO
 Imports OpenQA.Selenium
 
-Public Class Form4
+Public Class FindIgnored
     Public interrupt As Boolean = False
     Private Sub Form4_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Downloading list of tickets"
@@ -191,7 +191,7 @@ Public Class Form4
     Function WasIgnored(ticketData As String()) As Boolean
         If ticketData.Last.ToLower.Contains("no dep tickets will be raised") Then
             Return True
-        ElseIf ticketData.Last.ToLower.Contains(Form3.CloseMessage.ToLower) Then
+        ElseIf ticketData.Last.ToLower.Contains(CloseStale.CloseMessage.ToLower) Then
             Return True
         ElseIf ticketData.Last.ToLower.Contains("dep please advise and i will reopen this ticket") Then
             Return True

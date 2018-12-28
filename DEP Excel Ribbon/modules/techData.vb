@@ -1,6 +1,6 @@
 ﻿Imports OpenQA.Selenium
 
-Partial Class form1
+Partial Class CreateNew
 
     Function DoTDLogin() As Chrome.ChromeDriver
 

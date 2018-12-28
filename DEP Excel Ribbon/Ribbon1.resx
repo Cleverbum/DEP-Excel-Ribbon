@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="Button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="CreateNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEQAAABLCAYAAADJRSFnAAAABGdBTUEAALGPC/xhBQAABz9JREFUeF7t
         m3mIVVUcxx2nndIWaBltms15Mw4tOhBIpWPZQmUq2IJBlGSQRBnttEigCS20YItCKUT9UQahBm1utAyD
@@ -155,7 +155,7 @@
         SUVORK5CYII=
 </value>
   </data>
-  <data name="Button2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="CloseStale.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAA9QAAAOaCAYAAAB5hhqYAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
         JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AADC/UlEQVR4Xuzdd4AVRfa3cRnCkHNOkiWI
@@ -993,7 +993,7 @@
         8cQTxddgX2J/tpcdfPDBB7Jp0ya5cOGC+c/03xU8csP/AYb5S+jy0WNnAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Button3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="FindIgnored.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQIAAADECAIAAAD767gaAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAZ
         1gAAGdYBGNHK7QAAAAd0SU1FB+ILDw02BUlFx8cAAAAHdEVYdEF1dGhvcgCprsxIAAAADHRFWHREZXNj

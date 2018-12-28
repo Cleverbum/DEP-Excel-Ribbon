@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Form4
+Partial Class CreateNew
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -26,22 +26,25 @@ Partial Class Form4
         Me.Label1 = New System.Windows.Forms.Label()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(16, 58)
+        Me.Button1.Location = New System.Drawing.Point(16, 166)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(212, 28)
+        Me.Button1.Size = New System.Drawing.Size(415, 42)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(13, 9)
+        Me.Label1.Location = New System.Drawing.Point(18, 20)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(602, 24)
+        Me.Label1.Size = New System.Drawing.Size(414, 36)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
         '
@@ -50,23 +53,35 @@ Partial Class Form4
         '
         'Label2
         '
-        Me.Label2.Location = New System.Drawing.Point(13, 33)
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(16, 56)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(602, 24)
+        Me.Label2.Size = New System.Drawing.Size(71, 25)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Label2"
-        Me.Label2.Visible = False
         '
-        'Form4
+        'ProgressBar1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.ProgressBar1.Location = New System.Drawing.Point(16, 86)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(415, 64)
+        Me.ProgressBar1.TabIndex = 4
+        '
+        'CreateNew
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(11.0!, 24.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(240, 98)
+        Me.ClientSize = New System.Drawing.Size(448, 226)
+        Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Name = "Form4"
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Name = "CreateNew"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -74,4 +89,5 @@ Partial Class Form4
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents BackgroundWorker1 As ComponentModel.BackgroundWorker
     Friend WithEvents Label2 As Windows.Forms.Label
+    Friend WithEvents ProgressBar1 As Windows.Forms.ProgressBar
 End Class

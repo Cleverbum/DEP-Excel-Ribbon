@@ -3,7 +3,7 @@ Imports System.IO
 Imports OpenQA.Selenium
 Imports OpenQA.Selenium.Chrome
 
-Public Class Form3
+Public Class CloseStale
     Public Const CloseMessage As String =
         "This ticket appears to be stale, please let me know if it is still required"
     Public interrupt As Boolean = False

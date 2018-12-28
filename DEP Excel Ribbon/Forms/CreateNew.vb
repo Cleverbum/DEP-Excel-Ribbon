@@ -5,7 +5,7 @@ Imports Microsoft.Office.Interop
 Imports OpenQA.Selenium
 Imports OpenQA.Selenium.Chrome
 
-Public Class Form1
+Public Class CreateNew
 
     Public Interrupt As Boolean = False
     Public timeEstimate As TimeEstimator

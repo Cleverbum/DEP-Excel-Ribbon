@@ -44,9 +44,9 @@
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Ribbon1))
         Me.Tab1 = Me.Factory.CreateRibbonTab
         Me.Group1 = Me.Factory.CreateRibbonGroup
-        Me.Button1 = Me.Factory.CreateRibbonButton
-        Me.Button2 = Me.Factory.CreateRibbonButton
-        Me.Button3 = Me.Factory.CreateRibbonButton
+        Me.CreateNew = Me.Factory.CreateRibbonButton
+        Me.CloseStale = Me.Factory.CreateRibbonButton
+        Me.FindIgnored = Me.Factory.CreateRibbonButton
         Me.Button4 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
@@ -60,35 +60,35 @@
         '
         'Group1
         '
-        Me.Group1.Items.Add(Me.Button1)
-        Me.Group1.Items.Add(Me.Button2)
-        Me.Group1.Items.Add(Me.Button3)
+        Me.Group1.Items.Add(Me.CreateNew)
+        Me.Group1.Items.Add(Me.CloseStale)
+        Me.Group1.Items.Add(Me.FindIgnored)
         Me.Group1.Items.Add(Me.Button4)
         Me.Group1.Name = "Group1"
         '
-        'Button1
+        'CreateNew
         '
-        Me.Button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Label = "Create New Tickets"
-        Me.Button1.Name = "Button1"
-        Me.Button1.ShowImage = True
+        Me.CreateNew.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.CreateNew.Image = CType(resources.GetObject("CreateNew.Image"), System.Drawing.Image)
+        Me.CreateNew.Label = "Create New Tickets"
+        Me.CreateNew.Name = "CreateNew"
+        Me.CreateNew.ShowImage = True
         '
-        'Button2
+        'CloseStale
         '
-        Me.Button2.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.Button2.Image = CType(resources.GetObject("Button2.Image"), System.Drawing.Image)
-        Me.Button2.Label = "Close Stale Ticket"
-        Me.Button2.Name = "Button2"
-        Me.Button2.ShowImage = True
+        Me.CloseStale.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.CloseStale.Image = CType(resources.GetObject("CloseStale.Image"), System.Drawing.Image)
+        Me.CloseStale.Label = "Close Stale Ticket"
+        Me.CloseStale.Name = "CloseStale"
+        Me.CloseStale.ShowImage = True
         '
-        'Button3
+        'FindIgnored
         '
-        Me.Button3.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.Button3.Image = CType(resources.GetObject("Button3.Image"), System.Drawing.Image)
-        Me.Button3.Label = "Find Ignored Tickets"
-        Me.Button3.Name = "Button3"
-        Me.Button3.ShowImage = True
+        Me.FindIgnored.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.FindIgnored.Image = CType(resources.GetObject("FindIgnored.Image"), System.Drawing.Image)
+        Me.FindIgnored.Label = "Find Ignored Tickets"
+        Me.FindIgnored.Name = "FindIgnored"
+        Me.FindIgnored.ShowImage = True
         '
         'Button4
         '
@@ -110,9 +110,9 @@
 
     Friend WithEvents Tab1 As Microsoft.Office.Tools.Ribbon.RibbonTab
     Friend WithEvents Group1 As Microsoft.Office.Tools.Ribbon.RibbonGroup
-    Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
-    Friend WithEvents Button2 As Microsoft.Office.Tools.Ribbon.RibbonButton
-    Friend WithEvents Button3 As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents CreateNew As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents CloseStale As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents FindIgnored As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Button4 As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
