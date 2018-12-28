@@ -1,4 +1,5 @@
 ﻿Imports System.Diagnostics
+Imports Microsoft.Office.Interop
 
 Public Class PivotMail
     Public interrupt As Boolean = False
@@ -26,7 +27,7 @@ Public Class PivotMail
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
         Dim i As Integer = 2
-        Dim j As Integer
+        Dim j As Integer, mailSuccess As Boolean
         Dim MailCount As Integer = 0
 
         Dim AM_email As String, htmlTable As String
@@ -40,10 +41,10 @@ Public Class PivotMail
             htmlTable = MakeTable(i, j - 1)
 
 
-
+            mailSuccess = EditMail(AM_email, htmlTable)
 
             i = j
-            MailCount += 1
+            If mailSuccess Then MailCount += 1
         End While
 
 
@@ -55,11 +56,13 @@ Public Class PivotMail
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
 
-        MakeTable = "<table><tr><td>Customer Name</td><td>Net Units Bought (in 2018)</td></tr>" & vbCrLf
+        MakeTable = "<table><tr><td>Customer Name</td><td>Net Units Bought (in 2018)</td><td># of ""Apple"" Orders (in 2018)</td></tr>" & vbCrLf
 
 
         For line As Integer = i To j
-            MakeTable &= TableLineHTML(oXlWs.Cells(line, 4).value, oXlWs.Cells(line, 5).value)
+            MakeTable &= TableLineHTML(StrConv(oXlWs.Cells(line, 4).value.ToString, VbStrConv.ProperCase),
+                                       oXlWs.Cells(line, 6).value.ToString,
+                                       oXlWs.Cells(line, 5).value.ToString)
         Next
 
         MakeTable &= "</table>"
@@ -133,9 +136,72 @@ Public Class PivotMail
     End Sub
     Delegate Sub CloseCallBack()
 
-    Function TableLineHTML(cellOne As String, CellTwo As String) As String
+
+    Function TableLineHTML(cellOne As String, CellTwo As String, CellThree As String) As String
         Return "<tr>" & vbTab & "<td>" & vbCrLf & vbTab & vbTab & cellOne & vbCrLf & vbTab &
             "</td>" & vbCrLf & vbTab & "<td>" & vbCrLf & vbTab & vbTab & CellTwo &
+            vbCrLf & vbTab & "</td>" & vbCrLf & "<td>" & vbCrLf & vbTab & vbTab & CellThree &
             vbCrLf & vbTab & "</td>" & vbCrLf & "</tr>"
+    End Function
+
+    Private Function EditMail(to_address As String, table As String) As Boolean
+
+        Dim templateFile As String = Environ("TEMP") & "\AM DEP Email.oft"
+        Try
+
+
+
+            My.Computer.FileSystem.WriteAllBytes(templateFile, My.Resources.No_DEP_Mail, False)
+        Catch
+            Debug.WriteLine("Error writing to FS")
+            Return False
+        End Try
+
+
+        Dim AppOutlook As New Outlook.Application
+        Dim amEmail As Outlook.MailItem
+        amEmail = AppOutlook.CreateItemFromTemplate(templateFile)
+
+
+        Dim outlookNameSpace As Outlook.NameSpace = AppOutlook.GetNamespace("MAPI")
+        Dim myAddressList As Outlook.AddressList = outlookNameSpace.GetGlobalAddressList
+
+        Dim am_name As String
+        Try
+            Dim objAEntry As Outlook.AddressEntry
+
+            to_address = to_address.Replace("@uk.insight.com", "@insight.com")
+
+            'below are corrections between iCare email addresses and Nextdesk Email addresses
+            to_address = to_address.Replace("Scott.Waggstaff@insight.com", "Scott.Wagstaff@insight.com")
+
+
+
+            'do final lookup of email to "recipient"
+            objAEntry = AppOutlook.Session.CreateRecipient(to_address).AddressEntry
+
+            am_name = objAEntry.GetExchangeUser.FirstName
+        Catch
+            Debug.WriteLine("Error finding firstname")
+            am_name = ""
+        End Try
+
+        Try
+            With amEmail
+                .To = to_address
+                .CC = "Chapman, Duncan <Duncan.Chapman@insight.com>; Ings, Jenni <Jenni.Ings@insight.com>"
+
+                .HTMLBody = .HTMLBody.Replace("%TABLE%", table)
+                .HTMLBody = .HTMLBody.Replace("%AM%", am_name)
+
+
+                .Display()
+            End With
+        Catch
+            Debug.WriteLine("Error modifying template")
+            Return False
+        End Try
+
+        Return True
     End Function
 End Class

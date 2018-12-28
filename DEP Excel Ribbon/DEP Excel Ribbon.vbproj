@@ -285,6 +285,7 @@
     </EmbeddedResource>
     <None Include="DEP Excel Ribbon_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Resources\Customers with DEP Potential.oft" />
     <None Include="Resources\Ingram DEP Enrol.xlsx" />
     <None Include="Resources\Sales Order %25ordernum%25 Potential for Apple DEP Registration.oft" />
     <None Include="ThisAddIn.Designer.xml">

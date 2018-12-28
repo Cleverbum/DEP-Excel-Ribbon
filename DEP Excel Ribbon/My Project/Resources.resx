@@ -124,4 +124,7 @@
   <data name="Ingram_DEP_Enrol" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ingram DEP Enrol.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="No_DEP_Mail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Customers with DEP Potential.oft;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

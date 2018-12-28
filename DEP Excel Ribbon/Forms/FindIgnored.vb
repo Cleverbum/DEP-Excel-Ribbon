@@ -88,7 +88,7 @@ Public Class FindIgnored
             timeTaken = timeSoFar.Elapsed.TotalSeconds
             estimatedTotalTime = CInt(timeTaken / (j / ignoredTickets.Count))
             Call SetText("Read " & j & " of " & ignoredTickets.Count & " ignored tickets.")
-            Call SetTextTwo("About " & estimatedTotalTime - timeTaken & "s remaining")
+            Call SetTextTwo("About " & PrettyString(TimeSpan.FromSeconds(estimatedTotalTime - timeTaken)) & " remaining")
             'If j = 5 Then Exit For
         Next
 
