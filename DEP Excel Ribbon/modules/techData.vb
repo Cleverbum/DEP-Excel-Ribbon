@@ -29,6 +29,7 @@ Partial Class CreateNew
 
     Function RegisterTechdata(line As ClsDepLine, wd As Chrome.ChromeDriver) As Boolean
 
+        wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
         wd.FindElementByLinkText("Apple DEP").Click()
 
         wd.SwitchTo.Frame("ctl00_CPH_iframeCat")
@@ -53,14 +54,23 @@ Partial Class CreateNew
             End If
         Next
 
-        Try
-            SetClipText(serials)
-        Catch
-            MsgBox("well that didn't work")
-        End Try
+        If serials <> "" Then
+            Try
 
-        RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
+                SetClipText(serials)
 
+            Catch
+                MsgBox("error setting clipboard")
+            End Try
+
+            RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
+        Else
+
+            MsgBox("The serial numbers for so " & line.Sales_ID & " are blank, TD registration has been skipped")
+            wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
+
+            Return False
+        End If
 
 
 

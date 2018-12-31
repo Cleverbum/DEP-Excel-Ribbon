@@ -47,8 +47,8 @@
         Me.CreateNew = Me.Factory.CreateRibbonButton
         Me.CloseStale = Me.Factory.CreateRibbonButton
         Me.FindIgnored = Me.Factory.CreateRibbonButton
-        Me.Button4 = Me.Factory.CreateRibbonButton
         Me.WriteMails = Me.Factory.CreateRibbonButton
+        Me.Button4 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -92,11 +92,6 @@
         Me.FindIgnored.Name = "FindIgnored"
         Me.FindIgnored.ShowImage = True
         '
-        'Button4
-        '
-        Me.Button4.Label = "Test Chrome Control"
-        Me.Button4.Name = "Button4"
-        '
         'WriteMails
         '
         Me.WriteMails.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
@@ -104,6 +99,11 @@
         Me.WriteMails.Label = "Write Pivot Emails"
         Me.WriteMails.Name = "WriteMails"
         Me.WriteMails.ShowImage = True
+        '
+        'Button4
+        '
+        Me.Button4.Label = "Test Chrome Control"
+        Me.Button4.Name = "Button4"
         '
         'Ribbon1
         '
