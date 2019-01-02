@@ -29,7 +29,7 @@ Partial Class CreateNew
 
     Function RegisterTechdata(line As ClsDepLine, wd As Chrome.ChromeDriver) As Boolean
 
-        wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
+        wd.Navigate.GoToUrl("https://intouch.techdata.com/intouch/Home.aspx")
         wd.FindElementByLinkText("Apple DEP").Click()
 
         wd.SwitchTo.Frame("ctl00_CPH_iframeCat")
