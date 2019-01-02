@@ -3,4 +3,7 @@
 
     '  check pivotmail with Duncan/Jenny
     '  change pivotmail from diplay to send
+    
+    '  add a button that only does all the tech data registrats
+    
 End Module
