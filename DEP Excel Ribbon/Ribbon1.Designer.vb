@@ -48,7 +48,8 @@
         Me.CloseStale = Me.Factory.CreateRibbonButton
         Me.FindIgnored = Me.Factory.CreateRibbonButton
         Me.WriteMails = Me.Factory.CreateRibbonButton
-        Me.Button4 = Me.Factory.CreateRibbonButton
+        Me.TDOnly = Me.Factory.CreateRibbonButton
+        Me.Button1 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -65,7 +66,8 @@
         Me.Group1.Items.Add(Me.CloseStale)
         Me.Group1.Items.Add(Me.FindIgnored)
         Me.Group1.Items.Add(Me.WriteMails)
-        Me.Group1.Items.Add(Me.Button4)
+        Me.Group1.Items.Add(Me.TDOnly)
+        Me.Group1.Items.Add(Me.Button1)
         Me.Group1.Name = "Group1"
         '
         'CreateNew
@@ -100,10 +102,18 @@
         Me.WriteMails.Name = "WriteMails"
         Me.WriteMails.ShowImage = True
         '
-        'Button4
+        'TDOnly
         '
-        Me.Button4.Label = "Test Chrome Control"
-        Me.Button4.Name = "Button4"
+        Me.TDOnly.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.TDOnly.Image = CType(resources.GetObject("TDOnly.Image"), System.Drawing.Image)
+        Me.TDOnly.Label = "TechData Registrations"
+        Me.TDOnly.Name = "TDOnly"
+        Me.TDOnly.ShowImage = True
+        '
+        'Button1
+        '
+        Me.Button1.Label = "Test Chrome Control"
+        Me.Button1.Name = "Button1"
         '
         'Ribbon1
         '
@@ -123,8 +133,9 @@
     Friend WithEvents CreateNew As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents CloseStale As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents FindIgnored As Microsoft.Office.Tools.Ribbon.RibbonButton
-    Friend WithEvents Button4 As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents WriteMails As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents TDOnly As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection

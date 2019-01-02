@@ -11,7 +11,7 @@ Public Class Ribbon1
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
-        Dim frm As New CreateNew
+        Dim frm As New CreateNew(True)
         frm.Show()
 
     End Sub
@@ -95,7 +95,7 @@ Public Class Ribbon1
         Return ""
     End Function
 
-    Private Sub Button4_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button4.Click
+    Private Sub Button4_Click_1(sender As Object, e As RibbonControlEventArgs)
         Dim options As New Chrome.ChromeOptions
         Dim service As ChromeDriverService = ChromeDriverService.CreateDefaultService
 
@@ -112,7 +112,17 @@ Public Class Ribbon1
 
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As RibbonControlEventArgs)
+    Private Sub WriteMails_Click(sender As Object, e As RibbonControlEventArgs) Handles WriteMails.Click
+        Dim frm As New PivotMail
+        frm.Show()
+    End Sub
+
+    Private Sub Button1_Click_1(sender As Object, e As RibbonControlEventArgs) Handles TDOnly.Click
+        Dim frm As New CreateNew(False)
+        frm.Show()
+    End Sub
+
+    Private Sub Button1_Click_2(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
         Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
         Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
@@ -124,10 +134,5 @@ Public Class Ribbon1
         Dim wd As Chrome.ChromeDriver = frm.DoTDLogin()
 
         Dim success As Boolean = frm.RegisterTechdata(snglLine, wd)
-    End Sub
-
-    Private Sub WriteMails_Click(sender As Object, e As RibbonControlEventArgs) Handles WriteMails.Click
-        Dim frm As New PivotMail
-        frm.Show()
     End Sub
 End Class

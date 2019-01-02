@@ -9,6 +9,11 @@ Public Class CreateNew
 
     Public Interrupt As Boolean = False
     Public timeEstimate As TimeEstimator
+    Private DoAll As Boolean
+
+    Public Sub New(Optional v As Boolean = True)
+        Me.DoAll = v
+    End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "Reading in the Excel file"
@@ -68,157 +73,167 @@ Public Class CreateNew
 
         myCount = DiscardNoDEP(lines) ' number of lines removed
 
-        UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
 
-        Call SetProgressMax(lines.Count)
-
-
-
-        i = 1
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
-        Dim browser As Chrome.ChromeDriver
-        browser = ndt.GiveMeChrome(False)
 
-        For Each line As ClsDepLine In lines
-            Call SetProgress(i - 1)
-            If interrupt Then Exit For
+        If DoAll Then
+            UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
 
-            Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
+            Call SetProgressMax(lines.Count)
+            i = 1
 
-            Try
-                line.NDT_Number = ndt.CreateTicket(2, line.ToTicket(), browser)
-            Catch ex As Exception
-                line.NDT_Number = 0
-            End Try
+            Dim browser As Chrome.ChromeDriver
+            browser = ndt.GiveMeChrome(False)
 
-            If line.NDT_Number = 0 Then
-                HighlightError(line.Sales_ID)
-                errorCount += 1
-                i += 1
-                ' go to next "line"
-                Continue For
-            End If
+            For Each line As ClsDepLine In lines
+                Call SetProgress(i - 1)
+                If Interrupt Then Exit For
 
-            ndt.ticketNumber = line.NDT_Number
+                Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
 
-            If line.Units > 10 Then
-                ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive", browser)
-            End If
-
-            Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
-
-            If interrupt Then Exit For
-
-            Call SetProgress(i - 1 + 1.0 / 3.0)
-
-            If tmpAlias <> "NN" Then
                 Try
-                    ndt.AddToNotify(tmpAlias, browser)
+                    line.NDT_Number = ndt.CreateTicket(2, line.ToTicket(), browser)
                 Catch ex As Exception
-                    Debug.WriteLine("Failed during notify")
-                    Debug.WriteLine(ex.Message)
+                    line.NDT_Number = 0
                 End Try
 
-            Else
-                Try
-                    ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email, browser)
+                If line.NDT_Number = 0 Then
+                    HighlightError(line.Sales_ID)
+                    errorCount += 1
+                    i += 1
+                    ' go to next "line"
+                    Continue For
+                End If
 
-                Catch ex As Exception
-                    Debug.WriteLine("Failed during update")
-                    Debug.WriteLine(ex.Message)
-                End Try
-            End If
+                ndt.TicketNumber = line.NDT_Number
 
-            If interrupt Then Exit For
+                If line.Units > 10 Then
+                    ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive", browser)
+                End If
 
-            Call SetProgress(i - 1 + 2.0 / 3.0)
+                Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
 
-            If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
-                        doDistiMail And line.Units < 11 Then
+                If Interrupt Then Exit For
 
+                Call SetProgress(i - 1 + 1.0 / 3.0)
 
-
-                Dim distiMail As New ClsDistiEmail, thisMail As Outlook.MailItem
-                UpdateStatus("For ticket " & i & " of " & lines.Count & ": Generating an email if Required")
-                thisMail = distiMail.GenerateMail(line)
-
-                If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
-                    thisMail.Display()
-                    thisMail.SaveAs(mailPath)
-                    thisMail.CC = ThisAddIn.ccList
-                    thisMail.Send()
-
+                If tmpAlias <> "NN" Then
                     Try
-                        ndt.UpdateNextDeskAttach(mailPath, distiEmailMessage)
+                        ndt.AddToNotify(tmpAlias, browser)
                     Catch ex As Exception
-                        HighlightError(line.Sales_ID)
-                        errorCount += 1
-                        Debug.WriteLine("Failed during attach")
-                        Debug.WriteLine(ex.Message)
-                    End Try
-                    Try
-                        My.Computer.FileSystem.DeleteFile(mailPath)
-                    Catch ex As Exception
-                        HighlightError(line.Sales_ID)
-                        errorCount += 1
-                        Debug.WriteLine("Failed during file delete")
+                        Debug.WriteLine("Failed during notify")
                         Debug.WriteLine(ex.Message)
                     End Try
 
                 Else
                     Try
-                        TDLines.Add(line)
-                        ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
+                        ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email, browser)
+
                     Catch ex As Exception
-                        HighlightError(line.Sales_ID)
-                        errorCount += 1
-                        Debug.WriteLine("Failed during  update")
+                        Debug.WriteLine("Failed during update")
                         Debug.WriteLine(ex.Message)
                     End Try
                 End If
-            ElseIf line.Action.Equals("Only", ThisAddIn.ignoreCase) Then
-                Try
-                    ndt.UpdateNextDesk(OnlyMessage, browser)
-                Catch ex As Exception
-                    HighlightError(line.Sales_ID)
-                    errorCount += 1
-                    Debug.WriteLine("Failed during update")
-                    Debug.WriteLine(ex.Message)
-                End Try
-            ElseIf line.Action.Equals("Fake Serials", ThisAddIn.ignoreCase) Then
-                Try
-                    ndt.UpdateNextDesk(FakeMessage, browser)
-                Catch ex As Exception
-                    HighlightError(line.Sales_ID)
-                    errorCount += 1
-                    Debug.WriteLine("Failed during update")
-                    Debug.WriteLine(ex.Message)
-                End Try
-            ElseIf line.Action.Equals("Ticket", ThisAddIn.ignoreCase) Then
-                If Not line.Order_Type_Desc.ToLower.Contains("return") Then
+
+                If Interrupt Then Exit For
+
+                Call SetProgress(i - 1 + 2.0 / 3.0)
+
+                If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
+                            doDistiMail And line.Units < 11 Then
+
+
+
+                    Dim distiMail As New ClsDistiEmail, thisMail As Outlook.MailItem
+                    UpdateStatus("For ticket " & i & " of " & lines.Count & ": Generating an email if Required")
+                    thisMail = distiMail.GenerateMail(line)
+
+                    If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
+                        thisMail.Display()
+                        thisMail.SaveAs(mailPath)
+                        thisMail.CC = ThisAddIn.ccList
+                        thisMail.Send()
+
+                        Try
+                            ndt.UpdateNextDeskAttach(mailPath, distiEmailMessage)
+                        Catch ex As Exception
+                            HighlightError(line.Sales_ID)
+                            errorCount += 1
+                            Debug.WriteLine("Failed during attach")
+                            Debug.WriteLine(ex.Message)
+                        End Try
+                        Try
+                            My.Computer.FileSystem.DeleteFile(mailPath)
+                        Catch ex As Exception
+                            HighlightError(line.Sales_ID)
+                            errorCount += 1
+                            Debug.WriteLine("Failed during file delete")
+                            Debug.WriteLine(ex.Message)
+                        End Try
+
+                    Else
+                        Try
+                            TDLines.Add(line)
+                            ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
+                        Catch ex As Exception
+                            HighlightError(line.Sales_ID)
+                            errorCount += 1
+                            Debug.WriteLine("Failed during  update")
+                            Debug.WriteLine(ex.Message)
+                        End Try
+                    End If
+                ElseIf line.Action.Equals("Only", ThisAddIn.ignoreCase) Then
                     Try
-                        ndt.UpdateNextDesk(DepQuestion, browser)
+                        ndt.UpdateNextDesk(OnlyMessage, browser)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
                         Debug.WriteLine("Failed during update")
                         Debug.WriteLine(ex.Message)
                     End Try
+                ElseIf line.Action.Equals("Fake Serials", ThisAddIn.ignoreCase) Then
                     Try
-                        Call Send_AM_Email(line)
+                        ndt.UpdateNextDesk(FakeMessage, browser)
                     Catch ex As Exception
                         HighlightError(line.Sales_ID)
                         errorCount += 1
-                        Debug.WriteLine("Failed during mail generation")
+                        Debug.WriteLine("Failed during update")
                         Debug.WriteLine(ex.Message)
                     End Try
+                ElseIf line.Action.Equals("Ticket", ThisAddIn.ignoreCase) Then
+                    If Not line.Order_Type_Desc.ToLower.Contains("return") Then
+                        Try
+                            ndt.UpdateNextDesk(DepQuestion, browser)
+                        Catch ex As Exception
+                            HighlightError(line.Sales_ID)
+                            errorCount += 1
+                            Debug.WriteLine("Failed during update")
+                            Debug.WriteLine(ex.Message)
+                        End Try
+                        Try
+                            Call Send_AM_Email(line)
+                        Catch ex As Exception
+                            HighlightError(line.Sales_ID)
+                            errorCount += 1
+                            Debug.WriteLine("Failed during mail generation")
+                            Debug.WriteLine(ex.Message)
+                        End Try
+                    End If
+
                 End If
+                i += 1
+            Next
 
-            End If
-            i += 1
-        Next
-
-        browser.Quit()
+            browser.Quit()
+        Else ' We're only doing TechData
+            For Each line As ClsDepLine In lines
+                If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
+                        doDistiMail And line.Units < 11 And
+                        line.Suppliername.ToLower.Contains("tech data") Then
+                    TDLines.Add(line)
+                End If
+            Next
+        End If
 
         If TDLines.Count > 0 AndAlso
            MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
@@ -394,6 +409,7 @@ Public Class CreateNew
                     Return True
                 End If
             Catch ex As Exception
+                Debug.WriteLine("serial exception")
                 'error handler?
                 Debug.Print(ex.Message)
             End Try
