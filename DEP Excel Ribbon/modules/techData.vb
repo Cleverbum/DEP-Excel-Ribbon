@@ -6,7 +6,7 @@ Partial Class CreateNew
 
         Dim wd As Chrome.ChromeDriver
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-        wd = ndt.GiveMeChrome(True)
+        wd = ndt.GiveMeChrome(True, True) ' visible and maximised.
         wd.Navigate.GoToUrl("https://intouch.techdata.com/Intouch/MiscFE/SSO/ServiceLogin?service=IntouchClient&ContinueUrl=http%3A%2F%2Fintouch.techdata.com%2Fintouch%2FHome.aspx&SessForm=1&Lang=en-GB")
 
         Try
