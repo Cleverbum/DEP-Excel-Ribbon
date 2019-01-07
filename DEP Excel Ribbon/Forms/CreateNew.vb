@@ -12,12 +12,13 @@ Public Class CreateNew
     Private DoAll As Boolean
 
     Public Sub New(Optional v As Boolean = True)
+        InitializeComponent()
         DoAll = v
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Label1.Text = "Reading in the Excel file"
-        Label2.Text = "Calculating Duration Estimate"
+        Me.Label1.Text = "Reading in the Excel file"
+        Me.Label2.Text = "Calculating Duration Estimate"
         'parallel
         BackgroundWorker1.RunWorkerAsync()
 
