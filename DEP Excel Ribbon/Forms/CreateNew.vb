@@ -10,10 +10,13 @@ Public Class CreateNew
     Public Interrupt As Boolean = False
     Public timeEstimate As TimeEstimator
     Private DoAll As Boolean
+    Private debugFrm As DebugForm
+    Private debugMode As Boolean
 
-    Public Sub New(Optional v As Boolean = True)
+    Public Sub New(Optional v As Boolean = True, Optional showDebugInfo As Boolean = False)
         InitializeComponent()
         DoAll = v
+        debugMode = showDebugInfo
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -22,10 +25,22 @@ Public Class CreateNew
         'parallel
         BackgroundWorker1.RunWorkerAsync()
 
+        If debugMode Then
+            debugFrm = New DebugForm
+            updateDebugMessage("Starting processes.")
+        End If
+
         'testing version (no threading for debugging)
         'Call MakeTickets()
     End Sub
 
+    Private Sub UpdateDebugMessage(MessageString As String)
+        'write it to the Visual Studio Debugger for luck
+        Debug.WriteLine(MessageString)
+
+        'write it to the form if it's active
+        If debugMode Then debugFrm.debugText &= MessageString & vbCrLf
+    End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         interrupt = True
@@ -33,6 +48,7 @@ Public Class CreateNew
 
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
         Call MakeTickets()
         Call Closeme()
     End Sub
@@ -69,6 +85,7 @@ Public Class CreateNew
             End Try
 
             i += 1
+            If debugMode Then UpdateDebugMessage("Read in line " & i)
         End While
         Dim total As Long = lines.LongCount
 
@@ -94,12 +111,15 @@ Public Class CreateNew
 
                 Try
                     line.NDT_Number = ndt.CreateTicket(2, line.ToTicket(), browser)
+
                 Catch ex As Exception
                     line.NDT_Number = 0
                 End Try
 
+                If debugMode Then UpdateDebugMessage("Ticket created: " & line.NDT_Number)
+
                 If line.NDT_Number = 0 Then
-                    HighlightError(line.Sales_ID)
+                    HighlightError(line.Serials(0))
                     errorCount += 1
                     i += 1
                     ' go to next "line"
@@ -110,6 +130,7 @@ Public Class CreateNew
 
                 If line.Units > 10 Then
                     ndt.UpdateNextDesk("Please note that there were " & line.Units & " units on this order - the below serials list is not exhaustive", browser)
+                    If debugMode Then UpdateDebugMessage("Too many units: " & line.Units)
                 End If
 
                 Dim tmpAlias As String = Globals.ThisAddIn.FindAlias(line.Account_Manager_Email)
@@ -120,19 +141,22 @@ Public Class CreateNew
 
                 If tmpAlias <> "NN" Then
                     Try
+                        If debugMode Then UpdateDebugMessage("Adding to notify: " & tmpAlias)
                         ndt.AddToNotify(tmpAlias, browser)
                     Catch ex As Exception
-                        Debug.WriteLine("Failed during notify")
-                        Debug.WriteLine(ex.Message)
+                        UpdateDebugMessage("Failed during notify")
+                        UpdateDebugMessage(ex.Message)
                     End Try
 
                 Else
                     Try
+                        If debugMode Then UpdateDebugMessage("No alias for: " & line.Account_Manager_Email)
+                        If debugMode Then UpdateDebugMessage("Updating NDT")
                         ndt.UpdateNextDesk("Could not find the nextdesk username for " & line.Account_Manager_Email, browser)
 
                     Catch ex As Exception
-                        Debug.WriteLine("Failed during update")
-                        Debug.WriteLine(ex.Message)
+                        UpdateDebugMessage("Failed during update")
+                        UpdateDebugMessage(ex.Message)
                     End Try
                 End If
 
@@ -150,26 +174,29 @@ Public Class CreateNew
                     thisMail = distiMail.GenerateMail(line)
 
                     If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
+                        If debugMode Then UpdateDebugMessage("Sending Mail")
                         thisMail.Display()
                         thisMail.SaveAs(mailPath)
                         thisMail.CC = ThisAddIn.ccList
                         thisMail.Send()
 
                         Try
+                            If debugMode Then UpdateDebugMessage("Attaching Mail to ticket")
                             ndt.UpdateNextDeskAttach(mailPath, distiEmailMessage)
                         Catch ex As Exception
-                            HighlightError(line.Sales_ID)
+                            HighlightError(line.Serials(0))
                             errorCount += 1
-                            Debug.WriteLine("Failed during attach")
-                            Debug.WriteLine(ex.Message)
+                            UpdateDebugMessage("Failed during attach")
+                            UpdateDebugMessage(ex.Message)
                         End Try
                         Try
+                            If debugMode Then UpdateDebugMessage("Deleting Mail temporary file")
                             My.Computer.FileSystem.DeleteFile(mailPath)
                         Catch ex As Exception
-                            HighlightError(line.Sales_ID)
+                            HighlightError(line.Serials(0))
                             errorCount += 1
-                            Debug.WriteLine("Failed during file delete")
-                            Debug.WriteLine(ex.Message)
+                            UpdateDebugMessage("Failed during file delete")
+                            UpdateDebugMessage(ex.Message)
                         End Try
 
                     Else
@@ -177,47 +204,51 @@ Public Class CreateNew
                             If line.Suppliername.ToLower.Contains("tech data") Then TDLines.Add(line)
                             ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
                         Catch ex As Exception
-                            HighlightError(line.Sales_ID)
+                            HighlightError(line.Serials(0))
                             errorCount += 1
-                            Debug.WriteLine("Failed during  update")
-                            Debug.WriteLine(ex.Message)
+                            UpdateDebugMessage("Failed during  update")
+                            UpdateDebugMessage(ex.Message)
                         End Try
                     End If
                 ElseIf line.Action.Equals("Only", ThisAddIn.ignoreCase) Then
                     Try
+                        If debugMode Then UpdateDebugMessage("Updating NDT with 'only' message")
                         ndt.UpdateNextDesk(OnlyMessage, browser)
                     Catch ex As Exception
-                        HighlightError(line.Sales_ID)
+                        HighlightError(line.Serials(0))
                         errorCount += 1
-                        Debug.WriteLine("Failed during update")
-                        Debug.WriteLine(ex.Message)
+                        UpdateDebugMessage("Failed during update")
+                        UpdateDebugMessage(ex.Message)
                     End Try
                 ElseIf line.Action.Equals("Fake Serials", ThisAddIn.ignoreCase) Then
                     Try
+                        If debugMode Then UpdateDebugMessage("Updating NDT re: Fake Serials")
                         ndt.UpdateNextDesk(FakeMessage, browser)
                     Catch ex As Exception
-                        HighlightError(line.Sales_ID)
+                        HighlightError(line.Serials(0))
                         errorCount += 1
-                        Debug.WriteLine("Failed during update")
-                        Debug.WriteLine(ex.Message)
+                        UpdateDebugMessage("Failed during update")
+                        UpdateDebugMessage(ex.Message)
                     End Try
                 ElseIf line.Action.Equals("Ticket", ThisAddIn.ignoreCase) Then
                     If Not line.Order_Type_Desc.ToLower.Contains("return") Then
                         Try
+                            If debugMode Then UpdateDebugMessage("Updating NDT with 'do you want to dep' message")
                             ndt.UpdateNextDesk(DepQuestion, browser)
                         Catch ex As Exception
-                            HighlightError(line.Sales_ID)
+                            HighlightError(line.Serials(0))
                             errorCount += 1
-                            Debug.WriteLine("Failed during update")
-                            Debug.WriteLine(ex.Message)
+                            UpdateDebugMessage("Failed during update")
+                            UpdateDebugMessage(ex.Message)
                         End Try
                         Try
+                            If debugMode Then UpdateDebugMessage("Sending Account Manager 'do you want to DEP' eMail")
                             Call Send_AM_Email(line)
                         Catch ex As Exception
-                            HighlightError(line.Sales_ID)
+                            HighlightError(line.Serials(0))
                             errorCount += 1
-                            Debug.WriteLine("Failed during mail generation")
-                            Debug.WriteLine(ex.Message)
+                            UpdateDebugMessage("Failed during mail generation")
+                            UpdateDebugMessage(ex.Message)
                         End Try
                     End If
 
@@ -241,12 +272,12 @@ Public Class CreateNew
             Dim wd As Chrome.ChromeDriver = DoTDLogin()
             For Each line In TDLines
                 If Not RegisterTechdata(line, wd) Then
-                    HighlightError(line.Sales_ID)
+                    HighlightError(line.Serials(0))
                     errorCount += 1
                     ndt.UpdateNextDesk(tdFail)
-                    Debug.WriteLine("Failed during TD Registration")
+                    UpdateDebugMessage("Failed during TD Registration")
                 Else
-                    ndt.ticketNumber = line.NDT_Number
+                    ndt.TicketNumber = line.NDT_Number
                     ndt.UpdateNextDesk(tdSuccess)
                 End If
             Next
@@ -278,9 +309,9 @@ Public Class CreateNew
         End If
     End Sub
     Delegate Sub SetTextCallback(ByVal [text] As String)
-    Private Sub HighlightError(sales_ID As Long)
+    Private Sub HighlightError(FirstSerial As String)
         Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
-        Dim tCell As Excel.Range = tsheet.Cells.Find(sales_ID)
+        Dim tCell As Excel.Range = tsheet.Cells.Find(FirstSerial)
 
         With tCell.EntireRow.Font
             .Color = RGB(255, 0, 0)
@@ -397,6 +428,7 @@ Public Class CreateNew
             If rawLines(i).Action = "Discard" Then
                 rawLines.RemoveAt(i)
                 count = count + 1
+                If debugMode Then UpdateDebugMessage("Discarded line " & i)
             End If
 
 
@@ -407,10 +439,11 @@ Public Class CreateNew
         For Each serial In serials
             Try
                 If serial.ToLower.StartsWith("po") Then
+                    If debugMode Then UpdateDebugMessage("Fake Serial Found: " & serial)
                     Return True
                 End If
             Catch ex As Exception
-                Debug.WriteLine("serial exception")
+                UpdateDebugMessage("serial exception")
                 'error handler?
                 Debug.Print(ex.Message)
             End Try
@@ -434,6 +467,7 @@ Public Class CreateNew
 
     Private Sub UpdateStatus(message As String)
         Globals.ThisAddIn.Application.StatusBar = message
+        If debugMode Then UpdateDebugMessage(message)
         Call SetText(message)
     End Sub
 

@@ -50,6 +50,7 @@
         Me.WriteMails = Me.Factory.CreateRibbonButton
         Me.TDOnly = Me.Factory.CreateRibbonButton
         Me.Button1 = Me.Factory.CreateRibbonButton
+        Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -68,6 +69,7 @@
         Me.Group1.Items.Add(Me.WriteMails)
         Me.Group1.Items.Add(Me.TDOnly)
         Me.Group1.Items.Add(Me.Button1)
+        Me.Group1.Items.Add(Me.ChkDebug)
         Me.Group1.Name = "Group1"
         '
         'CreateNew
@@ -115,6 +117,11 @@
         Me.Button1.Label = "Test Chrome Control"
         Me.Button1.Name = "Button1"
         '
+        'ChkDebug
+        '
+        Me.ChkDebug.Label = "Debug Mode"
+        Me.ChkDebug.Name = "ChkDebug"
+        '
         'Ribbon1
         '
         Me.Name = "Ribbon1"
@@ -136,6 +143,7 @@
     Friend WithEvents WriteMails As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents TDOnly As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents ChkDebug As Microsoft.Office.Tools.Ribbon.RibbonCheckBox
 End Class
 
 Partial Class ThisRibbonCollection
