@@ -174,7 +174,7 @@ Public Class CreateNew
 
                     Else
                         Try
-                            TDLines.Add(line)
+                            If line.Suppliername.ToLower.Contains("tech data") Then TDLines.Add(line)
                             ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
                         Catch ex As Exception
                             HighlightError(line.Sales_ID)
