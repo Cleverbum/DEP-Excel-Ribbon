@@ -438,7 +438,7 @@ Public Class CreateNew
     Function FakeSerials(serials As String()) As Boolean
         For Each serial In serials
             Try
-                If serial.ToLower.StartsWith("po") Then
+                If serial IsNot Nothing AndAlso serial.ToLower.StartsWith("po") Then
                     If debugMode Then UpdateDebugMessage("Fake Serial Found: " & serial)
                     Return True
                 End If

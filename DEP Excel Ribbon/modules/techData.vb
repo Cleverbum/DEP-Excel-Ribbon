@@ -49,7 +49,7 @@ Partial Class CreateNew
         Dim serials As String = ""
 
         For Each serial In line.Serials
-            If serial <> "" Then
+            If serial IsNot Nothing AndAlso serial <> "" Then
                 serials &= serial & vbCrLf
             End If
         Next
