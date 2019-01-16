@@ -131,9 +131,9 @@ Public Class Ribbon1
         Dim frm As New CreateNew
         i = 2
         snglLine = frm.ReadExcelLine(oXlWs, i)
-        Dim wd As Chrome.ChromeDriver = frm.DoTDLogin()
+        Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
 
-        Dim success As Boolean = frm.RegisterTechdata(snglLine, wd)
+        Dim success As Boolean = frm.DoOneWC_DEP(snglLine, wd)
     End Sub
 
 
