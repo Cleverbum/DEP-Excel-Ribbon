@@ -36,7 +36,7 @@ Partial Class CreateNew
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(415, 42)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Stop Current Process"
+        Me.Button1.Text = "Quit && Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1

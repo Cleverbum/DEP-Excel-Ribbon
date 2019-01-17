@@ -8,6 +8,8 @@ Public Class ThisAddIn
 
     Public Const ignoreCase As StringComparison = StringComparison.CurrentCultureIgnoreCase
 
+    Public RegistrationRunning As Boolean = False
+
     Private Sub ThisAddIn_Startup() Handles Me.Startup
 
     End Sub

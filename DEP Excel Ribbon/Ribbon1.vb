@@ -11,9 +11,10 @@ Public Class Ribbon1
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
-        Dim frm As New CreateNew(True)
-        frm.Show()
-
+        If Not Globals.ThisAddIn.RegistrationRunning Then
+            Dim frm As New CreateNew(True)
+            frm.Show()
+        End If
     End Sub
 
 

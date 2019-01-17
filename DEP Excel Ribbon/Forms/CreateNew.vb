@@ -20,6 +20,7 @@ Public Class CreateNew
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Globals.ThisAddIn.RegistrationRunning = True
         Me.Label1.Text = "Reading in the Excel file"
         Me.Label2.Text = "Calculating Duration Estimate"
         'parallel
@@ -50,6 +51,9 @@ Public Class CreateNew
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
         Call MakeTickets()
+
+        Globals.ThisAddIn.RegistrationRunning = False
+
         Call Closeme()
     End Sub
 
