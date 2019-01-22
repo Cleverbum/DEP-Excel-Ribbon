@@ -51,15 +51,46 @@ Partial Class CreateNew
         Next
 
         If serials <> "" Then
-            wd.FindElementByName("serialupload").SendKeys(serials)
+            Dim tmp = wd.FindElementsByName("serialupload")
+            For Each tElement As IWebElement In tmp
+                If tElement.TagName = "textarea" Then
+                    tElement.SendKeys(serials)
+                    Exit For
+                End If
+            Next
+
         Else
             Return False
         End If
 
         wd.FindElementByName("uploadsubmitlist").Click()
 
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
 
+        wd.FindElementByName("po").SendKeys(line.Customer_PO)
+        wd.FindElementByName("enduserid").SendKeys(line.Customer_DEP_ID)
 
+        wd.FindElementByClassName("orddetail").Click()
+
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
+
+        Dim tmpTwo = wd.FindElementsByClassName("orddetail")
+        For Each tElement As IWebElement In tmpTwo
+            If tElement.Text = "Submit to Apple" Then
+                tElement.Click()
+                Exit For
+            End If
+        Next
+
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
+
+        Dim tmpThree = wd.FindElementsByClassName("orddetail")
+        For Each tElement As IWebElement In tmpThree
+            If tElement.Text = "" Then
+                tElement.Click()
+                Exit For
+            End If
+        Next
 
         Return True
     End Function

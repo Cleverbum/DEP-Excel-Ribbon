@@ -51,6 +51,7 @@
         Me.TDOnly = Me.Factory.CreateRibbonButton
         Me.Button1 = Me.Factory.CreateRibbonButton
         Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
+        Me.BtnWCOnly = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -70,6 +71,7 @@
         Me.Group1.Items.Add(Me.TDOnly)
         Me.Group1.Items.Add(Me.Button1)
         Me.Group1.Items.Add(Me.ChkDebug)
+        Me.Group1.Items.Add(Me.BtnWCOnly)
         Me.Group1.Name = "Group1"
         '
         'CreateNew
@@ -122,6 +124,14 @@
         Me.ChkDebug.Label = "Debug Mode"
         Me.ChkDebug.Name = "ChkDebug"
         '
+        'BtnWCOnly
+        '
+        Me.BtnWCOnly.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.BtnWCOnly.Image = CType(resources.GetObject("BtnWCOnly.Image"), System.Drawing.Image)
+        Me.BtnWCOnly.Label = "Westcoast Registrations"
+        Me.BtnWCOnly.Name = "BtnWCOnly"
+        Me.BtnWCOnly.ShowImage = True
+        '
         'Ribbon1
         '
         Me.Name = "Ribbon1"
@@ -144,6 +154,7 @@
     Friend WithEvents TDOnly As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents ChkDebug As Microsoft.Office.Tools.Ribbon.RibbonCheckBox
+    Friend WithEvents BtnWCOnly As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection

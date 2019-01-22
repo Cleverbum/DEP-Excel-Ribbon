@@ -135,8 +135,19 @@ Public Class Ribbon1
         snglLine = frm.ReadExcelLine(oXlWs, i)
         Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
 
-        Dim success As Boolean = frm.DoOneWC_DEP(snglLine, wd)
     End Sub
 
+    Private Sub BtnWCOnly_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnWCOnly.Click
+        Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
+        Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
 
+        Dim snglLine As ClsDepLine
+        Dim i As Integer
+        Dim frm As New CreateNew
+        i = 2
+        snglLine = frm.ReadExcelLine(oXlWs, i)
+        Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
+
+        Dim success As Boolean = frm.DoOneWC_DEP(snglLine, wd)
+    End Sub
 End Class
