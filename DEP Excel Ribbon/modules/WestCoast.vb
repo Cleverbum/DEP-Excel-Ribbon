@@ -51,10 +51,10 @@ Partial Class CreateNew
         Next
 
         If serials <> "" Then
-            Dim tmp = wd.FindElementsByName("serialupload")
-            For Each tElement As IWebElement In tmp
-                If tElement.TagName = "textarea" Then
-                    tElement.SendKeys(serials)
+            Dim serialTypeAreas = wd.FindElementsByName("serialupload")
+            For Each SerialArea As IWebElement In serialTypeAreas
+                If SerialArea.TagName = "textarea" Then
+                    SerialArea.SendKeys(serials)
                     Exit For
                 End If
             Next
@@ -65,29 +65,31 @@ Partial Class CreateNew
 
         wd.FindElementByName("uploadsubmitlist").Click()
 
-        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(4)) ' it seems to prefer if we go slow
 
         wd.FindElementByName("po").SendKeys(line.Customer_PO)
         wd.FindElementByName("enduserid").SendKeys(line.Customer_DEP_ID)
 
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(4)) ' it seems to prefer if we go slow
+
         wd.FindElementByClassName("orddetail").Click()
 
-        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(4)) ' it seems to prefer if we go slow
 
-        Dim tmpTwo = wd.FindElementsByClassName("orddetail")
-        For Each tElement As IWebElement In tmpTwo
-            If tElement.Text = "Submit to Apple" Then
-                tElement.Click()
+        Dim OrderDetailButtons = wd.FindElementsByClassName("orddetail")
+        For Each OrderButton As IWebElement In OrderDetailButtons
+            If OrderButton.Text = "Submit to Apple" Then
+                OrderButton.Click()
                 Exit For
             End If
         Next
 
-        Threading.Thread.Sleep(TimeSpan.FromSeconds(1)) ' it seems to prefer if we go slow
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(4)) ' it seems to prefer if we go slow
 
-        Dim tmpThree = wd.FindElementsByClassName("orddetail")
-        For Each tElement As IWebElement In tmpThree
-            If tElement.Text = "" Then
-                tElement.Click()
+        Dim SubmitButtons = wd.FindElementsByClassName("orddetail")
+        For Each SubmitButton As IWebElement In SubmitButtons
+            If SubmitButton.Text = "" Then
+                SubmitButton.Click()
                 Exit For
             End If
         Next

@@ -10,12 +10,16 @@ Public Class CreateNew
     Public Interrupt As Boolean = False
     Public timeEstimate As TimeEstimator
     Private DoAll As Boolean
+    Private DoTD As Boolean
+    Private DoWC As Boolean
     Private debugFrm As DebugForm
     Private debugMode As Boolean
 
-    Public Sub New(Optional v As Boolean = True, Optional showDebugInfo As Boolean = False)
+    Public Sub New(Optional tDoAll As Boolean = True, Optional showDebugInfo As Boolean = False, Optional tDoWC As Boolean = False, Optional tDoTD As Boolean = False)
         InitializeComponent()
-        DoAll = v
+        DoAll = tDoAll
+        DoWC = tDoWC
+        DoTD = tDoTD
         debugMode = showDebugInfo
     End Sub
 
@@ -66,6 +70,8 @@ Public Class CreateNew
         Dim lines As New List(Of ClsDepLine), snglLine As ClsDepLine
 
         Dim TDLines As New List(Of ClsDepLine)
+
+        Dim WClines As New List(Of ClsDepLine)
 
         UpdateStatus("Acting on " & oXlWb.Name)
 
@@ -177,7 +183,7 @@ Public Class CreateNew
                     UpdateStatus("For ticket " & i & " of " & lines.Count & ": Generating an email if Required")
                     thisMail = distiMail.GenerateMail(line)
 
-                    If thisMail.To IsNot Nothing Then ' Techdata don't do emails so techdata lines have no "to" address
+                    If thisMail.To IsNot Nothing Then ' Techdata & Westcoast don't do emails so techdata lines have no "to" address
                         If debugMode Then UpdateDebugMessage("Sending Mail")
                         thisMail.Display()
                         thisMail.SaveAs(mailPath)
@@ -205,7 +211,12 @@ Public Class CreateNew
 
                     Else
                         Try
-                            If line.Suppliername.ToLower.Contains("tech data") Then TDLines.Add(line)
+                            If line.Suppliername.ToLower.Contains("tech data") Then
+                                TDLines.Add(line)
+                            ElseIf line.Suppliername.ToLower.Contains("westcoast") Then
+                                WClines.Add(line)
+                            End If
+
                             ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
                         Catch ex As Exception
                             HighlightError(line.Serials(0))
@@ -261,12 +272,17 @@ Public Class CreateNew
             Next
 
             browser.Quit()
-        Else ' We're only doing TechData
+        Else ' We're only doing TechData or Westcoast
             For Each line As ClsDepLine In lines
                 If line.Action.Equals("Reg", comparisonType:=ThisAddIn.ignoreCase) And
-                        doDistiMail And line.Units < 11 And
-                        line.Suppliername.ToLower.Contains("tech data") Then
-                    TDLines.Add(line)
+                        doDistiMail And line.Units < 11 Then
+
+                    If line.Suppliername.ToLower.Contains("tech data") And DoTD Then
+                        TDLines.Add(line)
+                    ElseIf line.Suppliername.ToLower.Contains("westcoast") And DoWC Then
+                        WClines.add(line)
+                    End If
+
                 End If
             Next
         End If
@@ -283,6 +299,24 @@ Public Class CreateNew
                 Else
                     ndt.TicketNumber = line.NDT_Number
                     ndt.UpdateNextDesk(tdSuccess)
+                End If
+            Next
+
+            wd.Quit()
+
+        End If
+        If WClines.Count > 0 AndAlso
+           MsgBox("Do you want to do the Westcoast Regsitrations now?", vbYesNo) = vbYes Then
+            Dim wd As Chrome.ChromeDriver = DoWCLogin()
+            For Each line In WClines
+                If Not DoOneWC_DEP(line, wd) Then
+                    HighlightError(line.Serials(0))
+                    errorCount += 1
+                    ndt.UpdateNextDesk(wcFail)
+                    UpdateDebugMessage("Failed during WC Registration")
+                Else
+                    ndt.TicketNumber = line.NDT_Number
+                    ndt.UpdateNextDesk(wcSuccess)
                 End If
             Next
 

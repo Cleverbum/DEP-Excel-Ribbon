@@ -16,13 +16,13 @@ Public Class ClsDistiEmail
             distiEmail.Body = "Please could you register the attached devices?"
             distiEmail.To = "MobilityAppleDEPEMEA@ingrammicro.com"
             distiEmail.Subject = "Please can you register the attached devices (NDT: " & DepInfo.NDT_Number & ")"
-            ' My.Computer.FileSystem.DeleteFile(templateFile)
-        ElseIf DepInfo.Suppliername.StartsWith("Westcoast", ThisAddIn.ignoreCase) Then
-            distiEmail.HTMLBody = WestCoastBody(DepInfo)
-            distiEmail.To = "dep@westcoast.co.uk"
-            distiEmail.Subject = "Please can you register the below devices (NDT: " & DepInfo.NDT_Number & ")"
+            My.Computer.FileSystem.DeleteFile(templateFile)
+            'ElseIf DepInfo.Suppliername.StartsWith("Westcoast", ThisAddIn.ignoreCase) Then
+            '    distiEmail.HTMLBody = WestCoastBody(DepInfo)
+            '    distiEmail.To = "dep@westcoast.co.uk"
+            '    distiEmail.Subject = "Please can you register the below devices (NDT: " & DepInfo.NDT_Number & ")"
         Else
-            'probably Techdata - at this stage do nothing
+            'either westcoast/techdata who have auto, or a completely new supplier. At this stage do nothing
         End If
 
         If distiEmail.Subject <> "" AndAlso

@@ -44,13 +44,13 @@
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Ribbon1))
         Me.Tab1 = Me.Factory.CreateRibbonTab
         Me.Group1 = Me.Factory.CreateRibbonGroup
+        Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
         Me.CreateNew = Me.Factory.CreateRibbonButton
         Me.CloseStale = Me.Factory.CreateRibbonButton
         Me.FindIgnored = Me.Factory.CreateRibbonButton
         Me.WriteMails = Me.Factory.CreateRibbonButton
         Me.TDOnly = Me.Factory.CreateRibbonButton
         Me.Button1 = Me.Factory.CreateRibbonButton
-        Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
         Me.BtnWCOnly = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
@@ -73,6 +73,11 @@
         Me.Group1.Items.Add(Me.ChkDebug)
         Me.Group1.Items.Add(Me.BtnWCOnly)
         Me.Group1.Name = "Group1"
+        '
+        'ChkDebug
+        '
+        Me.ChkDebug.Label = "Debug Mode"
+        Me.ChkDebug.Name = "ChkDebug"
         '
         'CreateNew
         '
@@ -118,11 +123,6 @@
         '
         Me.Button1.Label = "Test Chrome Control"
         Me.Button1.Name = "Button1"
-        '
-        'ChkDebug
-        '
-        Me.ChkDebug.Label = "Debug Mode"
-        Me.ChkDebug.Name = "ChkDebug"
         '
         'BtnWCOnly
         '

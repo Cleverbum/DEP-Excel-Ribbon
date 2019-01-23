@@ -6,6 +6,8 @@
     Public Const NoEmailSent As String = "No mail was sent for this as the distributor is %SupplierName%. DEP Team: Please complete their process manually."
     Public Const tdFail As String = "Techdata registration failed via the assisted tool: DEP Team, please complete this manually for this order."
     Public Const tdSuccess As String = "Techdata registration was submitted successfully using the assisted tool. DEP Team: Please close this ticket once confirmation has been recieved from TechData"
+    Public Const wcFail As String = "Westcoast registration failed via the assisted tool: DEP Team, please complete this manually for this order."
+    Public Const wcSuccess As String = "Westcoast registration was submitted successfully using the assisted tool. DEP Team: Please close this ticket once confirmation has been recieved from TechData"
 
 
 End Module
