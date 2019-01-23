@@ -1,4 +1,5 @@
 ﻿Imports System.Diagnostics
+Imports System.Net
 Imports outlook = Microsoft.Office.Interop.Outlook
 
 Public Class ThisAddIn
@@ -13,6 +14,17 @@ Public Class ThisAddIn
     Private Sub ThisAddIn_Startup() Handles Me.Startup
 
     End Sub
+
+    Public Function OnIntranet() As Boolean
+        Try
+            Dim hostentry As IPHostEntry = Dns.GetHostEntry("nextdesk")
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
+
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
 

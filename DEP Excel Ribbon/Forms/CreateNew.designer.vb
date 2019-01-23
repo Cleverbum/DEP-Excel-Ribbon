@@ -31,20 +31,20 @@ Partial Class CreateNew
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(16, 166)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
+        Me.Button1.Location = New System.Drawing.Point(9, 90)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(415, 42)
+        Me.Button1.Size = New System.Drawing.Size(226, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Quit && Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(18, 20)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.Location = New System.Drawing.Point(10, 11)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(414, 36)
+        Me.Label1.Size = New System.Drawing.Size(226, 20)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
         '
@@ -54,31 +54,31 @@ Partial Class CreateNew
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(16, 56)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label2.Location = New System.Drawing.Point(9, 30)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(71, 25)
+        Me.Label2.Size = New System.Drawing.Size(39, 13)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Label2"
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(16, 86)
-        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(4)
+        Me.ProgressBar1.Location = New System.Drawing.Point(9, 47)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(415, 64)
+        Me.ProgressBar1.Size = New System.Drawing.Size(226, 35)
         Me.ProgressBar1.TabIndex = 4
         '
         'CreateNew
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(11.0!, 24.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(448, 226)
+        Me.ClientSize = New System.Drawing.Size(244, 122)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(4)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "CreateNew"
         Me.ResumeLayout(False)
         Me.PerformLayout()

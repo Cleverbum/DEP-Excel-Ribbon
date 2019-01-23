@@ -58,6 +58,7 @@ Public Class CreateNew
 
         Globals.ThisAddIn.RegistrationRunning = False
 
+
         Call Closeme()
     End Sub
 
@@ -498,6 +499,7 @@ Public Class CreateNew
             Dim d As New CloseCallBack(AddressOf Closeme)
             Me.Invoke(d, New Object() {})
         Else
+            Globals.Ribbons.Ribbon1.EnableButtons()
             Me.Close()
         End If
     End Sub
@@ -566,5 +568,6 @@ Public Class CreateNew
         End If
     End Sub
     Delegate Sub SetClipTextCallback(ByVal [text] As String)
+
 
 End Class
