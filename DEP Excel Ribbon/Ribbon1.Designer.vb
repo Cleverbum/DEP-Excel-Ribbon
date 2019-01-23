@@ -51,7 +51,6 @@
         Me.TDOnly = Me.Factory.CreateRibbonButton
         Me.Button1 = Me.Factory.CreateRibbonButton
         Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
-        Me.Button2 = Me.Factory.CreateRibbonButton
         Me.BtnWCOnly = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
@@ -70,10 +69,9 @@
         Me.Group1.Items.Add(Me.FindIgnored)
         Me.Group1.Items.Add(Me.WriteMails)
         Me.Group1.Items.Add(Me.TDOnly)
+        Me.Group1.Items.Add(Me.BtnWCOnly)
         Me.Group1.Items.Add(Me.Button1)
         Me.Group1.Items.Add(Me.ChkDebug)
-        Me.Group1.Items.Add(Me.Button2)
-        Me.Group1.Items.Add(Me.BtnWCOnly)
         Me.Group1.Name = "Group1"
         '
         'CreateNew
@@ -83,7 +81,6 @@
         Me.CreateNew.Label = "Create New Tickets"
         Me.CreateNew.Name = "CreateNew"
         Me.CreateNew.ShowImage = True
-        Me.CreateNew.SuperTip = "Create new nextdesk tickets based on the below DEP Spreadsheet"
         '
         'CloseStale
         '
@@ -127,11 +124,6 @@
         Me.ChkDebug.Label = "Debug Mode"
         Me.ChkDebug.Name = "ChkDebug"
         '
-        'Button2
-        '
-        Me.Button2.Label = "Test Connectivity"
-        Me.Button2.Name = "Button2"
-        '
         'BtnWCOnly
         '
         Me.BtnWCOnly.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
@@ -163,7 +155,6 @@
     Friend WithEvents Button1 As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents ChkDebug As Microsoft.Office.Tools.Ribbon.RibbonCheckBox
     Friend WithEvents BtnWCOnly As Microsoft.Office.Tools.Ribbon.RibbonButton
-    Friend WithEvents Button2 As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection

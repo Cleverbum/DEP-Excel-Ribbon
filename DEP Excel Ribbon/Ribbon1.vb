@@ -8,29 +8,11 @@ Public Class Ribbon1
 
     Private Sub Ribbon1_Load(ByVal sender As System.Object, ByVal e As RibbonUIEventArgs) Handles MyBase.Load
 
-        If Not Globals.ThisAddIn.OnIntranet() Then
-            Call DisableButtons("This has been disabled as it seems as though you're not online")
-
-        End If
     End Sub
 
-    Private Sub DisableButtons(strMessage As String)
-        Me.CreateNew.Enabled = False
-        Me.FindIgnored.Enabled = False
-        Me.CloseStale.Enabled = False
-        Me.CreateNew.SuperTip = strMessage
-    End Sub
-
-    Public Sub EnableButtons()
-        Me.CreateNew.Enabled = True
-        Me.FindIgnored.Enabled = True
-        Me.CloseStale.Enabled = True
-        Me.CreateNew.SuperTip = "Create new nextdesk tickets based on the below DEP Spreadsheet"
-    End Sub
     Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
         If Not Globals.ThisAddIn.RegistrationRunning Then
             Globals.ThisAddIn.RegistrationRunning = True
-            DisableButtons("Registrations are already running")
             Dim frm As New CreateNew(True)
             frm.Show()
         End If
@@ -137,7 +119,7 @@ Public Class Ribbon1
         frm.Show()
     End Sub
 
-    Private Sub TDOnly_click(sender As Object, e As RibbonControlEventArgs) Handles TDOnly.Click
+    Private Sub Button1_Click_1(sender As Object, e As RibbonControlEventArgs) Handles TDOnly.Click
         Dim frm As New CreateNew(False)
         frm.Show()
     End Sub
@@ -167,15 +149,5 @@ Public Class Ribbon1
         Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
 
         Dim success As Boolean = frm.DoOneWC_DEP(snglLine, wd)
-    End Sub
-
-    Private Sub Button2_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button2.Click
-        If Globals.ThisAddIn.OnIntranet Then
-            EnableButtons()
-            MsgBox("I was able to reach nextdesk")
-        Else
-            DisableButtons("This has been disabled as it seems as though you're not online")
-            MsgBox("I was unable to reach nextdesk")
-        End If
     End Sub
 End Class

@@ -18,7 +18,7 @@ Public Class ThisAddIn
     Public Function OnIntranet() As Boolean
         Try
             Dim hostentry As IPHostEntry = Dns.GetHostEntry("nextdesk")
-            Return True
+            Return hostentry.HostName.ToLower.Contains("insight")
         Catch ex As Exception
             Return False
         End Try
