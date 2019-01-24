@@ -10,4 +10,10 @@
     Public Const wcSuccess As String = "Westcoast registration was submitted successfully using the assisted tool. DEP Team: Please close this ticket once confirmation has been recieved from TechData"
 
 
+    Public Const FailedRegMsg As String = "An automated check of the distributor website suggests that the registration process failed for this order. DEP Team: Please can you manually verify that there has been an error and take steps to resolve it."
+
+    Public Const SuccessfulRegMsg As String = "An automated check of the distribor's website confirms that the registration process for this order was successful. This ticket will now be closed."
+
+    Public Const CloseMsg As String = "All of the tasks required for this order have now been completed, and as such this ticket has been closed. Please let us know if we are mistaken and something else needs doing."
+
 End Module

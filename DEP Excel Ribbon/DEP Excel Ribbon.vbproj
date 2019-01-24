@@ -259,6 +259,7 @@
     <Compile Include="Forms\PivotMail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="modules\SupportFunctions.vb" />
     <Compile Include="modules\TechData.vb">
       <SubType>Form</SubType>
     </Compile>

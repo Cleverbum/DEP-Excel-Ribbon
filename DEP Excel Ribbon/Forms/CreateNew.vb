@@ -90,7 +90,7 @@ Public Class CreateNew
                 snglLine = ReadExcelLine(oXlWs, i)
                 lines.Add(snglLine)
             Catch
-                HighlightError(oXlWs.Cells(i, 1))
+                Globals.ThisAddIn.HighlightError(oXlWs.Cells(i, 1))
                 errorCount += 1
 
             End Try
@@ -130,7 +130,7 @@ Public Class CreateNew
                 If debugMode Then UpdateDebugMessage("Ticket created: " & line.NDT_Number)
 
                 If line.NDT_Number = 0 Then
-                    HighlightError(line.Serials(0))
+                    Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
                     i += 1
                     ' go to next "line"
@@ -195,7 +195,7 @@ Public Class CreateNew
                             If debugMode Then UpdateDebugMessage("Attaching Mail to ticket")
                             ndt.UpdateNextDeskAttach(mailPath, distiEmailMessage)
                         Catch ex As Exception
-                            HighlightError(line.Serials(0))
+                            Globals.ThisAddIn.HighlightError(line.Serials(0))
                             errorCount += 1
                             UpdateDebugMessage("Failed during attach")
                             UpdateDebugMessage(ex.Message)
@@ -204,7 +204,7 @@ Public Class CreateNew
                             If debugMode Then UpdateDebugMessage("Deleting Mail temporary file")
                             My.Computer.FileSystem.DeleteFile(mailPath)
                         Catch ex As Exception
-                            HighlightError(line.Serials(0))
+                            Globals.ThisAddIn.HighlightError(line.Serials(0))
                             errorCount += 1
                             UpdateDebugMessage("Failed during file delete")
                             UpdateDebugMessage(ex.Message)
@@ -220,7 +220,7 @@ Public Class CreateNew
 
                             ndt.UpdateNextDesk(Replace(NoEmailSent, "%SupplierName%", line.Suppliername), browser)
                         Catch ex As Exception
-                            HighlightError(line.Serials(0))
+                            Globals.ThisAddIn.HighlightError(line.Serials(0))
                             errorCount += 1
                             UpdateDebugMessage("Failed during  update")
                             UpdateDebugMessage(ex.Message)
@@ -231,7 +231,7 @@ Public Class CreateNew
                         If debugMode Then UpdateDebugMessage("Updating NDT with 'only' message")
                         ndt.UpdateNextDesk(OnlyMessage, browser)
                     Catch ex As Exception
-                        HighlightError(line.Serials(0))
+                        Globals.ThisAddIn.HighlightError(line.Serials(0))
                         errorCount += 1
                         UpdateDebugMessage("Failed during update")
                         UpdateDebugMessage(ex.Message)
@@ -241,7 +241,7 @@ Public Class CreateNew
                         If debugMode Then UpdateDebugMessage("Updating NDT re: Fake Serials")
                         ndt.UpdateNextDesk(FakeMessage, browser)
                     Catch ex As Exception
-                        HighlightError(line.Serials(0))
+                        Globals.ThisAddIn.HighlightError(line.Serials(0))
                         errorCount += 1
                         UpdateDebugMessage("Failed during update")
                         UpdateDebugMessage(ex.Message)
@@ -252,7 +252,7 @@ Public Class CreateNew
                             If debugMode Then UpdateDebugMessage("Updating NDT with 'do you want to dep' message")
                             ndt.UpdateNextDesk(DepQuestion, browser)
                         Catch ex As Exception
-                            HighlightError(line.Serials(0))
+                            Globals.ThisAddIn.HighlightError(line.Serials(0))
                             errorCount += 1
                             UpdateDebugMessage("Failed during update")
                             UpdateDebugMessage(ex.Message)
@@ -261,7 +261,7 @@ Public Class CreateNew
                             If debugMode Then UpdateDebugMessage("Sending Account Manager 'do you want to DEP' eMail")
                             Call Send_AM_Email(line)
                         Catch ex As Exception
-                            HighlightError(line.Serials(0))
+                            Globals.ThisAddIn.HighlightError(line.Serials(0))
                             errorCount += 1
                             UpdateDebugMessage("Failed during mail generation")
                             UpdateDebugMessage(ex.Message)
@@ -281,7 +281,7 @@ Public Class CreateNew
                     If line.Suppliername.ToLower.Contains("tech data") And DoTD Then
                         TDLines.Add(line)
                     ElseIf line.Suppliername.ToLower.Contains("westcoast") And DoWC Then
-                        WClines.add(line)
+                        WClines.Add(line)
                     End If
 
                 End If
@@ -293,7 +293,7 @@ Public Class CreateNew
             Dim wd As Chrome.ChromeDriver = DoTDLogin()
             For Each line In TDLines
                 If Not RegisterTechdata(line, wd) Then
-                    HighlightError(line.Serials(0))
+                    Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
                     ndt.UpdateNextDesk(tdFail)
                     UpdateDebugMessage("Failed during TD Registration")
@@ -311,7 +311,7 @@ Public Class CreateNew
             Dim wd As Chrome.ChromeDriver = DoWCLogin()
             For Each line In WClines
                 If Not DoOneWC_DEP(line, wd) Then
-                    HighlightError(line.Serials(0))
+                    Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
                     ndt.UpdateNextDesk(wcFail)
                     UpdateDebugMessage("Failed during WC Registration")
@@ -348,22 +348,6 @@ Public Class CreateNew
         End If
     End Sub
     Delegate Sub SetTextCallback(ByVal [text] As String)
-    Private Sub HighlightError(FirstSerial As String)
-        Dim tsheet = Globals.ThisAddIn.Application.ActiveWorkbook.ActiveSheet
-        Dim tCell As Excel.Range = tsheet.Cells.Find(FirstSerial)
-
-        With tCell.EntireRow.Font
-            .Color = RGB(255, 0, 0)
-            .Bold = True
-        End With
-    End Sub
-
-    Private Sub HighlightError(tCell As Excel.Range)
-        With tCell.EntireRow.Font
-            .Color = RGB(255, 0, 0)
-            .Bold = True
-        End With
-    End Sub
 
     Function ReadExcelLine(ByRef worksheet As Object, ByVal i As Integer) As ClsDepLine
         Dim tmpLine As New ClsDepLine With {

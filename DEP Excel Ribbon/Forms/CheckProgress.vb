@@ -11,6 +11,7 @@ Public Class CheckProgress
     Private debugMode As Boolean
     Private showDebugInfo As Boolean
     Private debugFrm As DebugForm
+    Public timeEstimate As TimeEstimator
 
     Public Sub New(showDebugInfo As Boolean)
         InitializeComponent()
@@ -61,20 +62,51 @@ Public Class CheckProgress
             Try
                 lines.Add(createFrm.ReadExcelLine(oXlWs, i))
             Catch
-                createFrm.HighlightError(oXlWs.Cells(i, 1))
-                errorCount += 1
+                Globals.ThisAddIn.HighlightError(oXlWs.Cells(i, 1))
+                errorcount += 1
 
             End Try
 
             i += 1
             If debugMode Then UpdateDebugMessage("Read in line " & i)
         End While
-        Dim total As Long = lines.LongCount
+
+        DiscardIgnore(lines)
+
+
+        Call SetProgressMax(lines.LongCount)
+
 
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-        Dim browser As Chrome.ChromeDriver = createFrm.DoWCLogin()
 
-        Dim success = CheckOneWC(browser, "SFD1Y1AELJCM2")
+        Dim success As Boolean
+        Dim wcbrowser As Chrome.ChromeDriver = createFrm.DoWCLogin()
+        Dim tdbrowser As Chrome.ChromeDriver = createFrm.DoTDLogin()
+
+        For Each OneLine As ClsDepLine In lines
+            Dim tSerial As String = OneLine.Serials(0)
+            If OneLine.Suppliername.ToLower.Contains("westcoast") Then
+                success = CheckOneWC(wcbrowser, tSerial)
+            ElseIf OneLine.Suppliername.ToLower.Contains("tech data") Then
+                success = CheckOneTD(tdbrowser, tSerial)
+            End If
+
+            ndt.TicketNumber = ndt.FindTicket(0, tSerial)
+            If success Then
+                ndt.UpdateNextDesk(SuccessfulRegMsg)
+                ndt.CloseTicket(CloseMsg)
+            Else
+                ndt.UpdateNextDesk(FailedRegMsg)
+                Globals.ThisAddIn.highlighterror(tSerial)
+            End If
+        Next
+
+
+
+
+
+
+
 
     End Sub
 
@@ -87,8 +119,142 @@ Public Class CheckProgress
 
         wd.FindElementByClassName("searchbyord").Click()
 
-        wd.FindElementByClassName("tableHeightSpacing")
+        Return wd.FindElementByClassName("tableHeightSpacing").Text.Contains("Complete")
+
+    End Function
+
+
+    Function CheckOneTD(wd As Chrome.ChromeDriver, firstSerial As String) As Boolean
+        wd.Navigate.GoToUrl("https://intouch.techdata.com/intouch/Home.aspx")
+        wd.FindElementByLinkText("Apple DEP").Click()
+
+        wd.SwitchTo.Frame("ctl00_CPH_iframeCat")
+        wd.FindElementById("ancTran").Click()
+
+        Threading.Thread.Sleep(TimeSpan.FromSeconds(8))
+
+        wd.FindElementById("txtDepid").SendKeys(firstSerial)
+        wd.FindElementByClassName("btn_serch").Click()
+        Dim elements = wd.FindElementsByClassName("webgrid-row-style")
+
+        If elements.Count > 1 Then
+            Return (MsgBox("Was the most recent registration shown successful?", vbYesNo) = vbYes)
+        Else
+            Return elements(0).Text.ToLower.Contains("complete")
+        End If
 
         Return True
     End Function
+
+    Sub DiscardIgnore(rawlines As List(Of ClsDepLine))
+        For i = rawlines.Count - 1 To 0 Step -1
+            If rawlines(i).Action.Equals("Reg", ThisAddIn.ignoreCase) And (rawlines(i).Suppliername.ToLower.Contains("westcoast") Or rawlines(i).Suppliername.ToLower.Contains("tech data")) Then
+                rawlines.RemoveAt(i)
+
+                If debugMode Then UpdateDebugMessage("Discarded line " & i)
+            End If
+
+
+        Next
+
+    End Sub
+
+
+
+
+    Private Sub Closeme()
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New CloseCallBack(AddressOf Closeme)
+            Me.Invoke(d, New Object() {})
+        Else
+            Globals.Ribbons.Ribbon1.EnableButtons()
+            Me.Close()
+        End If
+    End Sub
+    Delegate Sub CloseCallBack()
+
+    Private Sub UpdateStatus(message As String)
+        Globals.ThisAddIn.Application.StatusBar = message
+        If debugMode Then UpdateDebugMessage(message)
+        Call SetText(message)
+    End Sub
+
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        interrupt = True
+    End Sub
+
+    Private Sub SetProgress(ByVal [progress] As Double)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetProgressCallback(AddressOf SetProgress)
+            Me.Invoke(d, New Object() {[progress]})
+        Else
+            If [progress] = CInt([progress]) Then
+                Dim timeLeft As TimeSpan = timeEstimate.TimeRemaining([progress])
+                Me.Label2.Text = "About " & PrettyString(timeLeft) & " remaining."
+            End If
+
+            Me.ProgressBar1.Value = [progress]
+
+        End If
+    End Sub
+    Delegate Sub SetProgressCallback(ByVal [progress] As Double)
+
+    Private Sub SetText(ByVal [text] As String)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetTextCallback(AddressOf SetText)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+            Me.Label1.Text = [text]
+        End If
+    End Sub
+    Delegate Sub SetTextCallback(ByVal [text] As String)
+
+    Private Sub SetProgressMax(ByVal [progressMax] As Long)
+
+        timeEstimate = New TimeEstimator(progressMax, 30.0)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetProgressMaxCallback(AddressOf SetProgressMax)
+            Me.Invoke(d, New Object() {[progressMax]})
+        Else
+
+            Me.ProgressBar1.Maximum = [progressMax]
+        End If
+    End Sub
+    Delegate Sub SetProgressMaxCallback(ByVal [progressMax] As Long)
+
+
+
+    Private Sub SetClipText(ByVal [text] As String)
+
+        ' InvokeRequired required compares the thread ID of the'
+        ' calling thread to the thread ID of the creating thread.'
+        ' If these threads are different, it returns true.'
+        If Me.Label1.InvokeRequired Then
+            Dim d As New SetClipTextCallback(AddressOf SetClipText)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+
+            My.Computer.Clipboard.SetText([text])
+        End If
+    End Sub
+    Delegate Sub SetClipTextCallback(ByVal [text] As String)
+
+
+
 End Class

@@ -166,4 +166,6 @@ Public Class Ribbon1
             DisableButtons("It seems as though you're not currently connected to the intranet")
         End If
     End Sub
+
+
 End Class
