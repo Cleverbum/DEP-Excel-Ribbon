@@ -49,9 +49,9 @@
         Me.FindIgnored = Me.Factory.CreateRibbonButton
         Me.WriteMails = Me.Factory.CreateRibbonButton
         Me.TDOnly = Me.Factory.CreateRibbonButton
+        Me.BtnWCOnly = Me.Factory.CreateRibbonButton
         Me.Button1 = Me.Factory.CreateRibbonButton
         Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
-        Me.BtnWCOnly = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.SuspendLayout()
@@ -114,6 +114,14 @@
         Me.TDOnly.Name = "TDOnly"
         Me.TDOnly.ShowImage = True
         '
+        'BtnWCOnly
+        '
+        Me.BtnWCOnly.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.BtnWCOnly.Image = CType(resources.GetObject("BtnWCOnly.Image"), System.Drawing.Image)
+        Me.BtnWCOnly.Label = "Westcoast Registrations"
+        Me.BtnWCOnly.Name = "BtnWCOnly"
+        Me.BtnWCOnly.ShowImage = True
+        '
         'Button1
         '
         Me.Button1.Label = "Test Chrome Control"
@@ -123,14 +131,6 @@
         '
         Me.ChkDebug.Label = "Debug Mode"
         Me.ChkDebug.Name = "ChkDebug"
-        '
-        'BtnWCOnly
-        '
-        Me.BtnWCOnly.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
-        Me.BtnWCOnly.Image = CType(resources.GetObject("BtnWCOnly.Image"), System.Drawing.Image)
-        Me.BtnWCOnly.Label = "Westcoast Registrations"
-        Me.BtnWCOnly.Name = "BtnWCOnly"
-        Me.BtnWCOnly.ShowImage = True
         '
         'Ribbon1
         '

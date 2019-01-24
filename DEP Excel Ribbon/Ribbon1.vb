@@ -120,7 +120,7 @@ Public Class Ribbon1
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As RibbonControlEventArgs) Handles TDOnly.Click
-        Dim frm As New CreateNew(False)
+        Dim frm As New CreateNew(tDoAll:=False, tDoTD:=True)
         frm.Show()
     End Sub
 
@@ -138,16 +138,7 @@ Public Class Ribbon1
     End Sub
 
     Private Sub BtnWCOnly_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnWCOnly.Click
-        Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
-        Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
-
-        Dim snglLine As ClsDepLine
-        Dim i As Integer
-        Dim frm As New CreateNew
-        i = 2
-        snglLine = frm.ReadExcelLine(oXlWs, i)
-        Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
-
-        Dim success As Boolean = frm.DoOneWC_DEP(snglLine, wd)
+        Dim frm As New CreateNew(tDoAll:=False, tDoWC:=True)
+        frm.Show()
     End Sub
 End Class
