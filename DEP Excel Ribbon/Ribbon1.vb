@@ -22,6 +22,7 @@ Public Class Ribbon1
         Me.CreateNew.Enabled = False
         Me.FindIgnored.Enabled = False
         Me.CloseStale.Enabled = False
+        Me.BtnCheckRegistrations.Enabled = False
         Me.CreateNew.SuperTip = strMessage
     End Sub
 
@@ -29,6 +30,7 @@ Public Class Ribbon1
         Me.CreateNew.Enabled = True
         Me.FindIgnored.Enabled = True
         Me.CloseStale.Enabled = True
+        Me.BtnCheckRegistrations.Enabled = True
         Me.CreateNew.SuperTip = "Create new nextdesk tickets based on the below DEP Spreadsheet"
     End Sub
 
