@@ -13,7 +13,7 @@ Public Class Ribbon1
     Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
         If Not Globals.ThisAddIn.RegistrationRunning Then
             Globals.ThisAddIn.RegistrationRunning = True
-            Dim frm As New CreateNew(True)
+            Dim frm As New CreateNew(tDoAll:=True, showDebugInfo:=Me.ChkDebug.Checked)
             frm.Show()
         End If
     End Sub
@@ -139,6 +139,11 @@ Public Class Ribbon1
 
     Private Sub BtnWCOnly_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnWCOnly.Click
         Dim frm As New CreateNew(tDoAll:=False, tDoWC:=True)
+        frm.Show()
+    End Sub
+
+    Private Sub BtnCheckRegistrations_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnCheckRegistrations.Click
+        Dim frm As New CheckProgress(showDebugInfo:=Me.ChkDebug.Checked)
         frm.Show()
     End Sub
 End Class

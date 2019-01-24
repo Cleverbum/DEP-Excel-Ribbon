@@ -217,6 +217,12 @@
     <AppDesigner Include="My Project\" />
     <Compile Include="Classes\clsDepLine.vb" />
     <Compile Include="Classes\distiEmails.vb" />
+    <Compile Include="Forms\CheckProgress.Designer.vb">
+      <DependentUpon>CheckProgress.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CheckProgress.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\CreateNew.designer.vb">
       <DependentUpon>CreateNew.vb</DependentUpon>
     </Compile>
@@ -274,6 +280,9 @@
     </Compile>
     <Compile Include="Classes\TimeEstimator.vb" />
     <Compile Include="modules\TimeSpanPrettyString.vb" />
+    <EmbeddedResource Include="Forms\CheckProgress.resx">
+      <DependentUpon>CheckProgress.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CreateNew.resx">
       <DependentUpon>CreateNew.vb</DependentUpon>
     </EmbeddedResource>
