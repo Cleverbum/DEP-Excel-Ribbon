@@ -7,7 +7,7 @@ Imports OpenQA.Selenium.Chrome
 Public Class Ribbon1
 
     Private Sub Ribbon1_Load(ByVal sender As System.Object, ByVal e As RibbonUIEventArgs) Handles MyBase.Load
-
+        If Not Globals.ThisAddIn.OnIntranet Then DisableButtons("It seems as though you're not currently connected to the intranet")
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As RibbonControlEventArgs) Handles CreateNew.Click
@@ -18,7 +18,19 @@ Public Class Ribbon1
         End If
     End Sub
 
+    Private Sub DisableButtons(strMessage As String)
+        Me.CreateNew.Enabled = False
+        Me.FindIgnored.Enabled = False
+        Me.CloseStale.Enabled = False
+        Me.CreateNew.SuperTip = strMessage
+    End Sub
 
+    Public Sub EnableButtons()
+        Me.CreateNew.Enabled = True
+        Me.FindIgnored.Enabled = True
+        Me.CloseStale.Enabled = True
+        Me.CreateNew.SuperTip = "Create new nextdesk tickets based on the below DEP Spreadsheet"
+    End Sub
 
     Private Sub Button2_Click(sender As Object, e As RibbonControlEventArgs) Handles CloseStale.Click
         Dim frm As New CloseStale
@@ -145,5 +157,13 @@ Public Class Ribbon1
     Private Sub BtnCheckRegistrations_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnCheckRegistrations.Click
         Dim frm As New CheckProgress(showDebugInfo:=Me.ChkDebug.Checked)
         frm.Show()
+    End Sub
+
+    Private Sub Button2_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button2.Click
+        If Globals.ThisAddIn.OnIntranet Then
+            EnableButtons()
+        Else
+            DisableButtons("It seems as though you're not currently connected to the intranet")
+        End If
     End Sub
 End Class

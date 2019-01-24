@@ -74,7 +74,21 @@ Public Class CheckProgress
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
         Dim browser As Chrome.ChromeDriver = createFrm.DoWCLogin()
 
-
+        Dim success = CheckOneWC(browser, "SFD1Y1AELJCM2")
 
     End Sub
+
+    Private Function CheckOneWC(wd As Chrome.ChromeDriver, firstSerial As String) As Boolean
+        wd.Navigate.GoToUrl("https://www.westcoast.co.uk/StartApp.aspx?name=dep&update=0&delete=0&mixbasket=0&pricecheck=1")
+
+        wd.Navigate.GoToUrl("http://dep.westcoast.co.uk/searchbyserial.php")
+
+        wd.FindElementByName("ordsearch").SendKeys(firstSerial)
+
+        wd.FindElementByClassName("searchbyord").Click()
+
+        wd.FindElementByClassName("tableHeightSpacing")
+
+        Return True
+    End Function
 End Class

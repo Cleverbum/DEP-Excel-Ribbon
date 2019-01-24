@@ -56,6 +56,7 @@
         Me.Group2 = Me.Factory.CreateRibbonGroup
         Me.Button1 = Me.Factory.CreateRibbonButton
         Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
+        Me.Button2 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
         Me.Group1.SuspendLayout()
         Me.Group3.SuspendLayout()
@@ -87,6 +88,7 @@
         Me.CreateNew.Label = "Create New Tickets"
         Me.CreateNew.Name = "CreateNew"
         Me.CreateNew.ShowImage = True
+        Me.CreateNew.SuperTip = "Create new nextdesk tickets based on the below DEP Spreadsheet"
         '
         'TDOnly
         '
@@ -154,6 +156,7 @@
         '
         Me.Group2.Items.Add(Me.Button1)
         Me.Group2.Items.Add(Me.ChkDebug)
+        Me.Group2.Items.Add(Me.Button2)
         Me.Group2.Label = "Debug Tools"
         Me.Group2.Name = "Group2"
         '
@@ -166,6 +169,11 @@
         '
         Me.ChkDebug.Label = "Debug Mode"
         Me.ChkDebug.Name = "ChkDebug"
+        '
+        'Button2
+        '
+        Me.Button2.Label = "Recheck Intranet"
+        Me.Button2.Name = "Button2"
         '
         'Ribbon1
         '
@@ -200,6 +208,7 @@
     Friend WithEvents BtnCheckRegistrations As Microsoft.Office.Tools.Ribbon.RibbonButton
     Friend WithEvents Group4 As Microsoft.Office.Tools.Ribbon.RibbonGroup
     Friend WithEvents Group2 As Microsoft.Office.Tools.Ribbon.RibbonGroup
+    Friend WithEvents Button2 As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection
