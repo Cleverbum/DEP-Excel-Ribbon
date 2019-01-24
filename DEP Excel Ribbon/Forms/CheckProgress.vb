@@ -97,12 +97,19 @@ Public Class CheckProgress
                 ndt.CloseTicket(CloseMsg)
             Else
                 ndt.UpdateNextDesk(FailedRegMsg)
-                Globals.ThisAddIn.highlighterror(tSerial)
+                Globals.ThisAddIn.HighlightError(tSerial)
+                errorcount += 1
             End If
         Next
 
 
+        Closeme()
 
+        If errorcount = 0 Then
+            MsgBox("All tasks completed without error")
+        Else
+            MsgBox("There were " & errorcount & " errors during this process. They have been highlighted in red.", vbCritical)
+        End If
 
 
 
