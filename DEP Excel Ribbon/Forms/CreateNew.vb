@@ -316,8 +316,12 @@ Public Class CreateNew
                     ndt.UpdateNextDesk(wcFail)
                     UpdateDebugMessage("Failed during WC Registration")
                 Else
-                    ndt.TicketNumber = line.NDT_Number
-                    ndt.UpdateNextDesk(wcSuccess)
+                    If DoAll Then
+                        ndt.TicketNumber = line.NDT_Number
+
+                        ndt.UpdateNextDesk(wcSuccess)
+                    End If
+
                 End If
             Next
 
