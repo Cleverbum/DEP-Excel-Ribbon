@@ -96,8 +96,8 @@ Partial Class CreateNew
                 End If
             Next
 
-            ' should be return "does page show completed"
-            Return True
+
+            Return wd.FindElementByName("error").Text.ToLower.Contains("have been submitted")
         Catch
             Return False
         End Try
