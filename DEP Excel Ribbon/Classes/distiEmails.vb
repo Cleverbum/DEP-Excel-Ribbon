@@ -16,7 +16,10 @@ Public Class ClsDistiEmail
             distiEmail.Body = "Please could you register the attached devices?"
             distiEmail.To = "MobilityAppleDEPEMEA@ingrammicro.com"
             distiEmail.Subject = "Please can you register the attached devices (NDT: " & DepInfo.NDT_Number & ")"
-            My.Computer.FileSystem.DeleteFile(templateFile)
+            Try
+                My.Computer.FileSystem.DeleteFile(templateFile)
+            Catch
+            End Try
             'ElseIf DepInfo.Suppliername.StartsWith("Westcoast", ThisAddIn.ignoreCase) Then
             '    distiEmail.HTMLBody = WestCoastBody(DepInfo)
             '    distiEmail.To = "dep@westcoast.co.uk"

@@ -289,7 +289,7 @@ Public Class CreateNew
         End If
 
         If TDLines.Count > 0 AndAlso
-           MsgBox("Do you want to do the Techdata Regsitrations now?", vbYesNo) = vbYes Then
+           MsgBox("Do you want to do the " & TDLines.Count & " Techdata Regsitrations now?", vbYesNo) = vbYes Then
             Dim wd As Chrome.ChromeDriver = DoTDLogin()
             For Each line In TDLines
                 If Not RegisterTechdata(line, wd) Then
@@ -307,7 +307,7 @@ Public Class CreateNew
 
         End If
         If WClines.Count > 0 AndAlso
-           MsgBox("Do you want to do the Westcoast Regsitrations now?", vbYesNo) = vbYes Then
+           MsgBox("Do you want to do the " & WClines.Count & " Westcoast Regsitrations now?", vbYesNo) = vbYes Then
             Dim wd As Chrome.ChromeDriver = DoWCLogin()
             For Each line In WClines
                 If Not DoOneWC_DEP(line, wd) Then
