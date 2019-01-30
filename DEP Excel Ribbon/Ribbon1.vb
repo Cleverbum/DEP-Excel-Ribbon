@@ -15,6 +15,11 @@ Public Class Ribbon1
             Globals.ThisAddIn.RegistrationRunning = True
             Dim frm As New CreateNew(tDoAll:=True, showDebugInfo:=Me.ChkDebug.Checked)
             frm.Show()
+        Else
+            If MsgBox("It looks as though the registration process is already running. Would you like to interrupt the running process and start again?", vbYesNo) = vbYes Then
+                Globals.ThisAddIn.RegistrationRunning = False
+                Call Button1_Click(Nothing, Nothing)
+            End If
         End If
     End Sub
 

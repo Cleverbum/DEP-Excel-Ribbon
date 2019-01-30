@@ -116,7 +116,18 @@ Public Class CreateNew
 
             For Each line As ClsDepLine In lines
                 Call SetProgress(i - 1)
-                If Interrupt Then Exit For
+
+                If Not Globals.ThisAddIn.OnIntranet Then
+                    Globals.ThisAddIn.HighlightError(line.Serials(0))
+                    UpdateStatus("Can't access nextdesk, skipping this line and retrying")
+                    Threading.Thread.Sleep(TimeSpan.FromSeconds(1))
+                    Continue For ' This tells it to skip the rest of the for loop and go to the next depline
+                End If
+
+                If Interrupt Or Not Globals.ThisAddIn.RegistrationRunning Then
+                    Globals.ThisAddIn.RegistrationRunning = False
+                    Exit Sub
+                End If
 
                 Call UpdateStatus("Creating ticket " & i & " of " & lines.Count)
 
@@ -295,6 +306,7 @@ Public Class CreateNew
                 If Not RegisterTechdata(line, wd) Then
                     Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
+                    ndt.TicketNumber = line.NDT_Number
                     ndt.UpdateNextDesk(tdFail)
                     UpdateDebugMessage("Failed during TD Registration")
                 Else
@@ -313,6 +325,7 @@ Public Class CreateNew
                 If Not DoOneWC_DEP(line, wd) Then
                     Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
+                    ndt.TicketNumber = line.NDT_Number
                     ndt.UpdateNextDesk(wcFail)
                     UpdateDebugMessage("Failed during WC Registration")
                 Else
