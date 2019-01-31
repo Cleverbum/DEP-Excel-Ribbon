@@ -447,7 +447,7 @@ Public Class CreateNew
 
         'if it includes a fake serial then modify later behaviour
 
-        If tmpLine.Action <> "Discard" Then
+        If tmpLine.Action.Equals("Reg") Then
             If FakeSerials(tmpLine.Serials) Then
                 tmpLine.Action = "Fake Serials"
             End If
