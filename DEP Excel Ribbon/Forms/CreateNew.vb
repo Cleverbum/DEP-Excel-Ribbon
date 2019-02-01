@@ -432,7 +432,12 @@ Public Class CreateNew
         End If
 
         Try
-            tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(0)
+            If tmpLine.DEP.Split(" ")(0).ToLower.Equals("reg") Or tmpLine.DEP.Split(" ")(0).ToLower.Equals("ask") Then
+                tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(1)
+            Else
+                tmpLine.Customer_DEP_ID = tmpLine.DEP.Split(" ")(0)
+            End If
+
         Catch
             tmpLine.Customer_DEP_ID = 0
         End Try
