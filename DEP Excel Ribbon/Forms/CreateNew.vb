@@ -325,10 +325,14 @@ Public Class CreateNew
                 If Not DoOneWC_DEP(line, wd) Then
                     Globals.ThisAddIn.HighlightError(line.Serials(0))
                     errorCount += 1
-                    ndt.TicketNumber = line.NDT_Number
-                    ndt.UpdateNextDesk(wcFail)
+                    If DoAll Then
+                        ndt.TicketNumber = line.NDT_Number
+                        ndt.UpdateNextDesk(wcFail)
+
+                    End If
                     UpdateDebugMessage("Failed during WC Registration")
-                Else
+
+                    Else
                     If DoAll Then
                         ndt.TicketNumber = line.NDT_Number
 

@@ -97,7 +97,7 @@ Partial Class CreateNew
             Next
 
 
-            Return wd.FindElementByName("error").Text.ToLower.Contains("have been submitted")
+            Return wd.FindElementByClassName("error").Text.ToLower.Contains("have been submitted")
         Catch
             Return False
         End Try
