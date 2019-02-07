@@ -28,6 +28,8 @@ Module ResolveAddressSync
             Dim City = "Unknown"
 
         End If
+
+        'return city
     End Sub
 
     Private Function GetCity(Lat As Double, Lon As Double) As String
