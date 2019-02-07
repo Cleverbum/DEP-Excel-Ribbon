@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DEP Excel Ribbon", "DEP Excel Ribbon\DEP Excel Ribbon.vbproj", "{AFBDFF59-E884-437E-AFAC-987958D63D8B}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "clsNextDeskTicket", "..\clsNextDeskTicket\clsNextDeskTicket\clsNextDeskTicket.vbproj", "{D346BA40-E4D7-47FD-B4C0-DAF313DDAA13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AFBDFF59-E884-437E-AFAC-987958D63D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFBDFF59-E884-437E-AFAC-987958D63D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFBDFF59-E884-437E-AFAC-987958D63D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D346BA40-E4D7-47FD-B4C0-DAF313DDAA13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D346BA40-E4D7-47FD-B4C0-DAF313DDAA13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D346BA40-E4D7-47FD-B4C0-DAF313DDAA13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D346BA40-E4D7-47FD-B4C0-DAF313DDAA13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

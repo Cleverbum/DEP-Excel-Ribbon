@@ -71,7 +71,7 @@ Partial Class CreateNew
             wd.FindElementByName("po").SendKeys(line.Customer_PO)
             wd.FindElementByName("enduserid").SendKeys(line.Customer_DEP_ID)
 
-            Threading.Thread.Sleep(TimeSpan.FromSeconds(4)) ' it seems to prefer if we go slow
+            Threading.Thread.Sleep(TimeSpan.FromSeconds(6)) ' it seems to prefer if we go slow
 
             wd.FindElementByClassName("orddetail").Click()
 
