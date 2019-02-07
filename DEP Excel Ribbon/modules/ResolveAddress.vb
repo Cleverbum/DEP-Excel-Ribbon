@@ -8,20 +8,25 @@ Module ResolveAddressSync
         watcher = New System.Device.Location.GeoCoordinateWatcher(GeoPositionAccuracy.Default)
         Dim started As Boolean = False
         watcher.MovementThreshold = 1.0     'set to one meter
-        started = watcher.TryStart(False, TimeSpan.FromMilliseconds(1000))
+        started = watcher.TryStart(False, TimeSpan.FromMilliseconds(500))
+        Dim i As Integer = 0
         While watcher.Status <> GeoPositionStatus.Ready
-            Threading.Thread.Sleep(TimeSpan.FromMilliseconds(1))
+            Threading.Thread.Sleep(TimeSpan.FromMilliseconds(10))
+            i += 1
+            If i > 1000 Then Exit While
         End While
 
         Dim resolver As CivicAddressResolver = New CivicAddressResolver()
         If started Then
             If Not watcher.Position.Location.IsUnknown Then
                 Dim City As String = GetCity(watcher.Position.Location.Latitude, watcher.Position.Location.Longitude)
-
+            Else
+                Dim City = "Unknown"
 
             End If
         Else
-            Console.WriteLine("GeoCoordinateWatcher timed out on start.")
+            Dim City = "Unknown"
+
         End If
     End Sub
 
