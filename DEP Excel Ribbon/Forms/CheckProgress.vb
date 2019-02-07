@@ -12,6 +12,7 @@ Public Class CheckProgress
     Private showDebugInfo As Boolean
     Private debugFrm As DebugForm
     Public timeEstimate As TimeEstimator
+    Private timingFile As String = Environ("Temp") & "\timinglog.csv"
 
     Public Sub New(showDebugInfo As Boolean)
         InitializeComponent()
@@ -77,7 +78,7 @@ Public Class CheckProgress
         Call SetProgressMax(lines.LongCount)
 
 
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(True, True, timingFile)
 
         Dim success As Boolean
         Dim wcbrowser As Chrome.ChromeDriver = createFrm.DoWCLogin()

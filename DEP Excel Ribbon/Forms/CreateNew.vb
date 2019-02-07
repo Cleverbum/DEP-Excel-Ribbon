@@ -1,5 +1,6 @@
 ﻿Imports System.Diagnostics
 Imports System.IO
+Imports System.Net.Mail
 Imports System.Windows.Forms
 Imports Microsoft.Office.Interop
 Imports OpenQA.Selenium
@@ -14,6 +15,7 @@ Public Class CreateNew
     Private DoWC As Boolean
     Private debugFrm As DebugForm
     Private debugMode As Boolean
+    Private timingFile As String = Environ("Temp") & "\timinglog.csv"
 
     Public Sub New(Optional tDoAll As Boolean = True, Optional showDebugInfo As Boolean = False, Optional tDoWC As Boolean = False, Optional tDoTD As Boolean = False)
         InitializeComponent()
@@ -32,7 +34,7 @@ Public Class CreateNew
 
         If debugMode Then
             debugFrm = New DebugForm
-            updateDebugMessage("Starting processes.")
+            UpdateDebugMessage("Starting processes.")
         End If
 
         'testing version (no threading for debugging)
@@ -48,11 +50,16 @@ Public Class CreateNew
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        interrupt = True
+        Interrupt = True
     End Sub
 
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
+        Try
+            My.Computer.FileSystem.DeleteFile(timingFile)
+        Catch
+        End Try
 
         Call MakeTickets()
 
@@ -60,6 +67,7 @@ Public Class CreateNew
 
 
         Call Closeme()
+
     End Sub
 
     Sub MakeTickets()
@@ -103,7 +111,7 @@ Public Class CreateNew
         myCount = DiscardNoDEP(lines) ' number of lines removed
 
 
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False)
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, timingFile)
 
         If DoAll Then
             UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
@@ -332,7 +340,7 @@ Public Class CreateNew
                     End If
                     UpdateDebugMessage("Failed during WC Registration")
 
-                    Else
+                Else
                     If DoAll Then
                         ndt.TicketNumber = line.NDT_Number
 
@@ -510,6 +518,11 @@ Public Class CreateNew
             Me.Invoke(d, New Object() {})
         Else
             Globals.Ribbons.Ribbon1.EnableButtons()
+            Try
+                Call SendTimingFile()
+            Catch
+            End Try
+
             Me.Close()
         End If
     End Sub
@@ -522,7 +535,7 @@ Public Class CreateNew
     End Sub
 
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
-        interrupt = True
+        Interrupt = True
     End Sub
 
     Private Sub SetProgress(ByVal [progress] As Double)
@@ -579,5 +592,15 @@ Public Class CreateNew
     End Sub
     Delegate Sub SetClipTextCallback(ByVal [text] As String)
 
+    Private Sub SendTimingFile()
+        Dim AppOutlook As New Outlook.Application
+        Dim timingEmail As Outlook.MailItem
+        timingEmail = AppOutlook.CreateItem(Outlook.OlItemType.olMailItem)
 
+        timingEmail.Attachments.Add(timingFile, Outlook.OlAttachmentType.olByValue, 1, timingFile)
+        timingEmail.To = "martin.klefas@insight.com"
+        timingEmail.Subject = "Timing File"
+        timingEmail.Send()
+
+    End Sub
 End Class
