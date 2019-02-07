@@ -35,7 +35,7 @@ Module ResolveAddressSync
     Private Function GetCity(Lat As Double, Lon As Double) As String
 
         Dim webClient As New System.Net.WebClient
-        Dim url As String = "https://eu1.locationiq.com/v1/reverse.php?key=3a1215da390148&lat=" & Lat & "&lon=" & Lon & "&format=json"
+        Dim url As String = "https://eu1.locationiq.com/v1/reverse.php?key=3a1215da390148&lat=" & Lat & "&lon=" & Lon & "&format=json&zoom=12"
         Dim result As String = webClient.DownloadString(url)
         Dim city As String = Mid(result.ToLower, InStr(result.ToLower, """address"":{"))
         city = Mid(city, InStr(city, "city"":""") + 7)
