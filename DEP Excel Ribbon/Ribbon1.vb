@@ -174,5 +174,7 @@ Public Class Ribbon1
         End If
     End Sub
 
-
+    Private Sub Button3_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
+        Call ResolveAddress()
+    End Sub
 End Class
