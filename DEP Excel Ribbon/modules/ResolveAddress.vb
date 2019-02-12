@@ -3,7 +3,7 @@ Imports System.Web.Script.Serialization
 
 Module ResolveAddressSync
 
-    Public Sub ResolveAddress()
+    Public Function ResolveAddress() As String
         Dim watcher As GeoCoordinateWatcher
         watcher = New System.Device.Location.GeoCoordinateWatcher(GeoPositionAccuracy.Default)
         Dim started As Boolean = False
@@ -16,21 +16,23 @@ Module ResolveAddressSync
             If i > 1000 Then Exit While
         End While
 
+        Dim City As String
+
         Dim resolver As CivicAddressResolver = New CivicAddressResolver()
         If started Then
             If Not watcher.Position.Location.IsUnknown Then
-                Dim City As String = GetCity(watcher.Position.Location.Latitude, watcher.Position.Location.Longitude)
+                City = GetCity(watcher.Position.Location.Latitude, watcher.Position.Location.Longitude)
             Else
-                Dim City = "Unknown"
+                City = "Unknown"
 
             End If
         Else
-            Dim City = "Unknown"
+            City = "Unknown"
 
         End If
 
-        'return city
-    End Sub
+        Return City
+    End Function
 
     Private Function GetCity(Lat As Double, Lon As Double) As String
 

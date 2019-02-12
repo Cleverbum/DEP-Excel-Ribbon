@@ -16,6 +16,7 @@ Public Class CreateNew
     Private debugFrm As DebugForm
     Private debugMode As Boolean
     Private timingFile As String = Environ("Temp") & "\timinglog.csv"
+    Private myCity As String
 
     Public Sub New(Optional tDoAll As Boolean = True, Optional showDebugInfo As Boolean = False, Optional tDoWC As Boolean = False, Optional tDoTD As Boolean = False)
         InitializeComponent()
@@ -60,6 +61,8 @@ Public Class CreateNew
             My.Computer.FileSystem.DeleteFile(timingFile)
         Catch
         End Try
+
+        myCity = ResolveAddress()
 
         Call MakeTickets()
 
@@ -111,7 +114,7 @@ Public Class CreateNew
         myCount = DiscardNoDEP(lines) ' number of lines removed
 
 
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, timingFile)
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, timingFile, myCity)
 
         If DoAll Then
             UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
@@ -493,6 +496,25 @@ Public Class CreateNew
         Return count
     End Function
     Function FakeSerials(serials As String()) As Boolean
+
+        Dim allblank As Boolean = True
+
+        'check if they're all blank
+        For Each serial In serials
+            Try
+                If serial IsNot Nothing Then
+                    allblank = False
+                End If
+            Catch ex As Exception
+                UpdateDebugMessage("serial exception")
+                'error handler?
+                Debug.Print(ex.Message)
+            End Try
+        Next
+
+        If allblank Then Return True
+
+        'check if they contain known "fake" patterns
         For Each serial In serials
             Try
                 If serial IsNot Nothing AndAlso serial.ToLower.StartsWith("po") Then
