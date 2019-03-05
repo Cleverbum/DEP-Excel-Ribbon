@@ -14,9 +14,11 @@ Partial Class CreateNew
             wd.FindElementByClassName("introjs-skipbutton").Click()
             wd.FindElementByName("loginname").SendKeys("martin.klefas@insight.com")
             wd.FindElementByName("password").SendKeys("Mg3oOjM535")
+            Threading.Thread.Sleep(TimeSpan.FromSeconds(4))
             For Each tElement As IWebElement In wd.FindElementsByClassName("btn")
                 If tElement.Text.ToLower.Contains("login") Then
                     tElement.Click()
+                    Threading.Thread.Sleep(TimeSpan.FromSeconds(4))
                     Exit For
                 End If
             Next
