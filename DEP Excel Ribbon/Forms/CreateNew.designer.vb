@@ -32,9 +32,9 @@ Partial Class CreateNew
         'Button1
         '
         Me.Button1.Location = New System.Drawing.Point(9, 90)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(2)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(226, 23)
+        Me.Button1.Size = New System.Drawing.Size(296, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Quit && Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
@@ -44,7 +44,7 @@ Partial Class CreateNew
         Me.Label1.Location = New System.Drawing.Point(10, 11)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(226, 20)
+        Me.Label1.Size = New System.Drawing.Size(296, 20)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
         '
@@ -64,21 +64,21 @@ Partial Class CreateNew
         'ProgressBar1
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(9, 47)
-        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(226, 35)
+        Me.ProgressBar1.Size = New System.Drawing.Size(296, 35)
         Me.ProgressBar1.TabIndex = 4
         '
         'CreateNew
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(244, 122)
+        Me.ClientSize = New System.Drawing.Size(317, 122)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "CreateNew"
         Me.ResumeLayout(False)
         Me.PerformLayout()

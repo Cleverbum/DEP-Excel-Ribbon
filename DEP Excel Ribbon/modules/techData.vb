@@ -63,7 +63,7 @@ Partial Class CreateNew
                 MsgBox("error setting clipboard")
             End Try
 
-            RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. Did this work?", vbYesNo) = vbYes)
+            RegisterTechdata = (MsgBox("The serials are now in the clipboard and ready to be pasted into the box. " & vbCrLf & "Please paste the serial lines in, click submit, and wait for the success/failure message." & vbCrLf & "Did the registration complete successfullly?", vbYesNo) = vbYes)
         Else
 
             MsgBox("The serial numbers for so " & line.Sales_ID & " are blank, TD registration has been skipped")
