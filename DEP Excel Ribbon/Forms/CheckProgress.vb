@@ -8,11 +8,10 @@ Imports OpenQA.Selenium.Chrome
 Public Class CheckProgress
 
     Public interrupt As Boolean = False
-    Private debugMode As Boolean
-    Private showDebugInfo As Boolean
+    Private ReadOnly debugMode As Boolean
+    Private ReadOnly showDebugInfo As Boolean
     Private debugFrm As DebugForm
     Public timeEstimate As TimeEstimator
-    Private timingFile As String = Environ("Temp") & "\timinglog.csv"
 
     Public Sub New(showDebugInfo As Boolean)
         InitializeComponent()
@@ -37,8 +36,7 @@ Public Class CheckProgress
             updateDebugMessage("Starting processes.")
         End If
 
-        'testing version (no threading for debugging)
-        'Call 
+
     End Sub
 
     Private Sub UpdateDebugMessage(MessageString As String)
@@ -78,7 +76,7 @@ Public Class CheckProgress
         Call SetProgressMax(lines.LongCount)
 
 
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(True, True, timingFile)
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(True, True, Globals.ThisAddIn.timingFile)
 
         Dim success As Boolean
         Dim wcbrowser As Chrome.ChromeDriver = createFrm.DoWCLogin()
@@ -157,8 +155,11 @@ Public Class CheckProgress
     Sub DiscardIgnore(rawlines As List(Of ClsDepLine))
         For i = rawlines.Count - 1 To 0 Step -1
             If rawlines(i).Action.Equals("Reg", ThisAddIn.ignoreCase) And (rawlines(i).Suppliername.ToLower.Contains("westcoast") Or rawlines(i).Suppliername.ToLower.Contains("tech data")) Then
-                rawlines.RemoveAt(i)
 
+                'keep it
+
+            Else
+                rawlines.RemoveAt(i)
                 If debugMode Then UpdateDebugMessage("Discarded line " & i)
             End If
 

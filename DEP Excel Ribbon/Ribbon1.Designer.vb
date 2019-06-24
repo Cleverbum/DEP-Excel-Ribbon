@@ -44,18 +44,18 @@
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Ribbon1))
         Me.Tab1 = Me.Factory.CreateRibbonTab
         Me.Group1 = Me.Factory.CreateRibbonGroup
-        Me.Group3 = Me.Factory.CreateRibbonGroup
-        Me.Group4 = Me.Factory.CreateRibbonGroup
-        Me.Group2 = Me.Factory.CreateRibbonGroup
-        Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
         Me.CreateNew = Me.Factory.CreateRibbonButton
         Me.TDOnly = Me.Factory.CreateRibbonButton
         Me.BtnWCOnly = Me.Factory.CreateRibbonButton
+        Me.Group3 = Me.Factory.CreateRibbonGroup
         Me.CloseStale = Me.Factory.CreateRibbonButton
         Me.BtnCheckRegistrations = Me.Factory.CreateRibbonButton
+        Me.Group4 = Me.Factory.CreateRibbonGroup
         Me.WriteMails = Me.Factory.CreateRibbonButton
         Me.FindIgnored = Me.Factory.CreateRibbonButton
+        Me.Group2 = Me.Factory.CreateRibbonGroup
         Me.btnTestChrome = Me.Factory.CreateRibbonButton
+        Me.ChkDebug = Me.Factory.CreateRibbonCheckBox
         Me.Button2 = Me.Factory.CreateRibbonButton
         Me.Button3 = Me.Factory.CreateRibbonButton
         Me.Tab1.SuspendLayout()
@@ -82,34 +82,6 @@
         Me.Group1.Label = "Registration Tools"
         Me.Group1.Name = "Group1"
         '
-        'Group3
-        '
-        Me.Group3.Items.Add(Me.CloseStale)
-        Me.Group3.Items.Add(Me.BtnCheckRegistrations)
-        Me.Group3.Label = "Ticket Tasks"
-        Me.Group3.Name = "Group3"
-        '
-        'Group4
-        '
-        Me.Group4.Items.Add(Me.WriteMails)
-        Me.Group4.Items.Add(Me.FindIgnored)
-        Me.Group4.Label = "Sales Engagement Tools"
-        Me.Group4.Name = "Group4"
-        '
-        'Group2
-        '
-        Me.Group2.Items.Add(Me.btnTestChrome)
-        Me.Group2.Items.Add(Me.ChkDebug)
-        Me.Group2.Items.Add(Me.Button2)
-        Me.Group2.Items.Add(Me.Button3)
-        Me.Group2.Label = "Debug Tools"
-        Me.Group2.Name = "Group2"
-        '
-        'ChkDebug
-        '
-        Me.ChkDebug.Label = "Debug Mode"
-        Me.ChkDebug.Name = "ChkDebug"
-        '
         'CreateNew
         '
         Me.CreateNew.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
@@ -135,11 +107,18 @@
         Me.BtnWCOnly.Name = "BtnWCOnly"
         Me.BtnWCOnly.ShowImage = True
         '
+        'Group3
+        '
+        Me.Group3.Items.Add(Me.CloseStale)
+        Me.Group3.Items.Add(Me.BtnCheckRegistrations)
+        Me.Group3.Label = "Ticket Tasks"
+        Me.Group3.Name = "Group3"
+        '
         'CloseStale
         '
         Me.CloseStale.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
         Me.CloseStale.Image = CType(resources.GetObject("CloseStale.Image"), System.Drawing.Image)
-        Me.CloseStale.Label = "Close Stale Ticket"
+        Me.CloseStale.Label = "Close Stale Tickets"
         Me.CloseStale.Name = "CloseStale"
         Me.CloseStale.ShowImage = True
         '
@@ -150,6 +129,13 @@
         Me.BtnCheckRegistrations.Label = "Check Reg Status"
         Me.BtnCheckRegistrations.Name = "BtnCheckRegistrations"
         Me.BtnCheckRegistrations.ShowImage = True
+        '
+        'Group4
+        '
+        Me.Group4.Items.Add(Me.WriteMails)
+        Me.Group4.Items.Add(Me.FindIgnored)
+        Me.Group4.Label = "Sales Engagement Tools"
+        Me.Group4.Name = "Group4"
         '
         'WriteMails
         '
@@ -167,10 +153,24 @@
         Me.FindIgnored.Name = "FindIgnored"
         Me.FindIgnored.ShowImage = True
         '
+        'Group2
+        '
+        Me.Group2.Items.Add(Me.btnTestChrome)
+        Me.Group2.Items.Add(Me.ChkDebug)
+        Me.Group2.Items.Add(Me.Button2)
+        Me.Group2.Items.Add(Me.Button3)
+        Me.Group2.Label = "Debug Tools"
+        Me.Group2.Name = "Group2"
+        '
         'btnTestChrome
         '
         Me.btnTestChrome.Label = "Test Chrome Control"
         Me.btnTestChrome.Name = "btnTestChrome"
+        '
+        'ChkDebug
+        '
+        Me.ChkDebug.Label = "Debug Mode"
+        Me.ChkDebug.Name = "ChkDebug"
         '
         'Button2
         '

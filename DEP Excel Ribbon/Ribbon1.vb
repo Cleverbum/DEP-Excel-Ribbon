@@ -51,32 +51,6 @@ Public Class Ribbon1
         frm.Show()
     End Sub
 
-
-
-
-
-    Private Sub Button4_Click(sender As Object, e As RibbonControlEventArgs)
-        Dim wd As Chrome.ChromeDriver
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
-        wd = ndt.GiveMeChrome(True)
-        Dim url As String = "http://nextdesk/ticket.php?id=5953026"
-
-        wd.Navigate.GoToUrl(url)
-        Dim depscrape As New Dictionary(Of String, String)
-
-        Dim elements = wd.FindElementsByClassName("ticketCell")
-        For Each element In elements
-            If element.Text.ToLower.Contains("client name") Then
-                depscrape.Add("Client", TrimClient(element.Text))
-                depscrape.Add("AM", TrimAM(element.Text))
-                depscrape.Add("Closed", TrimClosed(element.Text))
-            End If
-
-        Next
-
-    End Sub
-
-
     Function TrimClosed(txt As String) As String
 
         Dim list As String() = txt.ToLower.Split(vbCrLf)
@@ -143,19 +117,6 @@ Public Class Ribbon1
         frm.Show()
     End Sub
 
-    Private Sub Button1_Click_2(sender As Object, e As RibbonControlEventArgs)
-        Dim oXlWb As Excel.Workbook = Globals.ThisAddIn.Application.ActiveWorkbook
-        Dim oXlWs As Excel.Worksheet = oXlWb.ActiveSheet
-
-        Dim snglLine As ClsDepLine
-        Dim i As Integer
-        Dim frm As New CreateNew
-        i = 2
-        snglLine = frm.ReadExcelLine(oXlWs, i)
-        Dim wd As Chrome.ChromeDriver = frm.DoWCLogin()
-
-    End Sub
-
     Private Sub BtnWCOnly_Click(sender As Object, e As RibbonControlEventArgs) Handles BtnWCOnly.Click
         Dim frm As New CreateNew(tDoAll:=False, tDoWC:=True)
         frm.Show()
@@ -175,6 +136,6 @@ Public Class Ribbon1
     End Sub
 
     Private Sub Button3_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
-        MsgBox("Version from 16/05/19 10:43 - updated button labels")
+        MsgBox("Version from 18/06/19 16:23 - updated for multi-thread")
     End Sub
 End Class

@@ -1,4 +1,5 @@
-﻿Imports System.Diagnostics
+﻿Imports System.ComponentModel
+Imports System.Diagnostics
 Imports System.IO
 Imports OpenQA.Selenium
 Imports OpenQA.Selenium.Chrome
@@ -40,7 +41,10 @@ Public Class CloseStale
         For i = 1 To 6
             Call SetText(Label1.Text & ".")
             Threading.Thread.Sleep(300)
-            If interrupt Then Exit Sub
+            If interrupt Then
+                Closeme()
+                Exit Sub
+            End If
         Next
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
 
@@ -48,13 +52,18 @@ Public Class CloseStale
             For i = 1 To 5
                 Call SetText(Label1.Text & ".")
                 Threading.Thread.Sleep(1000)
-                If interrupt Then Exit Sub
+                If interrupt Then
+                    Closeme()
+
+                    Exit Sub
+                End If
             Next
         End If
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
 
         If oldfile = file Then
             MsgBox("File did not download correctly.", vbAbort)
+            Closeme()
             Exit Sub
         End If
 
@@ -158,6 +167,7 @@ Public Class CloseStale
         While Not MyReader.EndOfData
             If interrupt Then
                 ProcessFile = New Tuple(Of Integer, Integer)(i - 1, deleted)
+                Closeme()
                 Exit Function
             End If
             Try
@@ -216,13 +226,13 @@ Public Class CloseStale
     End Function
     Function ToClose(timeString As String) As Boolean
         Dim time As Double
-        time = CDbl(timeString.Split(" ")(0))
-        ToClose = time > 10
+        time = CDbl(timeString.Split(" ")(0)) 'the last element of the csv line is (hours worked - hours open) eg 1673.8 - (1673.8)
+        ToClose = time > 10 ' if the ticket's been open more than x hours it's stale
     End Function
 
     Sub CloseTicket(ticketnumber As Integer)
         Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket With {
-            .ticketNumber = ticketnumber
+            .TicketNumber = ticketnumber
         }
         ndt.CloseTicket(CloseMessage)
     End Sub
@@ -239,6 +249,12 @@ Public Class CloseStale
             Me.Close()
         End If
     End Sub
+
+
+    Private Sub CloseStale_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        interrupt = True
+    End Sub
+
     Delegate Sub CloseCallBack()
 
 

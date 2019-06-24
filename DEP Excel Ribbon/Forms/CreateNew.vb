@@ -10,12 +10,12 @@ Public Class CreateNew
 
     Public Interrupt As Boolean = False
     Public timeEstimate As TimeEstimator
-    Private DoAll As Boolean
-    Private DoTD As Boolean
-    Private DoWC As Boolean
+    Private ReadOnly DoAll As Boolean
+    Private ReadOnly DoTD As Boolean
+    Private ReadOnly DoWC As Boolean
     Private debugFrm As DebugForm
-    Private debugMode As Boolean
-    Private timingFile As String = Environ("Temp") & "\timinglog.csv"
+    Private ReadOnly debugMode As Boolean
+
     Private myCity As String
 
     Public Sub New(Optional tDoAll As Boolean = True, Optional showDebugInfo As Boolean = False, Optional tDoWC As Boolean = False, Optional tDoTD As Boolean = False)
@@ -57,10 +57,6 @@ Public Class CreateNew
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
-        Try
-            My.Computer.FileSystem.DeleteFile(timingFile)
-        Catch
-        End Try
 
         myCity = ResolveAddress()
 
@@ -114,7 +110,7 @@ Public Class CreateNew
         myCount = DiscardNoDEP(lines) ' number of lines removed
 
 
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, timingFile, myCity)
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, Globals.ThisAddIn.timingFile, myCity)
 
         If DoAll Then
             UpdateStatus("Found " & total & " total lines. Discarded " & myCount)
@@ -487,7 +483,7 @@ Public Class CreateNew
         For i = rawLines.Count - 1 To 0 Step -1
             If rawLines(i).Action = "Discard" Then
                 rawLines.RemoveAt(i)
-                count = count + 1
+                count += 1
                 If debugMode Then UpdateDebugMessage("Discarded line " & i)
             End If
 
@@ -540,10 +536,7 @@ Public Class CreateNew
             Me.Invoke(d, New Object() {})
         Else
             Globals.Ribbons.Ribbon1.EnableButtons()
-            Try
-                Call SendTimingFile()
-            Catch
-            End Try
+
 
             Me.Close()
         End If
@@ -614,15 +607,5 @@ Public Class CreateNew
     End Sub
     Delegate Sub SetClipTextCallback(ByVal [text] As String)
 
-    Private Sub SendTimingFile()
-        Dim AppOutlook As New Outlook.Application
-        Dim timingEmail As Outlook.MailItem
-        timingEmail = AppOutlook.CreateItem(Outlook.OlItemType.olMailItem)
 
-        timingEmail.Attachments.Add(timingFile, Outlook.OlAttachmentType.olByValue, 1, timingFile)
-        timingEmail.To = "martin.klefas@insight.com"
-        timingEmail.Subject = "Timing File"
-        timingEmail.Send()
-
-    End Sub
 End Class
