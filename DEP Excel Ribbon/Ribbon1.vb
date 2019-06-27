@@ -138,4 +138,10 @@ Public Class Ribbon1
     Private Sub Button3_Click_1(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
         MsgBox("Version from 18/06/19 16:23 - updated for multi-thread")
     End Sub
+
+    Private Sub Button1_Click_2(sender As Object, e As RibbonControlEventArgs) Handles Button1.Click
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        ndt.TicketNumber = 6571735
+        Dim tmp = ndt.DEPScrape()
+    End Sub
 End Class

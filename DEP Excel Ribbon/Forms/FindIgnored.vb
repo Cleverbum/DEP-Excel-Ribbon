@@ -5,6 +5,7 @@ Imports OpenQA.Selenium
 Public Class FindIgnored
     Public interrupt As Boolean = False
     Private Sub Form4_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        interrupt = False
         Label1.Text = "Downloading list of tickets"
         ' Call GetTickets()
         BackgroundWorker1.RunWorkerAsync()
@@ -17,12 +18,14 @@ Public Class FindIgnored
 
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
         Call GetTickets()
     End Sub
 
     Sub GetTickets()
         Dim wd As Chrome.ChromeDriver
-        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket
+        Dim ndt As New clsNextDeskTicket.ClsNextDeskTicket(False, True, Globals.ThisAddIn.timingFile)
+
         wd = ndt.GiveMeChrome(True)
         Globals.ThisAddIn.Application.ActiveWindow.Activate()
         Dim Downloads As String = Environment.ExpandEnvironmentVariables("%USERPROFILE%\Downloads")
@@ -38,12 +41,24 @@ Public Class FindIgnored
 
         MsgBox("Please set an appropriate start date before continuing")
 
-        wd.FindElementByName("report").Click()
+        Try
+            wd.FindElementByName("report").Click()
+        Catch
+            If wd.Title <> "nextDesk | Tickets Closed By System" Then
+                wd.Quit()
+                Closeme()
+                Exit Sub
+            End If
+
+        End Try
 
         For i = 1 To 10
             Call SetText(Label1.Text & ".")
             Threading.Thread.Sleep(300)
-            If interrupt Then Exit Sub
+            If interrupt Then
+                wd.Quit()
+                Exit Sub
+            End If
         Next
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
 
@@ -51,13 +66,21 @@ Public Class FindIgnored
             For i = 1 To 10
                 Call SetText(Label1.Text & ".")
                 Threading.Thread.Sleep(1000)
-                If interrupt Then Exit Sub
+                If interrupt Then
+                    Closeme()
+
+                    wd.Quit()
+                    Exit Sub
+                End If
             Next
         End If
         file = Directory.GetFiles(Downloads).OrderByDescending(Function(f) New FileInfo(f).LastWriteTime).First()
 
         If oldfile = file Then
             MsgBox("File did not download correctly.", vbAbort)
+
+            Closeme()
+            wd.Quit()
             Exit Sub
         End If
 

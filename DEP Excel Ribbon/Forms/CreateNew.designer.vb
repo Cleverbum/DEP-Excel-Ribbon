@@ -47,6 +47,7 @@ Partial Class CreateNew
         Me.Label1.Size = New System.Drawing.Size(296, 20)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
+        Me.Label1.UseMnemonic = False
         '
         'BackgroundWorker1
         '
@@ -60,6 +61,7 @@ Partial Class CreateNew
         Me.Label2.Size = New System.Drawing.Size(39, 13)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Label2"
+        Me.Label2.UseMnemonic = False
         '
         'ProgressBar1
         '

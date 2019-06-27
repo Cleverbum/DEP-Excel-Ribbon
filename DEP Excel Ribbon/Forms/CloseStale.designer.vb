@@ -29,32 +29,36 @@ Partial Class CloseStale
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(16, 40)
+        Me.Button1.Location = New System.Drawing.Point(12, 32)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(212, 28)
+        Me.Button1.Size = New System.Drawing.Size(159, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Location = New System.Drawing.Point(10, 11)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(602, 24)
+        Me.Label1.Size = New System.Drawing.Size(452, 20)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
+        Me.Label1.UseMnemonic = False
         '
         'BackgroundWorker1
         '
         '
-        'Form3
+        'CloseStale
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(240, 77)
+        Me.ClientSize = New System.Drawing.Size(180, 63)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Name = "Form3"
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Name = "CloseStale"
         Me.ResumeLayout(False)
 
     End Sub

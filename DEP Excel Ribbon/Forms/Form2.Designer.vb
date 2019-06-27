@@ -33,28 +33,32 @@ Partial Class Form2
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
+        Me.Label1.Location = New System.Drawing.Point(7, 5)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(71, 25)
+        Me.Label1.Size = New System.Drawing.Size(39, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Label1"
+        Me.Label1.UseMnemonic = False
         Me.Label1.Visible = False
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(13, 38)
+        Me.ProgressBar1.Location = New System.Drawing.Point(7, 21)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(736, 77)
+        Me.ProgressBar1.Size = New System.Drawing.Size(401, 42)
         Me.ProgressBar1.TabIndex = 1
         Me.ProgressBar1.Visible = False
         '
         'Form2
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(11.0!, 24.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(436, 244)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label1)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "Form2"
         Me.Text = "Form2"
         Me.ResumeLayout(False)

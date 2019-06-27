@@ -42,7 +42,7 @@ Public Class PivotMail
             AM_email = oXlWs.Cells(i, 3).value
             j = i
             While oXlWs.Cells(j, 3).value = AM_email
-                j = j + 1
+                j += 1
             End While
             htmlTable = MakeTable(i, j - 1)
 

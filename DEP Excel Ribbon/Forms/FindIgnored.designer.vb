@@ -33,42 +33,44 @@ Partial Class FindIgnored
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(22, 87)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
+        Me.Button1.Location = New System.Drawing.Point(12, 47)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(2)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(292, 42)
+        Me.Button1.Size = New System.Drawing.Size(264, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Stop Current Process"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(18, 14)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.Location = New System.Drawing.Point(10, 8)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(299, 36)
+        Me.Label1.Size = New System.Drawing.Size(266, 20)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
+        Me.Label1.UseMnemonic = False
         '
         'Label2
         '
-        Me.Label2.Location = New System.Drawing.Point(18, 50)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label2.Location = New System.Drawing.Point(10, 27)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(299, 36)
+        Me.Label2.Size = New System.Drawing.Size(266, 20)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Label2"
+        Me.Label2.UseMnemonic = False
         Me.Label2.Visible = False
         '
         'FindIgnored
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(11.0!, 24.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(330, 147)
+        Me.ClientSize = New System.Drawing.Size(287, 80)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FindIgnored"
         Me.ResumeLayout(False)
 
