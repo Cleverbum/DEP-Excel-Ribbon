@@ -9,7 +9,7 @@ Public Class ThisAddIn
 
     Public RegistrationRunning As Boolean = False
 
-    Public ReadOnly timingFile As String = "\\insight.com\root\Shared\Sales\public sector\Martin Klefas\Data\NextDesk Metrics\internaltimingfile.csv"
+    Public Const timingFile As String = "\\insight.com\root\Shared\Sales\public sector\Martin Klefas\Data\NextDesk Metrics\internaltimingfile.csv"
 
     Private Sub ThisAddIn_Startup() Handles Me.Startup
 
